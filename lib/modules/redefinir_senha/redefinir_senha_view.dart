@@ -5,8 +5,8 @@ import 'package:fidelem_app/core/widgets/fid_input_box.dart';
 import 'package:fidelem_app/core/widgets/fid_button.dart';
 import 'package:fidelem_app/routes.dart';
 
-class ConfigView extends StatelessWidget {
-  const ConfigView({super.key});
+class RedefinirSenhaView extends StatelessWidget {
+  const RedefinirSenhaView({super.key});
 
   @override
   Widget build(BuildContext context) {
