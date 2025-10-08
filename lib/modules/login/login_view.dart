@@ -21,7 +21,7 @@ class LoginView extends StatelessWidget {
             children: [
               FIDInputBox(text: "Usuário", padding: {"bottom": 0.03}, preset: FIDInputBox.medium),
               FIDInputBox(text: "Senha", padding: {"bottom": 0.01}, preset: FIDInputBox.medium),
-              FIDText(linkText: "Esqueceu sua senha?", fontSize: 0.013, route: Routes.configPage, preset: FIDText.link),
+              FIDText(linkText: "Esqueceu sua senha?", fontSize: 0.013, route: Routes.redefinirSenhaPage, preset: FIDText.link),
             ],
           ),
           FIDButton(text: "Login", preset: FIDButton.medium),

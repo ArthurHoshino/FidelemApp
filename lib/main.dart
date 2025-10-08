@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       routes: {
         Routes.registroPage: (context) => const RegistroView(),
         Routes.loginPage: (context) => const LoginView(),
-        Routes.configPage: (context) => const ConfigView()
+        Routes.redefinirSenhaPage: (context) => const RedefinirSenhaView()
       }
     );
   }

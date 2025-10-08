@@ -3,6 +3,7 @@ class Routes {
   static const String splash = '/';
   static const String loginPage = '/login';
   static const String registroPage = '/registro';
+  static const String redefinirSenhaPage = '/redefinir-senha';
   static const String configPage = '/config';
 
   // Rotas de fluxo do Cliente
