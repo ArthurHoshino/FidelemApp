@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fidelem_app/routes.dart';
 import 'package:fidelem_app/modules/login/login_view.dart';
 import 'package:fidelem_app/modules/registro/registro_view.dart';
-import 'package:fidelem_app/modules/config/config_view.dart';
+import 'package:fidelem_app/modules/redefinir_senha/redefinir_senha_view.dart';
 
 void main() {
   runApp(const MyApp());
