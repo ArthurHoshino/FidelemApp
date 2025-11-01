@@ -1,3 +1,7 @@
+import 'package:fidelem_app/modules/carrinho/carrinho_view.dart';
+import 'package:fidelem_app/modules/carrinho/pages/payment_selection_view.dart';
+import 'package:fidelem_app/modules/carrinho/pages/checkout_success_view.dart';
+import 'package:fidelem_app/modules/config/config_view.dart';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/routes.dart';
 import 'package:fidelem_app/modules/login/login_view.dart';
@@ -23,7 +27,11 @@ class MyApp extends StatelessWidget {
       routes: {
         Routes.registroPage: (context) => const RegistroView(),
         Routes.loginPage: (context) => const LoginView(),
-        Routes.redefinirSenhaPage: (context) => const RedefinirSenhaView()
+        Routes.redefinirSenhaPage: (context) => const RedefinirSenhaView(),
+        Routes.configPage: (context) => const ConfigView(),
+        Routes.cartPage: (context) => const CarrinhoView(),
+        Routes.paymentSelectionPage: (context) => const PaymentSelectionView(),
+        Routes.checkoutSuccessPage: (context) => const CheckoutSuccessView(),
       }
     );
   }

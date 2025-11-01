@@ -89,6 +89,7 @@ class FIDText extends StatelessWidget {
   final Map<String, double> padding;
   final String route;
   final bool linkFirst;
+  final TextAlign textAlign;
 
   FIDText({
     super.key,
@@ -101,14 +102,16 @@ class FIDText extends StatelessWidget {
     String? route,
     bool? linkFirst,
     Map<String, dynamic>? preset,
+    TextAlign textAlign = TextAlign.start,
   }) : baseText = baseText ?? (preset?["baseText"] as String? ?? defaultBaseText),
         linkText = linkText ?? (preset?["linkText"] as String? ?? defaultLinkText),
         fontSize = fontSize ?? (preset?["fontSize"] as double? ?? defaultFontSize),
         fontWeight = fontWeight ?? (preset?["fontWeight"] as FontWeight? ?? defaultFontWeight),
         color = color ?? (preset?["color"] as Color? ?? defaultColor),
         padding = padding ?? (preset?["padding"] as Map<String, double>? ?? defaultPadding),
-        route = route ?? (preset?["route"] as String ? ?? defaultRoute),
-        linkFirst = linkFirst ?? (preset?["linkFirst"] as bool? ?? defaultLinkFirst);
+        route = route ?? (preset?["route"] as String? ?? defaultRoute),
+        linkFirst = linkFirst ?? (preset?["linkFirst"] as bool? ?? defaultLinkFirst),
+        textAlign = textAlign;
 
  @override
   Widget build(BuildContext context) {
@@ -162,6 +165,7 @@ class FIDText extends StatelessWidget {
     return Padding(
       padding: finalPadding,
       child: RichText(
+        textAlign: textAlign,
         text: TextSpan(
           children: children,
         ),

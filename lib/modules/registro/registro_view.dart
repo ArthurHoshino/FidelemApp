@@ -14,11 +14,11 @@ class RegistroView extends StatelessWidget {
     return AppLogo(
       child: Column(
         children: [
-          FIDText(baseText: "Registro", preset: FIDText.large),
+          FIDText(baseText: "Registro", preset: FIDText.large, textAlign: TextAlign.center),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              FIDText(baseText: "Insira seus dados", preset: FIDText.medium),
+              FIDText(baseText: "Insira seus dados", preset: FIDText.medium, textAlign: TextAlign.start),
               FIDInputBox(text: "Nome", preset: FIDInputBox.medium),
               FIDInputBox(text: "Email", preset: FIDInputBox.medium),
               FIDInputBox(text: "Senha", preset: FIDInputBox.medium),
@@ -27,7 +27,7 @@ class RegistroView extends StatelessWidget {
           ),
           FIDButton(text: "Criar", preset: FIDButton.medium),
           FIDLine(preset: FIDLine.small),
-          FIDText(baseText: "Já tem uma conta? ", linkText: "Entre", route: Routes.loginPage, preset: FIDText.link),
+          FIDText(baseText: "Já tem uma conta? ", linkText: "Entre", route: Routes.loginPage, preset: FIDText.link, textAlign: TextAlign.center ),
         ],
       )
     );
