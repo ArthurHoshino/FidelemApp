@@ -29,7 +29,6 @@ class CarrinhoView extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // HEADER FIXO
               Row(
                 children: [
                   IconButton(

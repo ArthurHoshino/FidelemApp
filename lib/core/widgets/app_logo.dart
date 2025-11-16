@@ -16,20 +16,24 @@ class AppLogo extends StatelessWidget {
     final double bottomPadding = screenHeight * 0.01;
     final double logoWidth = screenWidth * 0.25;
     final double logoHeight = screenHeight * 0.25;
+
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: topPadding, bottom: bottomPadding),
-              child: Image.asset(
-                "lib/core/assets/registro/Logo_FidelemApp_1.png",
-                width: logoWidth,
-                height: logoHeight,
-              )
-            ),
-            child,
-          ],
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: topPadding, bottom: bottomPadding),
+                child: Image.asset(
+                  "lib/core/assets/registro/Logo_FidelemApp_1.png",
+                  width: logoWidth,
+                  height: logoHeight,
+                ),
+              ),
+              child,
+            ],
+          ),
         ),
       ),
     );

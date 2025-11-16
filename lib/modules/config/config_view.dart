@@ -7,17 +7,39 @@ class ConfigView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: FIDText(baseText: "Configurações", preset: FIDText.large, textAlign: TextAlign.start),
-      ),
-      body: Center(
-        child: FIDText(
-          baseText: "Configurações - Em Desenvolvimento",
-          preset: FIDText.medium,
-          textAlign: TextAlign.center,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () => Navigator.pop(context),
+              ),
+
+              const SizedBox(height: 10),
+
+              FIDText(
+                baseText: "Configurações",
+                preset: FIDText.large,
+              ),
+
+              const SizedBox(height: 20),
+
+              // Conteúdo
+              Center(
+                child: FIDText(
+                  baseText: "Configurações - Em Desenvolvimento",
+                  preset: FIDText.medium,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
