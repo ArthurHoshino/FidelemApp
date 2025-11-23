@@ -1,3 +1,8 @@
+import 'package:fidelem_app/modules/login/login_view.dart';
+import 'package:fidelem_app/modules/redefinir_senha/redefinir_senha_view.dart';
+import 'package:fidelem_app/modules/registro/registro_view.dart';
+import 'package:flutter/widgets.dart';
+
 class Routes {
   // Rotas de fluxo geral
   static const String splash = '/';
@@ -15,4 +20,12 @@ class Routes {
   static const String inventarioPage = '/inventario';
   static const String adicionarProdutoManualPage = '/inventario/add-manual';
   static const String adicionarProdutoScanPage = '/inventario/add-scan';
+
+  static Map<String, WidgetBuilder> get rotas {
+    return {
+      registroPage: (context) => const RegistroView(),
+      loginPage: (context) => const LoginView(),
+      redefinirSenhaPage: (context) => const RedefinirSenhaView(),
+    };
+  }
 }
