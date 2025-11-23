@@ -59,11 +59,18 @@ class DecimalConverter extends TypeConverter<Decimal, String> {
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
+  
+  /**
+   * Construtor para testes
+   */
+  // AppDatabase.test(QueryExecutor e) : super(e);
 
   @override
   int get schemaVersion => 1;
   
-  // Getter para os DAOs
+  /**
+   * Getter para os DAOs
+   */
   CDEMPRESADAO get empresaDao => cdempresadao;
   FIDELSESSAODAO get fidelSessaoDao => fidelsessaodao;
   CDCARGODAO get cdCargoDao => cdcargodao;
