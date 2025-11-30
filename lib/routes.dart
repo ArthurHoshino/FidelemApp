@@ -1,6 +1,9 @@
 import 'package:fidelem_app/modules/login/login_view.dart';
 import 'package:fidelem_app/modules/redefinir_senha/redefinir_senha_view.dart';
 import 'package:fidelem_app/modules/registro/registro_view.dart';
+import 'package:fidelem_app/modules/carrinho/carrinho_view.dart';
+import 'package:fidelem_app/modules/carrinho/pages/payment_selection_view.dart';
+import 'package:fidelem_app/modules/carrinho/pages/checkout_success_view.dart';
 import 'package:flutter/widgets.dart';
 
 class Routes {
@@ -15,6 +18,9 @@ class Routes {
   static const String homePage = '/home';
   static const String lojaNormalPage = '/loja-normal';
   static const String lojaPontosPage = '/loja-pontos';
+  static const String carrinhoPage = '/carrinho';
+  static const String paymentSelectionPage = '/payment-selection';
+  static const String checkoutSuccessPage = '/checkout-success';
 
   // Rotas do fluxo do Mercado
   static const String inventarioPage = '/inventario';
@@ -26,6 +32,10 @@ class Routes {
       registroPage: (context) => const RegistroView(),
       loginPage: (context) => const LoginView(),
       redefinirSenhaPage: (context) => const RedefinirSenhaView(),
+      carrinhoPage: (context) => const CarrinhoView(),
+      paymentSelectionPage: (context) => const PaymentSelectionView(),
+      checkoutSuccessPage: (context) => const CheckoutSuccessView(),
+      homePage: (context) => const RegistroView(), // TODO: Criar HomeView adequada
     };
   }
 }
