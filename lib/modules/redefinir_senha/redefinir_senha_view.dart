@@ -13,7 +13,7 @@ class RedefinirSenhaView extends StatelessWidget {
     return AppLogo(
       child: Column(
         children: [
-          FIDText(baseText: "Redefinir Senha", preset: FIDText.large),
+          FIDText(baseText: "Redefinir Senha", preset: FIDText.large, textAlign: TextAlign.center),
           FIDInputBox(text: "Confirme a senha antiga", padding: {"bottom": 0.03}, preset: FIDInputBox.medium),
           FIDInputBox(text: "Insira a nova senha", padding: {"bottom": 0.03}, preset: FIDInputBox.medium),
           FIDInputBox(text: "Confirme a nova senha", padding: {"bottom": 0.05}, preset: FIDInputBox.medium),

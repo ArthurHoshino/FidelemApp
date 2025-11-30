@@ -100,7 +100,7 @@ class FIDText extends StatelessWidget {
     Map<String, double>? padding,
     String? route,
     bool? linkFirst,
-    Map<String, dynamic>? preset,
+    Map<String, dynamic>? preset, required TextAlign textAlign,
   }) : baseText = baseText ?? (preset?["baseText"] as String? ?? defaultBaseText),
         linkText = linkText ?? (preset?["linkText"] as String? ?? defaultLinkText),
         fontSize = fontSize ?? (preset?["fontSize"] as double? ?? defaultFontSize),
