@@ -4,8 +4,10 @@ import 'package:http/http.dart' as http;
 enum HttpMethod { post, put, delete }
 
 class WebClient {
-  // static const String baseUrl = 'http://10.0.2.2:3000';
-  static const String baseUrl = 'http://127.0.0.1:3000';
+  // URL base quando App Flutter rodando em um Emulador Android.
+  static const String baseUrl = 'http://10.0.2.2:3000';
+  // URL base quando Servidor Web/Dart rodando diretamente no PC.
+  // static const String baseUrl = 'http://127.0.0.1:3000';
 
   // --- Endpoints (Tabelas) ---
   static const String cdEmpresa = 'cdempresa';
@@ -17,7 +19,12 @@ class WebClient {
     String endpoint, {
     Map<String, dynamic>? queryParameters,
   }) async {
-    final uri = Uri.parse('$baseUrl/$endpoint').replace(queryParameters: queryParameters);
+
+    final queryString = queryParameters?.map((key, value) {
+      return MapEntry(key, value.toString());
+    });
+    
+    final uri = Uri.parse('$baseUrl/$endpoint').replace(queryParameters: queryString);
 
     try {
       final response = await http.get(uri);
