@@ -5,6 +5,8 @@ import 'package:fidelem_app/modules/registro/registro_view.dart';
 import 'package:fidelem_app/modules/carrinho/carrinho_view.dart';
 import 'package:fidelem_app/modules/carrinho/pages/payment_selection_view.dart';
 import 'package:fidelem_app/modules/carrinho/pages/checkout_success_view.dart';
+import 'package:fidelem_app/modules/Home/home_mercado_view.dart';
+import 'package:fidelem_app/modules/Config/config_view.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fidelem_app/modules/inventario/add_manual/add_manual_view.dart';
 import 'package:path/path.dart';
@@ -46,10 +48,8 @@ class Routes {
       // Rotas do fluxo do Mercado
       adicionarProdutoManualPage: (context) => const AddManualView(),
       editarProduto: (context) => EditView(),
-
-
-      //
-      homePage: (context) => const RegistroView(), // TODO: Criar HomeView adequada
+      homePage: (context) => const HomeView(),
+      configPage: (context) => const SettingsView(),
     };
   }
 }
