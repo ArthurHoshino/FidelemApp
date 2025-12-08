@@ -5,6 +5,8 @@ import 'package:fidelem_app/modules/carrinho/carrinho_view.dart';
 import 'package:fidelem_app/modules/carrinho/pages/payment_selection_view.dart';
 import 'package:fidelem_app/modules/carrinho/pages/checkout_success_view.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fidelem_app/modules/inventario/add_manual/add_manual_view.dart';
+import 'package:path/path.dart';
 
 class Routes {
   // Rotas de fluxo geral
@@ -32,6 +34,7 @@ class Routes {
       registroPage: (context) => const RegistroView(),
       loginPage: (context) => const LoginView(),
       redefinirSenhaPage: (context) => const RedefinirSenhaView(),
+      adicionarProdutoManualPage: (context) => const AddManualView(),
       carrinhoPage: (context) => const CarrinhoView(),
       paymentSelectionPage: (context) => const PaymentSelectionView(),
       checkoutSuccessPage: (context) => const CheckoutSuccessView(),

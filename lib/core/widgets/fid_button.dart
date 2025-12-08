@@ -17,6 +17,23 @@ class FIDButton extends StatelessWidget {
     "left": 0.05,
   };
 
+  static Map<String, dynamic> big = {
+    "onPressed": null,
+    "text": "",
+    "width": 0.9,
+    "height": 0.07,
+    "borderRadius": 10.0,
+    "borderColor": Color.fromARGB(255, 37, 106, 255),
+    "BGColor": Color.fromARGB(255, 37, 106, 255),
+    "textColor": Color.fromARGB(255, 255, 255, 255),
+    "padding": {
+      "top": 0.00,
+      "bottom": 0.05,
+      "right": 0.00,
+      "left": 0.00,
+    },
+  };
+
   static Map<String, dynamic> medium = {
     "onPressed": null,
     "text": "",
