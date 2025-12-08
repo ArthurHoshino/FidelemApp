@@ -37,6 +37,8 @@ class FIDInputBox extends StatelessWidget {
   final Color borderColor;
   final Color textColor;
   final Map<String, double> padding;
+  final TextEditingController? controller;
+  final bool obscureText;
 
  FIDInputBox({
   super.key,
@@ -48,6 +50,8 @@ class FIDInputBox extends StatelessWidget {
   Color? textColor,
   Map<String, double>? padding,
   Map<String, dynamic>? preset,
+  this.controller,
+  this.obscureText = false,
 }) : text = text ?? (preset?["text"] as String? ?? defaultText),
       width = width ?? (preset?["width"] as double? ?? defaultWidth),
       height = height ?? (preset?["height"] as double? ?? defaultHeight),
@@ -74,13 +78,20 @@ class FIDInputBox extends StatelessWidget {
         width: finalWidth,
         height: finalHeight,
         child: TextFormField(
+          controller: controller,
+          obscureText: obscureText,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: borderColor),
               borderRadius: BorderRadius.circular(borderRadius),
             ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: borderColor, width: 2),
+              borderRadius: BorderRadius.circular(borderRadius),
+            ),
             labelText: text,
             labelStyle: TextStyle(color: textColor),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
           ),
         )
       )
