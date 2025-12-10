@@ -1,25 +1,45 @@
 import 'dart:io';
 
+import 'package:fidelem_app/modules/inventario/add_manual/add_manual_view.dart';
+import 'package:fidelem_app/modules/inventario/produto_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
 import 'package:fidelem_app/core/widgets/fid_input_box.dart';
 import 'package:fidelem_app/core/widgets/fid_button.dart';
 import 'package:image_picker/image_picker.dart';
-// const normalPadding
 
-List<File> listaImagens = [];
 
-class AddManualView extends StatefulWidget{
-  const AddManualView({super.key});
+// esse prodTest vai ser substituido com getById 
+// var prodTest = new ProdutoModel(
+//   nome: "Detergente",
+//   codigo: "000012000",
+//   desc: "Detergente ype sabor cereja",
+//   qtdEstoque: 10,
+//   precoDinheiro: 8.99,
+//   precoPontos: 900,
+//   fotos: [Image.network("https://zaffari.vtexassets.com/arquivos/ids/258346/1046429-00.jpg?v=638621775612870000")],
+// ).infoItem();
+var prodTest = new ProdutoModel(
+  nome: "Detergente",
+  codigo: "000012000",
+  desc: "Detergente ype sabor cereja",
+  qtdEstoque: 10,
+  precoDinheiro: 8.99,
+  precoPontos: 900,
+  fotos: [],
+).infoItem();
+List<File> listaImagens = prodTest['fotos'];
+
+class EditView extends StatefulWidget{
+  const EditView({super.key});
 
   @override
-  State<AddManualView> createState() => _AddManualViewState();
+  State<EditView> createState() => _EditViewState();
 }
 
 
-class _AddManualViewState extends State<AddManualView> {
+class _EditViewState extends State<EditView> {
   var _nImagem = 0;
-  
   void atualizaImagem () {
     setState(() {
       {
@@ -33,6 +53,8 @@ class _AddManualViewState extends State<AddManualView> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -45,7 +67,7 @@ class _AddManualViewState extends State<AddManualView> {
                   children: [
               
                     FIDText(
-                      baseText: "Adicionar Produto - Manualmente", 
+                      baseText: "Editar produto", 
                       fontSize: 0.024, 
                       fontWeight: FontWeight.bold, 
                       color: Colors.black, 
@@ -57,7 +79,7 @@ class _AddManualViewState extends State<AddManualView> {
                     ),
                 
                     FIDText(
-                      baseText: "Adicione as informações do seu produto", 
+                      baseText: "Altere os campos desejados", 
                       fontSize: 0.018, 
                       color: Colors.black, 
                       textAlign: TextAlign.start, 
@@ -81,7 +103,7 @@ class _AddManualViewState extends State<AddManualView> {
                         "bottom": 0.005,
                       }
                     ),
-                    FIDInputBox(text: "Insira o codigo do produto", padding: {"bottom": 0.03}, preset: FIDInputBox.medium),
+                    FIDInputBox(text: prodTest["codigo"], padding: {"bottom": 0.03}, preset: FIDInputBox.medium),
                     // 
                     FIDText(
                       baseText: "Nome do Produto", 
@@ -94,7 +116,7 @@ class _AddManualViewState extends State<AddManualView> {
                         "bottom": 0.005,
                       }
                     ),
-                    FIDInputBox(text: "Insira o nome do produto", padding: {"bottom": 0.03}, preset: FIDInputBox.medium),
+                    FIDInputBox(text: prodTest["nome"], padding: {"bottom": 0.03}, preset: FIDInputBox.medium),
                     // 
                     FIDText(
                       baseText: "Descrição", 
@@ -107,7 +129,7 @@ class _AddManualViewState extends State<AddManualView> {
                         "bottom": 0.005,
                       }
                     ),
-                    FIDInputBox(text: "Insira uma breve descrição", padding: {"bottom": 0.03}, preset: FIDInputBox.medium),
+                    FIDInputBox(text: prodTest["desc"], padding: {"bottom": 0.03}, preset: FIDInputBox.medium),
                     // 
                     FIDText(
                       baseText: "Quantidade em estoque", 
@@ -120,7 +142,7 @@ class _AddManualViewState extends State<AddManualView> {
                         "bottom": 0.005,
                       }
                     ),
-                    FIDInputBox(text: "Quantidade disponivel em estoque", padding: {"bottom": 0.03}, preset: FIDInputBox.medium),
+                    FIDInputBox(text: prodTest["qtdEstoque"].toString(), padding: {"bottom": 0.03}, preset: FIDInputBox.medium),
                     // 
                     FIDText(
                       baseText: "Preço", 
@@ -133,7 +155,7 @@ class _AddManualViewState extends State<AddManualView> {
                         "bottom": 0.005,
                       }
                     ),
-                    FIDInputBox(text: "Preço do Produto", padding: {"bottom": 0.02}, preset: FIDInputBox.medium),
+                    FIDInputBox(text: prodTest["precoDinheiro"].toString(), padding: {"bottom": 0.02}, preset: FIDInputBox.medium),
 
 
                     FIDText(
@@ -197,7 +219,7 @@ class _AddManualViewState extends State<AddManualView> {
                       ],
                     ),
 
-                    FIDButton(text: "+ Adicionar", preset: FIDButton.big, padding: {"top": 0.02}, onPressed: (){print(listaImagens);},),                 
+                    FIDButton(text: "Confirmar Alterações", preset: FIDButton.big, padding: {"top": 0.02}, onPressed: (){print(listaImagens);},),                 
                 ],
               ), 
         )

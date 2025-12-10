@@ -1,3 +1,4 @@
+import 'package:fidelem_app/modules/inventario/edit_produto/edit_view.dart';
 import 'package:fidelem_app/modules/login/login_view.dart';
 import 'package:fidelem_app/modules/redefinir_senha/redefinir_senha_view.dart';
 import 'package:fidelem_app/modules/registro/registro_view.dart';
@@ -27,17 +28,27 @@ class Routes {
   // Rotas do fluxo do Mercado
   static const String inventarioPage = '/inventario';
   static const String adicionarProdutoManualPage = '/inventario/add-manual';
+  static const String editarProduto = '/inventario/edit-produto';
   static const String adicionarProdutoScanPage = '/inventario/add-scan';
 
   static Map<String, WidgetBuilder> get rotas {
     return {
+      // Rotas de fluxo geral
       registroPage: (context) => const RegistroView(),
       loginPage: (context) => const LoginView(),
       redefinirSenhaPage: (context) => const RedefinirSenhaView(),
-      adicionarProdutoManualPage: (context) => const AddManualView(),
+
+      // Rotas de fluxo do Cliente
       carrinhoPage: (context) => const CarrinhoView(),
       paymentSelectionPage: (context) => const PaymentSelectionView(),
       checkoutSuccessPage: (context) => const CheckoutSuccessView(),
+
+      // Rotas do fluxo do Mercado
+      adicionarProdutoManualPage: (context) => const AddManualView(),
+      editarProduto: (context) => EditView(),
+
+
+      //
       homePage: (context) => const RegistroView(), // TODO: Criar HomeView adequada
     };
   }
