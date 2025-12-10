@@ -16,11 +16,10 @@ class _CheckoutSuccessViewState extends State<CheckoutSuccessView> {
   @override
   void initState() {
     super.initState();
-    // Espera 3 segundos e navega para a Home
     Timer(const Duration(seconds: 3), () {
       if (mounted) {
         Navigator.of(context).pushNamedAndRemoveUntil(
-          Routes.homePage,
+          Routes.basePage,
               (Route<dynamic> route) => false,
         );
       }
@@ -39,7 +38,7 @@ class _CheckoutSuccessViewState extends State<CheckoutSuccessView> {
               children: [
                 const Icon(
                   Icons.check_circle_outline,
-                  color: Colors.green,
+                  color: Color.fromRGBO(76, 175, 80, 1),
                   size: 100,
                 ),
                 const SizedBox(height: 30),
@@ -63,7 +62,7 @@ class _CheckoutSuccessViewState extends State<CheckoutSuccessView> {
                   preset: FIDButton.medium,
                   onPressed: () {
                     Navigator.of(context).pushNamedAndRemoveUntil(
-                      Routes.homePage,
+                      Routes.basePage,
                           (Route<dynamic> route) => false,
                     );
                   },

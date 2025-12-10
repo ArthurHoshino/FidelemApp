@@ -7,8 +7,8 @@ class FIDSelectBox extends StatelessWidget {
   static double defaultWidth = 0.01;
   static double defaultHeight = 0.01;
   static double defaultBorderRadius = 20.0;
-  static Color defaultBorderColor = const Color.fromARGB(255, 175, 175, 175);
-  static Color defaultTextColor = const Color.fromARGB(255, 175, 175, 175);
+  static Color defaultBorderColor = const Color.fromRGBO(175, 175, 175, 1);
+  static Color defaultTextColor = const Color.fromRGBO(175, 175, 175, 1);
   static Map<String, double> defaultPadding = {
     "top": 0.05, "bottom": 0.05, "right": 0.05, "left": 0.05,
   };
@@ -98,7 +98,7 @@ class FIDSelectBox extends StatelessWidget {
               items: items.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value, style: const TextStyle(color: Colors.black)),
+                  child: Text(value, style: const TextStyle(color: Color.fromRGBO(0, 0, 0, 1))),
                 );
               }).toList(),
               onChanged: (newValue) {

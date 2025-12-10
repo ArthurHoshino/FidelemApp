@@ -6,12 +6,13 @@ import 'package:fidelem_app/modules/carrinho/components/payment_method_tile.dart
 import 'package:fidelem_app/routes.dart';
 
 class PaymentSelectionView extends StatelessWidget {
-  final double totalValue = 735.50;
 
   const PaymentSelectionView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final totalValue = ModalRoute.of(context)!.settings.arguments as double;
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -67,7 +68,7 @@ class PaymentSelectionView extends StatelessWidget {
                 title: "Dinheiro",
                 icon: Icons.money,
                 isEnabled: true,
-                isSelected: true, // 🔥 SOMENTE O PRIMEIRO SELECIONADO
+                isSelected: true,
                 onTap: () {},
               ),
               PaymentMethodTile(
@@ -97,7 +98,7 @@ class PaymentSelectionView extends StatelessWidget {
                     text: "Confirmar Pagamento",
                     preset: FIDButton.medium,
                     onPressed: () {
-                      Navigator.of(context).pushNamed(Routes.paymentSelectionPage ?? '');
+                      Navigator.of(context).pushNamed(Routes.checkoutSuccessPage);
                     },
                     padding: const {"bottom": 0.01},
                   ),

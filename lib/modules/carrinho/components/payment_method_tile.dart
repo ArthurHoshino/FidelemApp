@@ -14,14 +14,14 @@ class PaymentMethodTile extends StatelessWidget {
     required this.title,
     required this.icon,
     this.isEnabled = true,
-    this.isSelected = false, // padrão: não selecionado
+    this.isSelected = false,
     this.subtitle,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final Color textColor = isEnabled ? Colors.black : Colors.grey;
+    final Color textColor = isEnabled ? const Color.fromRGBO(0, 0, 0, 1) : const Color.fromRGBO(158, 158, 158, 1);
 
     return GestureDetector(
       onTap: isEnabled ? onTap : null,
@@ -30,8 +30,8 @@ class PaymentMethodTile extends StatelessWidget {
 
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xFFE3F2FD)
-              : Colors.transparent,
+              ? const Color.fromRGBO(227, 242, 253, 1)
+              : const Color.fromRGBO(0, 0, 0, 0),
           borderRadius: BorderRadius.circular(10),
         ),
 
@@ -68,7 +68,7 @@ class PaymentMethodTile extends StatelessWidget {
                       child: FIDText(
                         baseText: subtitle!,
                         preset: FIDText.small,
-                        color: Colors.red,
+                        color: const Color.fromRGBO(244, 67, 54, 1),
                         textAlign: TextAlign.left,
                       ),
                     ),
