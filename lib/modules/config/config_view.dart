@@ -24,6 +24,7 @@ class ConfigView extends StatelessWidget {
               FIDText(
                 baseText: "Configurações",
                 preset: FIDText.large,
+                textAlign: TextAlign.left,
               ),
 
               const SizedBox(height: 20),

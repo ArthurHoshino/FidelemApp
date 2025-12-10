@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
-import 'package:fidelem_app/core/widgets/fid_line.dart'; 
+import 'package:fidelem_app/core/widgets/fid_line.dart';
 
 class CartItemCard extends StatefulWidget {
   final CartItem item;
-  
+
   const CartItemCard({super.key, required this.item});
 
   @override
@@ -52,11 +52,11 @@ class _CartItemCardState extends State<CartItemCard> {
       width: 80,
       height: 80,
       decoration: BoxDecoration(
-        color: Colors.grey[300], 
+        color: Colors.grey[300],
         borderRadius: BorderRadius.circular(8),
       ),
       child: const Center(
-        child: Icon(Icons.image_not_supported, color: Colors.grey, size: 40),
+        child: Icon(Icons.image_not_supported, color: Colors.blue, size: 40),
       ),
     );
   }
@@ -70,14 +70,20 @@ class _CartItemCardState extends State<CartItemCard> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
               _buildProductImage(),
               const SizedBox(width: 10),
-              
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    FIDText(baseText: widget.item.name, preset: FIDText.medium, textAlign: TextAlign.start),
+                    FIDText(
+                      baseText: widget.item.name,
+                      preset: FIDText.medium,
+                      textAlign: TextAlign.start,
+                    ),
+
                     FIDText(
                       baseText: widget.item.description,
                       preset: FIDText.small,
@@ -86,47 +92,67 @@ class _CartItemCardState extends State<CartItemCard> {
                       textAlign: TextAlign.start,
                     ),
 
+                    const SizedBox(height: 20),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // Controle de Quantidade
+
+                        // CONTROLE DE QUANTIDADE
                         Row(
                           children: [
-                            GestureDetector(
-                              onTap: _decrementQuantity,
-                              child: const Icon(Icons.remove_circle_outline, size: 24),
+
+                            Transform.translate(
+                              offset: const Offset(0, -4), // sobe 2px
+                              child: GestureDetector(
+                                onTap: _decrementQuantity,
+                                child: const Icon(Icons.remove_circle_outline, size: 24),
+                              ),
                             ),
+
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 8),
                               child: FIDText(
-                                baseText: widget.item.quantity.toString(), 
+                                baseText: widget.item.quantity.toString(),
                                 preset: FIDText.medium,
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            GestureDetector(
-                              onTap: _incrementQuantity,
-                              child: const Icon(Icons.add_circle_outline, size: 24),
+
+                            Transform.translate(
+                              offset: const Offset(0, -4), // sobe 2px (mesmo valor)
+                              child: GestureDetector(
+                                onTap: _incrementQuantity,
+                                child: const Icon(Icons.add_circle_outline, size: 24),
+                              ),
                             ),
                           ],
                         ),
 
-                        // Valor Total
+                        // PREÇO
                         FIDText(
                           baseText: "R\$ ${widget.item.totalProductPrice.toStringAsFixed(2).replaceAll('.', ',')}",
                           preset: FIDText.medium,
                           fontWeight: FontWeight.bold,
-                          textAlign: TextAlign.end,
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
+
+
+
+
+
+
                   ],
                 ),
               ),
             ],
           ),
         ),
-        FIDLine(preset: FIDLine.small), 
+
+        FIDLine(preset: FIDLine.small),
       ],
     );
   }

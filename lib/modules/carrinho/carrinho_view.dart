@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
 import 'package:fidelem_app/core/widgets/fid_button.dart';
-import 'package:fidelem_app/modules/carrinho/components/cart_item_card.dart'; 
+import 'package:fidelem_app/modules/carrinho/components/cart_item_card.dart';
 import 'package:fidelem_app/routes.dart';
 
-// MOCK de dados com a classe CartItem
+
 final List<CartItem> mockCartItems = [
   CartItem(id: '1', name: 'Produto Premium A', description: 'Melhor item da loja.', imageUrl: '', price: 150.00, quantity: 2),
   CartItem(id: '2', name: 'Produto Básico C', description: 'Para o dia a dia.', imageUrl: '', price: 35.50, quantity: 1),
@@ -12,16 +12,58 @@ final List<CartItem> mockCartItems = [
   CartItem(id: '4', name: 'Caneca do App', description: 'Sua caneca favorita.', imageUrl: '', price: 29.99, quantity: 3),
 ];
 
-class CarrinhoView extends StatelessWidget {
+
+class CarrinhoView extends StatefulWidget {
   const CarrinhoView({super.key});
 
-  double _calculateTotal(List<CartItem> items) {
-    return items.fold(0.0, (sum, item) => sum + item.totalProductPrice);
+  @override
+  State<CarrinhoView> createState() => _CarrinhoViewState();
+}
+
+class _CarrinhoViewState extends State<CarrinhoView> {
+
+  late List<CartItem> _items;
+
+  @override
+  void initState() {
+    super.initState();
+    _items = List.from(mockCartItems); // Copia os dados do mock para a lista local
+  }
+
+  double _calculateTotal() {
+
+    return _items.fold(0.0, (sum, item) => sum + (item.price * item.quantity));
+  }
+
+  void _removerItem(int index) {
+    setState(() {
+      _items.removeAt(index);
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Item removido do carrinho"), duration: Duration(seconds: 1)),
+    );
+  }
+
+  void _decrementarQuantidade(int index) {
+    setState(() {
+      if (_items[index].quantity > 1) {
+        _items[index].quantity--;
+      } else {
+        _removerItem(index);
+      }
+    });
+  }
+
+  void _incrementarQuantidade(int index) {
+    setState(() {
+      _items[index].quantity++;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final totalValue = _calculateTotal(mockCartItems);
+    final totalValue = _calculateTotal();
 
     return Scaffold(
       body: SafeArea(
@@ -30,37 +72,74 @@ class CarrinhoView extends StatelessWidget {
           child: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () => Navigator.of(context).pop(), 
+                  Transform.translate(
+                    offset: const Offset(0, -30),
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () => Navigator.of(context).pop(),
+                      padding: const EdgeInsets.all(8),
+                      constraints: const BoxConstraints(),
+                      iconSize: 30,
+                    ),
                   ),
-                  const SizedBox(width: 8),
-                  FIDText(baseText: "Carrinho", preset: FIDText.large, textAlign: TextAlign.start),
+                  Expanded(
+                    child: FIDText(
+                      baseText: "Carrinho",
+                      preset: FIDText.large,
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
                 ],
               ),
-              
-              // LISTA DE PRODUTOS
+
               Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  itemCount: mockCartItems.length,
+                child: _items.isEmpty
+                    ? Center(child: FIDText(baseText: "Seu carrinho está vazio.", preset: FIDText.large, textAlign: TextAlign.center,))
+                    : ListView.builder(
+                  padding: const EdgeInsets.only(top: 10),
+                  itemCount: _items.length,
                   itemBuilder: (context, index) {
-                    return CartItemCard(item: mockCartItems[index]);
+                    final item = _items[index];
+
+                    return Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0, top: 15.0),
+                          child: CartItemCard(
+                            item: item,
+                          ),
+                        ),
+
+                        Positioned(
+                          top: 20,
+                          right: 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.red[50],
+                              shape: BoxShape.circle,
+                            ),
+                            child: IconButton(
+                              icon: const Icon(Icons.delete_outline, color: Colors.red),
+                              onPressed: () => _removerItem(index),
+                              tooltip: 'Remover item',
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
                   },
                 ),
               ),
 
-              // RODAPÉ FIXO
               Column(
                 children: [
-                  const Divider(height: 30), 
-                  
-                  // Valor Total
+                  const Divider(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      FIDText(baseText: "Valor Total:", preset: FIDText.medium, textAlign: TextAlign.start),
+                      FIDText(baseText: "Valor Total:", preset: FIDText.large, textAlign: TextAlign.start),
                       FIDText(
                         baseText: "R\$ ${totalValue.toStringAsFixed(2).replaceAll('.', ',')}",
                         preset: FIDText.large,
@@ -69,13 +148,12 @@ class CarrinhoView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  
-                  // Botão de Finalizar
+
                   FIDButton(
                     text: "Finalizar Compra",
                     preset: FIDButton.medium,
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(Routes.paymentSelectionPage); 
+                    onPressed: _items.isEmpty ? null : () {
+                      Navigator.of(context).pushNamed(Routes.paymentSelectionPage ?? '');
                     },
                     padding: const {"top": 0.02, "bottom": 0.01},
                   ),

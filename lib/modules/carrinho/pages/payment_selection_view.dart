@@ -20,16 +20,24 @@ class PaymentSelectionView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () => Navigator.of(context).pop(),
+                  Transform.translate(
+                    offset: const Offset(0, -30),
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () => Navigator.of(context).pop(),
+                      padding: const EdgeInsets.all(8),
+                      constraints: const BoxConstraints(),
+                      iconSize: 30,
+                    ),
                   ),
-                  const SizedBox(width: 8),
-                  FIDText(
-                    baseText: "Método de Pagamento",
-                    preset: FIDText.large,
-                    textAlign: TextAlign.start,
+                  Expanded(
+                    child: FIDText(
+                      baseText: "Métodos de Pagamentos",
+                      preset: FIDText.large,
+                      textAlign: TextAlign.start,
+                    ),
                   ),
                 ],
               ),
@@ -37,7 +45,7 @@ class PaymentSelectionView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  FIDText(baseText: "Total a Pagar:", preset: FIDText.medium, textAlign: TextAlign.start),
+                  FIDText(baseText: "Total a Pagar:", preset: FIDText.large, textAlign: TextAlign.start),
                   FIDText(
                     baseText: "R\$ ${totalValue.toStringAsFixed(2).replaceAll('.', ',')}",
                     preset: FIDText.large,
@@ -58,6 +66,7 @@ class PaymentSelectionView extends StatelessWidget {
                 title: "Dinheiro",
                 icon: Icons.money,
                 isEnabled: true,
+                isSelected: true, // 🔥 SOMENTE O PRIMEIRO SELECIONADO
                 onTap: () {},
               ),
               PaymentMethodTile(
@@ -78,6 +87,7 @@ class PaymentSelectionView extends StatelessWidget {
                 isEnabled: false,
                 subtitle: "Em desenvolvimento",
               ),
+
               const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -86,7 +96,7 @@ class PaymentSelectionView extends StatelessWidget {
                     text: "Confirmar Pagamento",
                     preset: FIDButton.medium,
                     onPressed: () {
-                      Navigator.of(context).pushNamed(Routes.checkoutSuccessPage);
+                      Navigator.of(context).pushNamed(Routes.checkoutSuccessPage!);
                     },
                     padding: const {"bottom": 0.01},
                   ),
