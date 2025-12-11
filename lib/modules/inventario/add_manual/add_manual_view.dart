@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fidelem_app/modules/inventario/fun%C3%A7%C3%A3oWIP.dart';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
 import 'package:fidelem_app/core/widgets/fid_input_box.dart';
@@ -197,7 +198,7 @@ class _AddManualViewState extends State<AddManualView> {
                       ],
                     ),
 
-                    FIDButton(text: "+ Adicionar", preset: FIDButton.big, padding: {"top": 0.02}, onPressed: (){print(listaImagens);},),                 
+                    FIDButton(text: "+ Adicionar", preset: FIDButton.big, padding: {"top": 0.02}, onPressed: (){WIPfunction(context);},),                 
                 ],
               ), 
         )
