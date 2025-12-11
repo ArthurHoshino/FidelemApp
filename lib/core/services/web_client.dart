@@ -5,7 +5,7 @@ enum HttpMethod { post, put, delete }
 
 class WebClient {
   // URL base quando App Flutter rodando em um Emulador Android.
-  static const String baseUrl = 'http://192.168.0.3:3000';
+  static const String baseUrl = 'http://192.168.15.159:3000';
   // URL base quando Servidor Web/Dart rodando diretamente no PC.
   // static const String baseUrl = 'http://127.0.0.1:3000';
 

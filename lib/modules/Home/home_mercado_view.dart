@@ -157,7 +157,8 @@ class _HomeViewState extends State<HomeView> {
                             ),
                           ),
                           onPressed: () {
-                            // ação de adicionar
+                            // TODO adicionar um seletor entre adicionar produto manualmente ou por scan.
+                            Navigator.pushNamed(context, Routes.adicionarProdutoManualPage);
                           },
                           child: const Text("Adicionar"),
                         ),
@@ -284,7 +285,8 @@ class _HomeViewState extends State<HomeView> {
           });
 
           if (index == 0) {
-            // ação de adicionar
+            // TODO adicionar modal para escolher adicionar manual ou por scan
+            Navigator.pushNamed(context, Routes.adicionarProdutoManualPage);
           } else if (index == 1) {
             // ação de home
           } else if (index == 2) {

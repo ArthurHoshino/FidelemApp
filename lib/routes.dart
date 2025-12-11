@@ -9,7 +9,6 @@ import 'package:fidelem_app/modules/Home/home_mercado_view.dart';
 import 'package:fidelem_app/modules/Config/config_view.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fidelem_app/modules/inventario/add_manual/add_manual_view.dart';
-import 'package:path/path.dart';
 
 class Routes {
   // Rotas de fluxo geral
