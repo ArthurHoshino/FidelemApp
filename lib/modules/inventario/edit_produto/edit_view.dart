@@ -1,12 +1,16 @@
 import 'dart:io';
 
-import 'package:fidelem_app/modules/inventario/add_manual/add_manual_view.dart';
 import 'package:fidelem_app/modules/inventario/produto_model.dart';
 import 'package:flutter/material.dart';
+import 'package:fidelem_app/modules/inventario/funcaoWIP.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
 import 'package:fidelem_app/core/widgets/fid_input_box.dart';
 import 'package:fidelem_app/core/widgets/fid_button.dart';
 import 'package:image_picker/image_picker.dart';
+
+// FUNCAO SO P FICAR BONITINHO
+
+
 
 
 // esse prodTest vai ser substituido com getById 
@@ -219,7 +223,7 @@ class _EditViewState extends State<EditView> {
                       ],
                     ),
 
-                    FIDButton(text: "Confirmar Alterações", preset: FIDButton.big, padding: {"top": 0.02}, onPressed: (){print(listaImagens);},),                 
+                    FIDButton(text: "Confirmar Alterações", preset: FIDButton.big, padding: {"top": 0.02}, onPressed: (){WIPfunction(context);},),                 
                 ],
               ), 
         )
