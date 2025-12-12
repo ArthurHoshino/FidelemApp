@@ -52,11 +52,11 @@ class _CartItemCardState extends State<CartItemCard> {
       width: 80,
       height: 80,
       decoration: BoxDecoration(
-        color: Colors.grey[300],
+        color: const Color.fromRGBO(224, 224, 224, 1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: const Center(
-        child: Icon(Icons.image_not_supported, color: Colors.blue, size: 40),
+        child: Icon(Icons.image_not_supported, color: Color.fromRGBO(33, 150, 243, 1), size: 40),
       ),
     );
   }
@@ -87,7 +87,7 @@ class _CartItemCardState extends State<CartItemCard> {
                     FIDText(
                       baseText: widget.item.description,
                       preset: FIDText.small,
-                      color: const Color.fromARGB(255, 120, 120, 120),
+                      color: const Color.fromRGBO(120, 120, 120, 1),
                       padding: const {"bottom": 0.005},
                       textAlign: TextAlign.start,
                     ),
@@ -99,12 +99,11 @@ class _CartItemCardState extends State<CartItemCard> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
 
-                        // CONTROLE DE QUANTIDADE
                         Row(
                           children: [
 
                             Transform.translate(
-                              offset: const Offset(0, -4), // sobe 2px
+                              offset: const Offset(0, -4),
                               child: GestureDetector(
                                 onTap: _decrementQuantity,
                                 child: const Icon(Icons.remove_circle_outline, size: 24),
@@ -121,7 +120,7 @@ class _CartItemCardState extends State<CartItemCard> {
                             ),
 
                             Transform.translate(
-                              offset: const Offset(0, -4), // sobe 2px (mesmo valor)
+                              offset: const Offset(0, -4),
                               child: GestureDetector(
                                 onTap: _incrementQuantity,
                                 child: const Icon(Icons.add_circle_outline, size: 24),
@@ -130,7 +129,6 @@ class _CartItemCardState extends State<CartItemCard> {
                           ],
                         ),
 
-                        // PREÇO
                         FIDText(
                           baseText: "R\$ ${widget.item.totalProductPrice.toStringAsFixed(2).replaceAll('.', ',')}",
                           preset: FIDText.medium,

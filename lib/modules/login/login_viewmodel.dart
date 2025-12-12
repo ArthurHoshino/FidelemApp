@@ -98,7 +98,7 @@ class LoginViewModel extends ChangeNotifier {
               backgroundColor: Colors.green,
             ),
           );
-          Navigator.of(context).pushReplacementNamed(Routes.homePage);
+          Navigator.of(context).pushReplacementNamed(Routes.homePageCliente);
         }
       } else {
         final msgErro = "Falha no login. Verifique as informações.";

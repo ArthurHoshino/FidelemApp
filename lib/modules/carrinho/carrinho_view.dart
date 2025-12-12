@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:drift/drift.dart' as drift;
+import 'package:decimal/decimal.dart';
+import 'package:fidelem_app/database/database.dart'; 
+import 'package:fidelem_app/main.dart'; 
+import 'package:fidelem_app/core/widgets/fid_header.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
 import 'package:fidelem_app/core/widgets/fid_button.dart';
-import 'package:fidelem_app/modules/carrinho/components/cart_item_card.dart';
 import 'package:fidelem_app/routes.dart';
 
+class CartItemCardData {
+  final LCCARRINHOData carrinhoData;
+  final CDPRODUTOData produtoData;
 
-final List<CartItem> mockCartItems = [
-  CartItem(id: '1', name: 'Produto Premium A', description: 'Melhor item da loja.', imageUrl: '', price: 150.00, quantity: 2),
-  CartItem(id: '2', name: 'Produto Básico C', description: 'Para o dia a dia.', imageUrl: '', price: 35.50, quantity: 1),
-  CartItem(id: '3', name: 'Produto Xtreme Z', description: 'Limitado e potente.', imageUrl: '', price: 500.00, quantity: 1),
-  CartItem(id: '4', name: 'Caneca do App', description: 'Sua caneca favorita.', imageUrl: '', price: 29.99, quantity: 3),
-];
+  CartItemCardData({required this.carrinhoData, required this.produtoData});
+}
 
 
 class CarrinhoView extends StatefulWidget {
@@ -21,147 +24,190 @@ class CarrinhoView extends StatefulWidget {
 }
 
 class _CarrinhoViewState extends State<CarrinhoView> {
-
-  late List<CartItem> _items;
+  
+  late Future<List<CDPRODUTOData>> _allProductsFuture;
 
   @override
   void initState() {
     super.initState();
-    _items = List.from(mockCartItems); // Copia os dados do mock para a lista local
+    _allProductsFuture = appDatabase.cdProdutoDao.getAllProdutos();
+  }
+  
+  void _atualizarQuantidade(LCCARRINHOData item, int novaQtd) {
+    if (novaQtd < 1) {
+      _removerItem(item);
+      return;
+    }
+    appDatabase.carrinhoDao.updateItem(item.toCompanion(true).copyWith(
+      lcCarQuantidade: drift.Value(novaQtd)
+    ));
   }
 
-  double _calculateTotal() {
-
-    return _items.fold(0.0, (sum, item) => sum + (item.price * item.quantity));
-  }
-
-  void _removerItem(int index) {
-    setState(() {
-      _items.removeAt(index);
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Item removido do carrinho"), duration: Duration(seconds: 1)),
-    );
-  }
-
-  void _decrementarQuantidade(int index) {
-    setState(() {
-      if (_items[index].quantity > 1) {
-        _items[index].quantity--;
-      } else {
-        _removerItem(index);
-      }
-    });
-  }
-
-  void _incrementarQuantidade(int index) {
-    setState(() {
-      _items[index].quantity++;
-    });
+  void _removerItem(LCCARRINHOData item) {
+    appDatabase.carrinhoDao.deleteItem(item.toCompanion(true));
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Item removido"), duration: Duration(milliseconds: 500)));
   }
 
   @override
   Widget build(BuildContext context) {
-    final totalValue = _calculateTotal();
+    final userId = MyApp.dadosUsuario?['CDSEID'] ?? 1;
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Transform.translate(
-                    offset: const Offset(0, -30),
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () => Navigator.of(context).pop(),
-                      padding: const EdgeInsets.all(8),
-                      constraints: const BoxConstraints(),
-                      iconSize: 30,
-                    ),
-                  ),
-                  Expanded(
-                    child: FIDText(
-                      baseText: "Carrinho",
-                      preset: FIDText.large,
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                ],
-              ),
+        child: Column(
+          children: [
+            const FIDHeader(),
 
-              Expanded(
-                child: _items.isEmpty
-                    ? Center(child: FIDText(baseText: "Seu carrinho está vazio.", preset: FIDText.large, textAlign: TextAlign.center,))
-                    : ListView.builder(
-                  padding: const EdgeInsets.only(top: 10),
-                  itemCount: _items.length,
-                  itemBuilder: (context, index) {
-                    final item = _items[index];
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: StreamBuilder<List<LCCARRINHOData>>(
+                  stream: appDatabase.carrinhoDao.watchCarrinhoSimplesDoUsuario(userId),
+                  builder: (context, snapshotCar) {
+                    
+                    if (snapshotCar.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                    return Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10.0, top: 15.0),
-                          child: CartItemCard(
-                            item: item,
-                          ),
-                        ),
+                    final cartItems = snapshotCar.data ?? [];
 
-                        Positioned(
-                          top: 20,
-                          right: 0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.red[50],
-                              shape: BoxShape.circle,
+                    if (cartItems.isEmpty) {
+                      return Center(child: FIDText(baseText: "Seu carrinho está vazio.", preset: FIDText.large));
+                    }
+
+                    return FutureBuilder<List<CDPRODUTOData>>(
+                      future: _allProductsFuture,
+                      builder: (context, snapshotProd) {
+                        
+                        if (snapshotProd.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                        
+                        final allProducts = snapshotProd.data ?? [];
+                        final Map<int, CDPRODUTOData> productMap = { 
+                          for (var prod in allProducts) prod.cdProdId: prod 
+                        };
+                        
+                        final List<CartItemCardData> displayItems = [];
+                        Decimal totalValue = Decimal.zero;
+
+                        for (var carItem in cartItems) {
+                          final prod = productMap[carItem.lcCarProdutoId];
+                          
+                          if (prod != null) {
+                            final itemDisplay = CartItemCardData(
+                              carrinhoData: carItem,
+                              produtoData: prod,
+                            );
+                            displayItems.add(itemDisplay);
+                            
+                            final precoDecimal = prod.cdProdPrecoReal; 
+                            totalValue += (precoDecimal * Decimal.fromInt(carItem.lcCarQuantidade));
+                          }
+                        }
+                        
+                        return Column(
+                          children: [
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: displayItems.length,
+                                itemBuilder: (context, index) {
+                                  final itemCompleto = displayItems[index];
+                                  final prod = itemCompleto.produtoData;
+                                  final car = itemCompleto.carrinhoData;
+
+                                  final precoDisplay = prod.cdProdPrecoReal.toStringAsFixed(2).replaceAll('.', ',');
+
+                                  return Container(
+                                    margin: const EdgeInsets.only(bottom: 12),
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromRGBO(255, 255, 255, 1),
+                                      borderRadius: BorderRadius.circular(12),
+                                      boxShadow: [BoxShadow(color: const Color.fromRGBO(0, 0, 0, 0.122), blurRadius: 4, offset: const Offset(0, 2))],
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 60, height: 60, 
+                                          color: const Color.fromRGBO(238, 238, 238, 1),
+                                          child: const Icon(Icons.shopping_bag, color: Color.fromRGBO(158, 158, 158, 1)),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              FIDText(baseText: prod.cdProdNome, preset: FIDText.medium, fontWeight: FontWeight.bold),
+                                              FIDText(baseText: "R\$ $precoDisplay", preset: FIDText.small, color: const Color.fromRGBO(158, 158, 158, 1)),
+                                            ],
+                                          ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            IconButton(
+                                              icon: const Icon(Icons.remove_circle_outline, color: Color.fromRGBO(33, 150, 243, 1)),
+                                              onPressed: () => _atualizarQuantidade(car, car.lcCarQuantidade - 1),
+                                              padding: EdgeInsets.zero,
+                                              constraints: const BoxConstraints(),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                              child: Text("${car.lcCarQuantidade}", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                            ),
+                                            IconButton(
+                                              icon: const Icon(Icons.add_circle_outline, color: Color.fromRGBO(33, 150, 243, 1)),
+                                              onPressed: () => _atualizarQuantidade(car, car.lcCarQuantidade + 1),
+                                              padding: EdgeInsets.zero,
+                                              constraints: const BoxConstraints(),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(width: 8),
+                                        IconButton(
+                                          icon: const Icon(Icons.delete_outline, color: Color.fromRGBO(244, 67, 54, 1)),
+                                          onPressed: () => _removerItem(car),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
-                            child: IconButton(
-                              icon: const Icon(Icons.delete_outline, color: Colors.red),
-                              onPressed: () => _removerItem(index),
-                              tooltip: 'Remover item',
+                            
+                            const Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                FIDText(baseText: "Total:", preset: FIDText.large),
+                                FIDText(
+                                  baseText: "R\$ ${totalValue.toStringAsFixed(2).replaceAll('.', ',')}",
+                                  preset: FIDText.large,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ],
                             ),
-                          ),
-                        ),
-                      ],
+                            const SizedBox(height: 10),
+                            FIDButton(
+                              text: "Finalizar Compra",
+                              preset: FIDButton.medium,
+                              onPressed: () {
+                                Navigator.of(context).pushNamed(
+                                  Routes.paymentSelectionPage,
+                                  arguments: totalValue.toDouble(), 
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 20),
+                          ],
+                        );
+                      },
                     );
                   },
                 ),
               ),
-
-              Column(
-                children: [
-                  const Divider(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      FIDText(baseText: "Valor Total:", preset: FIDText.large, textAlign: TextAlign.start),
-                      FIDText(
-                        baseText: "R\$ ${totalValue.toStringAsFixed(2).replaceAll('.', ',')}",
-                        preset: FIDText.large,
-                        fontWeight: FontWeight.bold,
-                        textAlign: TextAlign.end,
-                      ),
-                    ],
-                  ),
-
-                  FIDButton(
-                    text: "Finalizar Compra",
-                    preset: FIDButton.medium,
-                    onPressed: _items.isEmpty ? null : () {
-                      Navigator.of(context).pushNamed(Routes.paymentSelectionPage ?? '');
-                    },
-                    padding: const {"top": 0.02, "bottom": 0.01},
-                  ),
-                ],
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

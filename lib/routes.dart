@@ -1,4 +1,5 @@
 import 'package:fidelem_app/modules/inventario/edit_produto/edit_view.dart';
+import 'package:fidelem_app/modules/home/home_view.dart';
 import 'package:fidelem_app/modules/login/login_view.dart';
 import 'package:fidelem_app/modules/redefinir_senha/redefinir_senha_view.dart';
 import 'package:fidelem_app/modules/registro/registro_view.dart';
@@ -7,6 +8,8 @@ import 'package:fidelem_app/modules/carrinho/pages/payment_selection_view.dart';
 import 'package:fidelem_app/modules/carrinho/pages/checkout_success_view.dart';
 import 'package:fidelem_app/modules/Home/home_mercado_view.dart';
 import 'package:fidelem_app/modules/Config/config_view.dart';
+import 'package:fidelem_app/modules/loja_pontos/loja_pontos_view.dart';
+import 'package:fidelem_app/base_view.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fidelem_app/modules/inventario/add_manual/add_manual_view.dart';
 
@@ -19,7 +22,8 @@ class Routes {
   static const String configPage = '/config';
 
   // Rotas de fluxo do Cliente
-  static const String homePage = '/home';
+  static const String basePage = '/base';
+  static const String homePageCliente = '/homeCliente';
   static const String lojaNormalPage = '/loja-normal';
   static const String lojaPontosPage = '/loja-pontos';
   static const String carrinhoPage = '/carrinho';
@@ -27,6 +31,7 @@ class Routes {
   static const String checkoutSuccessPage = '/checkout-success';
 
   // Rotas do fluxo do Mercado
+  static const String homePage = '/home';
   static const String inventarioPage = '/inventario';
   static const String adicionarProdutoManualPage = '/inventario/add-manual';
   static const String editarProduto = '/inventario/edit-produto';
@@ -43,6 +48,9 @@ class Routes {
       carrinhoPage: (context) => const CarrinhoView(),
       paymentSelectionPage: (context) => const PaymentSelectionView(),
       checkoutSuccessPage: (context) => const CheckoutSuccessView(),
+      homePageCliente: (context) => const HomeViewCliente(),
+      lojaPontosPage: (context) => const LojaPontosView(),
+      basePage: (context) => const BaseView(),
 
       // Rotas do fluxo do Mercado
       adicionarProdutoManualPage: (context) => const AddManualView(),

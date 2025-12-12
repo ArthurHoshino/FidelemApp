@@ -3675,6 +3675,338 @@ class LCAUDITORIACompanion extends UpdateCompanion<LCAUDITORIAData> {
   }
 }
 
+class $LCCARRINHOTable extends LCCARRINHO
+    with TableInfo<$LCCARRINHOTable, LCCARRINHOData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $LCCARRINHOTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _lcCarIdMeta = const VerificationMeta(
+    'lcCarId',
+  );
+  @override
+  late final GeneratedColumn<int> lcCarId = GeneratedColumn<int>(
+    'LCCARID',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _lcCarProdutoIdMeta = const VerificationMeta(
+    'lcCarProdutoId',
+  );
+  @override
+  late final GeneratedColumn<int> lcCarProdutoId = GeneratedColumn<int>(
+    'LCCARPRODUTOID',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES cdproduto (CDPRODID)',
+    ),
+  );
+  static const VerificationMeta _lcCarUsuarioIdMeta = const VerificationMeta(
+    'lcCarUsuarioId',
+  );
+  @override
+  late final GeneratedColumn<int> lcCarUsuarioId = GeneratedColumn<int>(
+    'LCCARUSUARIOID',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES cdsenha (CDSEID)',
+    ),
+  );
+  static const VerificationMeta _lcCarQuantidadeMeta = const VerificationMeta(
+    'lcCarQuantidade',
+  );
+  @override
+  late final GeneratedColumn<int> lcCarQuantidade = GeneratedColumn<int>(
+    'LCCARQUANTIDADE',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    lcCarId,
+    lcCarProdutoId,
+    lcCarUsuarioId,
+    lcCarQuantidade,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'lccarrinho';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<LCCARRINHOData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('LCCARID')) {
+      context.handle(
+        _lcCarIdMeta,
+        lcCarId.isAcceptableOrUnknown(data['LCCARID']!, _lcCarIdMeta),
+      );
+    }
+    if (data.containsKey('LCCARPRODUTOID')) {
+      context.handle(
+        _lcCarProdutoIdMeta,
+        lcCarProdutoId.isAcceptableOrUnknown(
+          data['LCCARPRODUTOID']!,
+          _lcCarProdutoIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_lcCarProdutoIdMeta);
+    }
+    if (data.containsKey('LCCARUSUARIOID')) {
+      context.handle(
+        _lcCarUsuarioIdMeta,
+        lcCarUsuarioId.isAcceptableOrUnknown(
+          data['LCCARUSUARIOID']!,
+          _lcCarUsuarioIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_lcCarUsuarioIdMeta);
+    }
+    if (data.containsKey('LCCARQUANTIDADE')) {
+      context.handle(
+        _lcCarQuantidadeMeta,
+        lcCarQuantidade.isAcceptableOrUnknown(
+          data['LCCARQUANTIDADE']!,
+          _lcCarQuantidadeMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_lcCarQuantidadeMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {lcCarId};
+  @override
+  LCCARRINHOData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return LCCARRINHOData(
+      lcCarId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}LCCARID'],
+      )!,
+      lcCarProdutoId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}LCCARPRODUTOID'],
+      )!,
+      lcCarUsuarioId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}LCCARUSUARIOID'],
+      )!,
+      lcCarQuantidade: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}LCCARQUANTIDADE'],
+      )!,
+    );
+  }
+
+  @override
+  $LCCARRINHOTable createAlias(String alias) {
+    return $LCCARRINHOTable(attachedDatabase, alias);
+  }
+}
+
+class LCCARRINHOData extends DataClass implements Insertable<LCCARRINHOData> {
+  final int lcCarId;
+  final int lcCarProdutoId;
+  final int lcCarUsuarioId;
+  final int lcCarQuantidade;
+  const LCCARRINHOData({
+    required this.lcCarId,
+    required this.lcCarProdutoId,
+    required this.lcCarUsuarioId,
+    required this.lcCarQuantidade,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['LCCARID'] = Variable<int>(lcCarId);
+    map['LCCARPRODUTOID'] = Variable<int>(lcCarProdutoId);
+    map['LCCARUSUARIOID'] = Variable<int>(lcCarUsuarioId);
+    map['LCCARQUANTIDADE'] = Variable<int>(lcCarQuantidade);
+    return map;
+  }
+
+  LCCARRINHOCompanion toCompanion(bool nullToAbsent) {
+    return LCCARRINHOCompanion(
+      lcCarId: Value(lcCarId),
+      lcCarProdutoId: Value(lcCarProdutoId),
+      lcCarUsuarioId: Value(lcCarUsuarioId),
+      lcCarQuantidade: Value(lcCarQuantidade),
+    );
+  }
+
+  factory LCCARRINHOData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LCCARRINHOData(
+      lcCarId: serializer.fromJson<int>(json['lcCarId']),
+      lcCarProdutoId: serializer.fromJson<int>(json['lcCarProdutoId']),
+      lcCarUsuarioId: serializer.fromJson<int>(json['lcCarUsuarioId']),
+      lcCarQuantidade: serializer.fromJson<int>(json['lcCarQuantidade']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'lcCarId': serializer.toJson<int>(lcCarId),
+      'lcCarProdutoId': serializer.toJson<int>(lcCarProdutoId),
+      'lcCarUsuarioId': serializer.toJson<int>(lcCarUsuarioId),
+      'lcCarQuantidade': serializer.toJson<int>(lcCarQuantidade),
+    };
+  }
+
+  LCCARRINHOData copyWith({
+    int? lcCarId,
+    int? lcCarProdutoId,
+    int? lcCarUsuarioId,
+    int? lcCarQuantidade,
+  }) => LCCARRINHOData(
+    lcCarId: lcCarId ?? this.lcCarId,
+    lcCarProdutoId: lcCarProdutoId ?? this.lcCarProdutoId,
+    lcCarUsuarioId: lcCarUsuarioId ?? this.lcCarUsuarioId,
+    lcCarQuantidade: lcCarQuantidade ?? this.lcCarQuantidade,
+  );
+  LCCARRINHOData copyWithCompanion(LCCARRINHOCompanion data) {
+    return LCCARRINHOData(
+      lcCarId: data.lcCarId.present ? data.lcCarId.value : this.lcCarId,
+      lcCarProdutoId: data.lcCarProdutoId.present
+          ? data.lcCarProdutoId.value
+          : this.lcCarProdutoId,
+      lcCarUsuarioId: data.lcCarUsuarioId.present
+          ? data.lcCarUsuarioId.value
+          : this.lcCarUsuarioId,
+      lcCarQuantidade: data.lcCarQuantidade.present
+          ? data.lcCarQuantidade.value
+          : this.lcCarQuantidade,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LCCARRINHOData(')
+          ..write('lcCarId: $lcCarId, ')
+          ..write('lcCarProdutoId: $lcCarProdutoId, ')
+          ..write('lcCarUsuarioId: $lcCarUsuarioId, ')
+          ..write('lcCarQuantidade: $lcCarQuantidade')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(lcCarId, lcCarProdutoId, lcCarUsuarioId, lcCarQuantidade);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LCCARRINHOData &&
+          other.lcCarId == this.lcCarId &&
+          other.lcCarProdutoId == this.lcCarProdutoId &&
+          other.lcCarUsuarioId == this.lcCarUsuarioId &&
+          other.lcCarQuantidade == this.lcCarQuantidade);
+}
+
+class LCCARRINHOCompanion extends UpdateCompanion<LCCARRINHOData> {
+  final Value<int> lcCarId;
+  final Value<int> lcCarProdutoId;
+  final Value<int> lcCarUsuarioId;
+  final Value<int> lcCarQuantidade;
+  const LCCARRINHOCompanion({
+    this.lcCarId = const Value.absent(),
+    this.lcCarProdutoId = const Value.absent(),
+    this.lcCarUsuarioId = const Value.absent(),
+    this.lcCarQuantidade = const Value.absent(),
+  });
+  LCCARRINHOCompanion.insert({
+    this.lcCarId = const Value.absent(),
+    required int lcCarProdutoId,
+    required int lcCarUsuarioId,
+    required int lcCarQuantidade,
+  }) : lcCarProdutoId = Value(lcCarProdutoId),
+       lcCarUsuarioId = Value(lcCarUsuarioId),
+       lcCarQuantidade = Value(lcCarQuantidade);
+  static Insertable<LCCARRINHOData> custom({
+    Expression<int>? lcCarId,
+    Expression<int>? lcCarProdutoId,
+    Expression<int>? lcCarUsuarioId,
+    Expression<int>? lcCarQuantidade,
+  }) {
+    return RawValuesInsertable({
+      if (lcCarId != null) 'LCCARID': lcCarId,
+      if (lcCarProdutoId != null) 'LCCARPRODUTOID': lcCarProdutoId,
+      if (lcCarUsuarioId != null) 'LCCARUSUARIOID': lcCarUsuarioId,
+      if (lcCarQuantidade != null) 'LCCARQUANTIDADE': lcCarQuantidade,
+    });
+  }
+
+  LCCARRINHOCompanion copyWith({
+    Value<int>? lcCarId,
+    Value<int>? lcCarProdutoId,
+    Value<int>? lcCarUsuarioId,
+    Value<int>? lcCarQuantidade,
+  }) {
+    return LCCARRINHOCompanion(
+      lcCarId: lcCarId ?? this.lcCarId,
+      lcCarProdutoId: lcCarProdutoId ?? this.lcCarProdutoId,
+      lcCarUsuarioId: lcCarUsuarioId ?? this.lcCarUsuarioId,
+      lcCarQuantidade: lcCarQuantidade ?? this.lcCarQuantidade,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (lcCarId.present) {
+      map['LCCARID'] = Variable<int>(lcCarId.value);
+    }
+    if (lcCarProdutoId.present) {
+      map['LCCARPRODUTOID'] = Variable<int>(lcCarProdutoId.value);
+    }
+    if (lcCarUsuarioId.present) {
+      map['LCCARUSUARIOID'] = Variable<int>(lcCarUsuarioId.value);
+    }
+    if (lcCarQuantidade.present) {
+      map['LCCARQUANTIDADE'] = Variable<int>(lcCarQuantidade.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LCCARRINHOCompanion(')
+          ..write('lcCarId: $lcCarId, ')
+          ..write('lcCarProdutoId: $lcCarProdutoId, ')
+          ..write('lcCarUsuarioId: $lcCarUsuarioId, ')
+          ..write('lcCarQuantidade: $lcCarQuantidade')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3691,6 +4023,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $CDEXCECAOTable cdexcecao = $CDEXCECAOTable(this);
   late final $CDACAOTable cdacao = $CDACAOTable(this);
   late final $LCAUDITORIATable lcauditoria = $LCAUDITORIATable(this);
+  late final $LCCARRINHOTable lccarrinho = $LCCARRINHOTable(this);
   late final CDEMPRESADAO cdempresadao = CDEMPRESADAO(this as AppDatabase);
   late final CDCARGODAO cdcargodao = CDCARGODAO(this as AppDatabase);
   late final CDSENHADAO cdsenhadao = CDSENHADAO(this as AppDatabase);
@@ -3710,6 +4043,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final LCAUDITORIADAO lcauditoriadao = LCAUDITORIADAO(
     this as AppDatabase,
   );
+  late final LCCARRINHODAO lccarrinhodao = LCCARRINHODAO(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3726,6 +4060,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     cdexcecao,
     cdacao,
     lcauditoria,
+    lccarrinho,
   ];
 }
 
@@ -4708,6 +5043,26 @@ final class $$CDSENHATableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<$LCCARRINHOTable, List<LCCARRINHOData>>
+  _lccarrinhoRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.lccarrinho,
+    aliasName: $_aliasNameGenerator(
+      db.cdsenha.cdSeId,
+      db.lccarrinho.lcCarUsuarioId,
+    ),
+  );
+
+  $$LCCARRINHOTableProcessedTableManager get lccarrinhoRefs {
+    final manager = $$LCCARRINHOTableTableManager($_db, $_db.lccarrinho).filter(
+      (f) => f.lcCarUsuarioId.cdSeId.sqlEquals($_itemColumn<int>('CDSEID')!),
+    );
+
+    final cache = $_typedResult.readTableOrNull(_lccarrinhoRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$CDSENHATableFilterComposer
@@ -4813,6 +5168,31 @@ class $$CDSENHATableFilterComposer
           }) => $$LCVENDATableFilterComposer(
             $db: $db,
             $table: $db.lcvenda,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> lccarrinhoRefs(
+    Expression<bool> Function($$LCCARRINHOTableFilterComposer f) f,
+  ) {
+    final $$LCCARRINHOTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.cdSeId,
+      referencedTable: $db.lccarrinho,
+      getReferencedColumn: (t) => t.lcCarUsuarioId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$LCCARRINHOTableFilterComposer(
+            $db: $db,
+            $table: $db.lccarrinho,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -4989,6 +5369,31 @@ class $$CDSENHATableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> lccarrinhoRefs<T extends Object>(
+    Expression<T> Function($$LCCARRINHOTableAnnotationComposer a) f,
+  ) {
+    final $$LCCARRINHOTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.cdSeId,
+      referencedTable: $db.lccarrinho,
+      getReferencedColumn: (t) => t.lcCarUsuarioId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$LCCARRINHOTableAnnotationComposer(
+            $db: $db,
+            $table: $db.lccarrinho,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$CDSENHATableTableManager
@@ -5008,6 +5413,7 @@ class $$CDSENHATableTableManager
             bool cdSeCargoId,
             bool fidelsessaoRefs,
             bool lcvendaRefs,
+            bool lccarrinhoRefs,
           })
         > {
   $$CDSENHATableTableManager(_$AppDatabase db, $CDSENHATable table)
@@ -5070,12 +5476,14 @@ class $$CDSENHATableTableManager
                 cdSeCargoId = false,
                 fidelsessaoRefs = false,
                 lcvendaRefs = false,
+                lccarrinhoRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (fidelsessaoRefs) db.fidelsessao,
                     if (lcvendaRefs) db.lcvenda,
+                    if (lccarrinhoRefs) db.lccarrinho,
                   ],
                   addJoins:
                       <
@@ -5153,6 +5561,27 @@ class $$CDSENHATableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (lccarrinhoRefs)
+                        await $_getPrefetchedData<
+                          CDSENHAData,
+                          $CDSENHATable,
+                          LCCARRINHOData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$CDSENHATableReferences
+                              ._lccarrinhoRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$CDSENHATableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).lccarrinhoRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.lcCarUsuarioId == item.cdSeId,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -5177,6 +5606,7 @@ typedef $$CDSENHATableProcessedTableManager =
         bool cdSeCargoId,
         bool fidelsessaoRefs,
         bool lcvendaRefs,
+        bool lccarrinhoRefs,
       })
     >;
 typedef $$FIDELSESSAOTableCreateCompanionBuilder =
@@ -6113,6 +6543,27 @@ final class $$CDPRODUTOTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<$LCCARRINHOTable, List<LCCARRINHOData>>
+  _lccarrinhoRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.lccarrinho,
+    aliasName: $_aliasNameGenerator(
+      db.cdproduto.cdProdId,
+      db.lccarrinho.lcCarProdutoId,
+    ),
+  );
+
+  $$LCCARRINHOTableProcessedTableManager get lccarrinhoRefs {
+    final manager = $$LCCARRINHOTableTableManager($_db, $_db.lccarrinho).filter(
+      (f) =>
+          f.lcCarProdutoId.cdProdId.sqlEquals($_itemColumn<int>('CDPRODID')!),
+    );
+
+    final cache = $_typedResult.readTableOrNull(_lccarrinhoRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$CDPRODUTOTableFilterComposer
@@ -6223,6 +6674,31 @@ class $$CDPRODUTOTableFilterComposer
           }) => $$CDPRODUTOIMAGEMTableFilterComposer(
             $db: $db,
             $table: $db.cdprodutoimagem,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> lccarrinhoRefs(
+    Expression<bool> Function($$LCCARRINHOTableFilterComposer f) f,
+  ) {
+    final $$LCCARRINHOTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.cdProdId,
+      referencedTable: $db.lccarrinho,
+      getReferencedColumn: (t) => t.lcCarProdutoId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$LCCARRINHOTableFilterComposer(
+            $db: $db,
+            $table: $db.lccarrinho,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -6438,6 +6914,31 @@ class $$CDPRODUTOTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> lccarrinhoRefs<T extends Object>(
+    Expression<T> Function($$LCCARRINHOTableAnnotationComposer a) f,
+  ) {
+    final $$LCCARRINHOTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.cdProdId,
+      referencedTable: $db.lccarrinho,
+      getReferencedColumn: (t) => t.lcCarProdutoId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$LCCARRINHOTableAnnotationComposer(
+            $db: $db,
+            $table: $db.lccarrinho,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$CDPRODUTOTableTableManager
@@ -6457,6 +6958,7 @@ class $$CDPRODUTOTableTableManager
             bool cdProdEmpresaId,
             bool cdProdCategoriaId,
             bool cdprodutoimagemRefs,
+            bool lccarrinhoRefs,
           })
         > {
   $$CDPRODUTOTableTableManager(_$AppDatabase db, $CDPRODUTOTable table)
@@ -6527,11 +7029,13 @@ class $$CDPRODUTOTableTableManager
                 cdProdEmpresaId = false,
                 cdProdCategoriaId = false,
                 cdprodutoimagemRefs = false,
+                lccarrinhoRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (cdprodutoimagemRefs) db.cdprodutoimagem,
+                    if (lccarrinhoRefs) db.lccarrinho,
                   ],
                   addJoins:
                       <
@@ -6601,6 +7105,27 @@ class $$CDPRODUTOTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (lccarrinhoRefs)
+                        await $_getPrefetchedData<
+                          CDPRODUTOData,
+                          $CDPRODUTOTable,
+                          LCCARRINHOData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$CDPRODUTOTableReferences
+                              ._lccarrinhoRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$CDPRODUTOTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).lccarrinhoRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.lcCarProdutoId == item.cdProdId,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -6625,6 +7150,7 @@ typedef $$CDPRODUTOTableProcessedTableManager =
         bool cdProdEmpresaId,
         bool cdProdCategoriaId,
         bool cdprodutoimagemRefs,
+        bool lccarrinhoRefs,
       })
     >;
 typedef $$CDPRODUTOIMAGEMTableCreateCompanionBuilder =
@@ -7872,6 +8398,396 @@ typedef $$LCAUDITORIATableProcessedTableManager =
       LCAUDITORIAData,
       PrefetchHooks Function({bool lcAudAcaoId, bool lcAudEmpresaId})
     >;
+typedef $$LCCARRINHOTableCreateCompanionBuilder =
+    LCCARRINHOCompanion Function({
+      Value<int> lcCarId,
+      required int lcCarProdutoId,
+      required int lcCarUsuarioId,
+      required int lcCarQuantidade,
+    });
+typedef $$LCCARRINHOTableUpdateCompanionBuilder =
+    LCCARRINHOCompanion Function({
+      Value<int> lcCarId,
+      Value<int> lcCarProdutoId,
+      Value<int> lcCarUsuarioId,
+      Value<int> lcCarQuantidade,
+    });
+
+final class $$LCCARRINHOTableReferences
+    extends BaseReferences<_$AppDatabase, $LCCARRINHOTable, LCCARRINHOData> {
+  $$LCCARRINHOTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $CDPRODUTOTable _lcCarProdutoIdTable(_$AppDatabase db) =>
+      db.cdproduto.createAlias(
+        $_aliasNameGenerator(
+          db.lccarrinho.lcCarProdutoId,
+          db.cdproduto.cdProdId,
+        ),
+      );
+
+  $$CDPRODUTOTableProcessedTableManager get lcCarProdutoId {
+    final $_column = $_itemColumn<int>('LCCARPRODUTOID')!;
+
+    final manager = $$CDPRODUTOTableTableManager(
+      $_db,
+      $_db.cdproduto,
+    ).filter((f) => f.cdProdId.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_lcCarProdutoIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $CDSENHATable _lcCarUsuarioIdTable(_$AppDatabase db) =>
+      db.cdsenha.createAlias(
+        $_aliasNameGenerator(db.lccarrinho.lcCarUsuarioId, db.cdsenha.cdSeId),
+      );
+
+  $$CDSENHATableProcessedTableManager get lcCarUsuarioId {
+    final $_column = $_itemColumn<int>('LCCARUSUARIOID')!;
+
+    final manager = $$CDSENHATableTableManager(
+      $_db,
+      $_db.cdsenha,
+    ).filter((f) => f.cdSeId.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_lcCarUsuarioIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$LCCARRINHOTableFilterComposer
+    extends Composer<_$AppDatabase, $LCCARRINHOTable> {
+  $$LCCARRINHOTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get lcCarId => $composableBuilder(
+    column: $table.lcCarId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get lcCarQuantidade => $composableBuilder(
+    column: $table.lcCarQuantidade,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$CDPRODUTOTableFilterComposer get lcCarProdutoId {
+    final $$CDPRODUTOTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.lcCarProdutoId,
+      referencedTable: $db.cdproduto,
+      getReferencedColumn: (t) => t.cdProdId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CDPRODUTOTableFilterComposer(
+            $db: $db,
+            $table: $db.cdproduto,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$CDSENHATableFilterComposer get lcCarUsuarioId {
+    final $$CDSENHATableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.lcCarUsuarioId,
+      referencedTable: $db.cdsenha,
+      getReferencedColumn: (t) => t.cdSeId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CDSENHATableFilterComposer(
+            $db: $db,
+            $table: $db.cdsenha,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$LCCARRINHOTableOrderingComposer
+    extends Composer<_$AppDatabase, $LCCARRINHOTable> {
+  $$LCCARRINHOTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get lcCarId => $composableBuilder(
+    column: $table.lcCarId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get lcCarQuantidade => $composableBuilder(
+    column: $table.lcCarQuantidade,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$CDPRODUTOTableOrderingComposer get lcCarProdutoId {
+    final $$CDPRODUTOTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.lcCarProdutoId,
+      referencedTable: $db.cdproduto,
+      getReferencedColumn: (t) => t.cdProdId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CDPRODUTOTableOrderingComposer(
+            $db: $db,
+            $table: $db.cdproduto,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$CDSENHATableOrderingComposer get lcCarUsuarioId {
+    final $$CDSENHATableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.lcCarUsuarioId,
+      referencedTable: $db.cdsenha,
+      getReferencedColumn: (t) => t.cdSeId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CDSENHATableOrderingComposer(
+            $db: $db,
+            $table: $db.cdsenha,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$LCCARRINHOTableAnnotationComposer
+    extends Composer<_$AppDatabase, $LCCARRINHOTable> {
+  $$LCCARRINHOTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get lcCarId =>
+      $composableBuilder(column: $table.lcCarId, builder: (column) => column);
+
+  GeneratedColumn<int> get lcCarQuantidade => $composableBuilder(
+    column: $table.lcCarQuantidade,
+    builder: (column) => column,
+  );
+
+  $$CDPRODUTOTableAnnotationComposer get lcCarProdutoId {
+    final $$CDPRODUTOTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.lcCarProdutoId,
+      referencedTable: $db.cdproduto,
+      getReferencedColumn: (t) => t.cdProdId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CDPRODUTOTableAnnotationComposer(
+            $db: $db,
+            $table: $db.cdproduto,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$CDSENHATableAnnotationComposer get lcCarUsuarioId {
+    final $$CDSENHATableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.lcCarUsuarioId,
+      referencedTable: $db.cdsenha,
+      getReferencedColumn: (t) => t.cdSeId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CDSENHATableAnnotationComposer(
+            $db: $db,
+            $table: $db.cdsenha,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$LCCARRINHOTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $LCCARRINHOTable,
+          LCCARRINHOData,
+          $$LCCARRINHOTableFilterComposer,
+          $$LCCARRINHOTableOrderingComposer,
+          $$LCCARRINHOTableAnnotationComposer,
+          $$LCCARRINHOTableCreateCompanionBuilder,
+          $$LCCARRINHOTableUpdateCompanionBuilder,
+          (LCCARRINHOData, $$LCCARRINHOTableReferences),
+          LCCARRINHOData,
+          PrefetchHooks Function({bool lcCarProdutoId, bool lcCarUsuarioId})
+        > {
+  $$LCCARRINHOTableTableManager(_$AppDatabase db, $LCCARRINHOTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$LCCARRINHOTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$LCCARRINHOTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$LCCARRINHOTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> lcCarId = const Value.absent(),
+                Value<int> lcCarProdutoId = const Value.absent(),
+                Value<int> lcCarUsuarioId = const Value.absent(),
+                Value<int> lcCarQuantidade = const Value.absent(),
+              }) => LCCARRINHOCompanion(
+                lcCarId: lcCarId,
+                lcCarProdutoId: lcCarProdutoId,
+                lcCarUsuarioId: lcCarUsuarioId,
+                lcCarQuantidade: lcCarQuantidade,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> lcCarId = const Value.absent(),
+                required int lcCarProdutoId,
+                required int lcCarUsuarioId,
+                required int lcCarQuantidade,
+              }) => LCCARRINHOCompanion.insert(
+                lcCarId: lcCarId,
+                lcCarProdutoId: lcCarProdutoId,
+                lcCarUsuarioId: lcCarUsuarioId,
+                lcCarQuantidade: lcCarQuantidade,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$LCCARRINHOTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({lcCarProdutoId = false, lcCarUsuarioId = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (lcCarProdutoId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.lcCarProdutoId,
+                                    referencedTable: $$LCCARRINHOTableReferences
+                                        ._lcCarProdutoIdTable(db),
+                                    referencedColumn:
+                                        $$LCCARRINHOTableReferences
+                                            ._lcCarProdutoIdTable(db)
+                                            .cdProdId,
+                                  )
+                                  as T;
+                        }
+                        if (lcCarUsuarioId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.lcCarUsuarioId,
+                                    referencedTable: $$LCCARRINHOTableReferences
+                                        ._lcCarUsuarioIdTable(db),
+                                    referencedColumn:
+                                        $$LCCARRINHOTableReferences
+                                            ._lcCarUsuarioIdTable(db)
+                                            .cdSeId,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$LCCARRINHOTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $LCCARRINHOTable,
+      LCCARRINHOData,
+      $$LCCARRINHOTableFilterComposer,
+      $$LCCARRINHOTableOrderingComposer,
+      $$LCCARRINHOTableAnnotationComposer,
+      $$LCCARRINHOTableCreateCompanionBuilder,
+      $$LCCARRINHOTableUpdateCompanionBuilder,
+      (LCCARRINHOData, $$LCCARRINHOTableReferences),
+      LCCARRINHOData,
+      PrefetchHooks Function({bool lcCarProdutoId, bool lcCarUsuarioId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -7898,6 +8814,8 @@ class $AppDatabaseManager {
       $$CDACAOTableTableManager(_db, _db.cdacao);
   $$LCAUDITORIATableTableManager get lcauditoria =>
       $$LCAUDITORIATableTableManager(_db, _db.lcauditoria);
+  $$LCCARRINHOTableTableManager get lccarrinho =>
+      $$LCCARRINHOTableTableManager(_db, _db.lccarrinho);
 }
 
 mixin _$CDEMPRESADAOMixin on DatabaseAccessor<AppDatabase> {
@@ -7949,4 +8867,12 @@ mixin _$LCAUDITORIADAOMixin on DatabaseAccessor<AppDatabase> {
   $CDACAOTable get cdacao => attachedDatabase.cdacao;
   $CDEMPRESATable get cdempresa => attachedDatabase.cdempresa;
   $LCAUDITORIATable get lcauditoria => attachedDatabase.lcauditoria;
+}
+mixin _$LCCARRINHODAOMixin on DatabaseAccessor<AppDatabase> {
+  $CDEMPRESATable get cdempresa => attachedDatabase.cdempresa;
+  $CDCATEGORIATable get cdcategoria => attachedDatabase.cdcategoria;
+  $CDPRODUTOTable get cdproduto => attachedDatabase.cdproduto;
+  $CDCARGOTable get cdcargo => attachedDatabase.cdcargo;
+  $CDSENHATable get cdsenha => attachedDatabase.cdsenha;
+  $LCCARRINHOTable get lccarrinho => attachedDatabase.lccarrinho;
 }

@@ -41,7 +41,8 @@ class DecimalConverter extends TypeConverter<Decimal, String> {
     CDPRODUTOIMAGEM, 
     CDEXCECAO, 
     CDACAO, 
-    LCAUDITORIA
+    LCAUDITORIA,
+    LCCARRINHO,
   ], 
   daos: [
     CDEMPRESADAO, 
@@ -54,7 +55,8 @@ class DecimalConverter extends TypeConverter<Decimal, String> {
     CDPRODUTOIMAGEMDAO,
     CDEXCECAODAO,
     CDACAODAO,
-    LCAUDITORIADAO
+    LCAUDITORIADAO,
+    LCCARRINHODAO,
   ]
 )
 class AppDatabase extends _$AppDatabase {
@@ -82,6 +84,7 @@ class AppDatabase extends _$AppDatabase {
   CDEXCECAODAO get cdExcecaoDao => cdexcecaodao;
   CDACAODAO get cdAcaoDao => cdacaodao;
   LCAUDITORIADAO get lcAuditoriaDao => lcauditoriadao;
+  LCCARRINHODAO get carrinhoDao => lccarrinhodao;
 }
 
 LazyDatabase _openConnection() {
@@ -174,6 +177,19 @@ class LCAUDITORIA extends Table {
   DateTimeColumn get lcAudData => dateTime().named('LCAUDDATA')();
   IntColumn get lcAudAcaoId => integer().named('LCAUDACAOID').references(CDACAO, #cdAcaoId)();
   IntColumn get lcAudEmpresaId => integer().named('LCAUDEMPRESAID').references(CDEMPRESA, #cdEmpId)();
+}
+
+class LCCARRINHO extends Table {
+  IntColumn get lcCarId => integer().named('LCCARID').autoIncrement()();
+  IntColumn get lcCarProdutoId => integer().named('LCCARPRODUTOID').references(CDPRODUTO, #cdProdId)();
+  IntColumn get lcCarUsuarioId => integer().named('LCCARUSUARIOID').references(CDSENHA, #cdSeId)();
+  IntColumn get lcCarQuantidade => integer().named('LCCARQUANTIDADE')();
+}
+
+class CarrinhoCompleto {
+  final LCCARRINHOData carrinho;
+  final CDPRODUTOData produto;
+  CarrinhoCompleto({required this.carrinho, required this.produto});
 }
 
 
@@ -423,3 +439,28 @@ class LCAUDITORIADAO extends DatabaseAccessor<AppDatabase> with _$LCAUDITORIADAO
   Future<bool> updateAuditoria(LCAUDITORIACompanion auditoria) => update(lcauditoria).replace(auditoria);
   Future<int> deleteAuditoria(LCAUDITORIACompanion auditoria) => delete(lcauditoria).delete(auditoria);
 }
+
+@DriftAccessor(tables: [LCCARRINHO, CDPRODUTO]) 
+class LCCARRINHODAO extends DatabaseAccessor<AppDatabase> with _$LCCARRINHODAOMixin {
+  final AppDatabase db;
+
+  // O construtor é chamado pelo AppDatabase
+  LCCARRINHODAO(this.db) : super(db);
+  
+  Stream<List<LCCARRINHOData>> watchCarrinhoSimplesDoUsuario(int usuarioId) {
+    return (select(lccarrinho)..where((t) => t.lcCarUsuarioId.equals(usuarioId))).watch();
+  }
+  Future<LCCARRINHOData?> getItemByProdutoEUsuario(int produtoId, int usuarioId) {
+    return (select(lccarrinho)
+      ..where((t) => t.lcCarProdutoId.equals(produtoId) & t.lcCarUsuarioId.equals(usuarioId))
+    ).getSingleOrNull();
+  }
+  Future<int> insertItem(LCCARRINHOCompanion item) => into(lccarrinho).insert(item);
+  Future<bool> updateItem(LCCARRINHOCompanion item) => update(lccarrinho).replace(item);
+  Future<int> deleteItem(LCCARRINHOCompanion item) => delete(lccarrinho).delete(item);
+  Future<void> limparCarrinhoDoUsuario(int usuarioId) {
+    return (delete(lccarrinho)..where((t) => t.lcCarUsuarioId.equals(usuarioId))).go();
+  }
+}
+
+late AppDatabase appDatabase;
