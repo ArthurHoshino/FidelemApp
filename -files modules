@@ -1,0 +1,34 @@
+[33mb83b186[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mEXTMOBILE-36[m[33m, [m[1;31morigin/EXTMOBILE-36[m[33m)[m EXTMOBILE-36 - Padronização
+[33med45c6e[m[33m ([m[1;31morigin/develop[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mdevelop[m[33m)[m hotfix - Troca para o fluxo de mercado
+[33m1369f9f[m Merge pull request #11 from ArthurHoshino/EXTMOBILE-25
+[33mf162f00[m[33m ([m[1;31morigin/EXTMOBILE-25[m[33m)[m EXTMOBILE-25 - Criada tela de home e loja (front)
+[33mf1f6536[m hotfix - Roteamento da home mercado para tela de adicao de produto manual (temp)
+[33m3b224e6[m Merge pull request #9 from ArthurHoshino/EXTMOBILE-27
+[33m497db30[m[33m ([m[1;31morigin/EXTMOBILE-27[m[33m)[m EXTMOBILE-27 - Criacao das tela home e config
+[33m15d638a[m Merge pull request #13 from ArthurHoshino/EXTMOBILE-28
+[33mbf7ad29[m[33m ([m[1;31morigin/EXTMOBILE-28[m[33m)[m EXTMOBILE-28 Criação da pagina de adcionar item manualmente no inventario Alteração no widget fid_button para criar um preset 'big' Criada a tela de edição de produtos Criado um arquivo para a funcaoWIP, a fim de esclarecer quando uma funcionalidade ainda não foi implementada
+[33m3ab2a30[m Atualizacao README
+[33m181a756[m EXTMOBILE-28 Criação da pagina de adcionar item manualmente no inventario Alteração no widget fid_button para criar um preset 'big' Criada a tela de edição de produtos
+[33mc1b47b1[m Merge pull request #10 from ArthurHoshino/EXTMOBILE-32
+[33mb7b7e2d[m EXTMOBILE-32 - Paginas de Login(Conexao com backend)
+[33m142a136[m EXTMOBILE-28 Criação da pagina de adcionar item manualmente no inventario Alteração no widget fid_button para criar um preset 'big'
+[33ma2cd02c[m EXTMOBILE-28 Criação da pagina de adcionar item manualmente no inventario Alteração no widget fid_button para criar um preset 'big'
+[33m6f45a30[m Criação da pagina de adcionar item manualmente no inventario Alteração no widget fid_button para criar um preset 'big'
+[33m2dcb9a5[m Merge pull request #8 from ArthurHoshino/EXTMOBILE-30
+[33m137ef0f[m EXTMOBILE-30 - Implementacao conexao do FidelemApp com a API Backend
+[33m802a741[m EXTMOBILE-30 - Implementacao WebService para conectar back-end e front
+[33m909f35d[m Merge pull request #7 from ArthurHoshino/EXTMOBILE-26.1
+[33m1dbce44[m EXTMOBILE-26.1 - Ajuste QA João
+[33me6e2eda[m Merge pull request #6 from ArthurHoshino/EXTMOBILE-21
+[33m89f9436[m Merge pull request #5 from ArthurHoshino/Nikolas_Dalton
+[33ma131ce2[m Implementação de rotas NO HARDCODE
+[33ma88f58d[m EXTMOBILE-21 - Adicionando os casos de testes dos DAOs restantes no arquivo de teste
+[33mc8cad97[m EXTMOBILE-21 - Implementação do armazenamento local - Drift
+[33m915d8a3[m Merge pull request #3 from ArthurHoshino/correcao
+[33mfcdcfba[m EXTMOBILE-16 - Correcao de importacao da view
+[33mbf0cb1b[m Merge pull request #2 from ArthurHoshino/EXTMOBILE-16
+[33m7c321b6[m EXTMOBILE-16
+[33mc5ff1bf[m[33m ([m[1;31morigin/main[m[33m)[m Merge pull request #1 from ArthurHoshino/EXTMOBILE-16
+[33m14a94b3[m EXTMOBILE-16 - Criada tela de Registro, Login, RedefinirSenha (Front)
+[33me5385f0[m Commit inicial do proejeto. Estrutura de rotas e paginas (modelo)
+[33m39a8840[m Initial commit
