@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:fidelem_app/core/widgets/fid_select_controller.dart";
+import 'package:fidelem_app/core/tema/tema.dart';
 
 class FIDSelectBox extends StatelessWidget {
 
@@ -7,8 +8,8 @@ class FIDSelectBox extends StatelessWidget {
   static double defaultWidth = 0.01;
   static double defaultHeight = 0.01;
   static double defaultBorderRadius = 20.0;
-  static Color defaultBorderColor = const Color.fromRGBO(175, 175, 175, 1);
-  static Color defaultTextColor = const Color.fromRGBO(175, 175, 175, 1);
+  static Color defaultBorderColor = Cor.cinzaClaro;
+  static Color defaultTextColor = Cor.cinzaClaro;
   static Map<String, double> defaultPadding = {
     "top": 0.05, "bottom": 0.05, "right": 0.05, "left": 0.05,
   };
@@ -18,8 +19,8 @@ class FIDSelectBox extends StatelessWidget {
     "width": 0.7,
     "height": 0.05,
     "borderRadius": 10.0,
-    "borderColor": const Color.fromARGB(255, 175, 175, 175),
-    "textColor": const Color.fromARGB(255, 175, 175, 175),
+    "borderColor": Cor.cinzaClaro,
+    "textColor": Cor.cinzaClaro,
     "padding": { "top": 0.00, "bottom": 0.02, "right": 0.00, "left": 0.00 },
   };
   // -------------------------------------------------------------------------

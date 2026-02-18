@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter/gestures.dart';
+import 'package:fidelem_app/core/tema/tema.dart';
 
 class FIDText extends StatelessWidget {
 
@@ -7,7 +8,7 @@ class FIDText extends StatelessWidget {
   static String defaultLinkText = "";
   static double defaultFontSize = 0.05;
   static FontWeight defaultFontWeight = FontWeight.normal;
-  static Color defaultColor = Color.fromARGB(255, 255, 0, 0);
+  static Color defaultColor = Cor.vermelho;
   static Map<String, double> defaultPadding = {
     "top": 0.05,
     "bottom": 0.05,
