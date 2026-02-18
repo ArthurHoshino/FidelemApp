@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fidelem_app/core/tema/tema.dart';
 
 class FIDLine extends StatelessWidget {
 
   static double defaultWidth = 0.01;
   static double defaultHeight = 1.0;
-  static Color defaultColor = Color.fromARGB(255, 255, 0, 0);
+  static Color defaultColor = Cor.vermelho;
   static Map<String, double> defaultPadding = {
     "top": 0.05,
     "bottom": 0.05,

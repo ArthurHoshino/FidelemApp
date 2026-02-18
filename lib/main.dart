@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/database/database.dart';
 import 'package:fidelem_app/routes.dart';
+import 'package:fidelem_app/core/tema/tema.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,10 +21,10 @@ class MyApp extends StatelessWidget {
       title: 'Fidelem App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 37, 150, 190),
+          seedColor: Cor.azul,
         ),
       ),
-      initialRoute: Routes.loginPage,
+      initialRoute: Routes.basePage,
       routes: Routes.rotas,
     );
   }

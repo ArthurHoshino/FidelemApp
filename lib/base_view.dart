@@ -1,9 +1,36 @@
-import 'package:fidelem_app/modules/Config/config_view.dart';
+import 'package:fidelem_app/modules/mercado/home/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_bottom_nav.dart';
-import 'package:fidelem_app/modules/home/home_view.dart';
-import 'package:fidelem_app/modules/loja_pontos/loja_pontos_view.dart';
-import 'package:fidelem_app/modules/carrinho/carrinho_view.dart';
+import 'package:fidelem_app/routes.dart';
+
+class NavConfig {
+  final List<String> routes;
+  final List<IconData> icons;
+
+  NavConfig({required this.routes, required this.icons});
+
+  // Configuração para Mercado
+  static NavConfig mercado = NavConfig(
+    routes: [
+      Routes.homeMercadoPage,
+      Routes.adicionarProdutoPage,
+      Routes.editarProdutoPage,
+      Routes.configPage,
+    ],
+    icons: [Icons.home, Icons.add_box, Icons.edit, Icons.settings],
+  );
+
+  // Configuração para Cliente
+  static NavConfig cliente = NavConfig(
+    routes: [
+      Routes.homeClientePage,
+      Routes.lojaPontosPage,
+      Routes.carrinhoPage,
+      Routes.configPage,
+    ],
+    icons: [Icons.home, Icons.shopping_bag, Icons.shopping_cart, Icons.person],
+  );
+}
 
 class BaseView extends StatefulWidget {
   const BaseView({super.key});
@@ -13,32 +40,35 @@ class BaseView extends StatefulWidget {
 }
 
 class _BaseViewState extends State<BaseView> {
-  int _currentIndex = 0; 
-  late PageController _pageController;
+  int currentIndex = 0;
+  late PageController pageController;
+  late NavConfig currentConfig;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: _currentIndex);
+    pageController = PageController(initialPage: currentIndex);
+    
+    // M = mercado else cliente
+    final usuario = 'Ma';
+
+    if (usuario == 'M') {
+      currentConfig = NavConfig.mercado;
+    } else {
+      currentConfig = NavConfig.cliente;
+    }
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
+    pageController.dispose();
     super.dispose();
   }
 
-  final List<Widget> _views = [
-    const HomeViewCliente(),
-    const LojaPontosView(),
-    const CarrinhoView(),
-    const SettingsView()
-  ];
-
-  void _onPageChange(int index) {
+  void onPageChange(int index) {
     setState(() {
-      _currentIndex = index;
-      _pageController.animateToPage(
+      currentIndex = index;
+      pageController.animateToPage(
         index,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut,
@@ -48,20 +78,32 @@ class _BaseViewState extends State<BaseView> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> views = currentConfig.routes.map((routeName) {
+      final builder = Routes.rotas[routeName];
+      if (routeName == Routes.homeMercadoPage) {
+        return HomeMercadoView(onPressed: onPageChange); 
+      }
+      if (builder != null) {
+        return builder(context);
+      }
+      return Center(child: Text("Rota não encontrada: $routeName"));
+    }).toList();
+
     return Scaffold(
       body: PageView(
-        controller: _pageController,
-        physics: const AlwaysScrollableScrollPhysics(), 
+        controller: pageController,
+        physics: const AlwaysScrollableScrollPhysics(),
         onPageChanged: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+          setState(() => currentIndex = index);
         },
-        children: _views,
+        children: views,
       ),
-      bottomNavigationBar: FIDBottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onPageChange,
+      bottomNavigationBar: SafeArea(
+        child: FIDBottomNavBar(
+          currentIndex: currentIndex,
+          onTap: onPageChange,
+          icons: currentConfig.icons,
+        ),
       ),
     );
   }
