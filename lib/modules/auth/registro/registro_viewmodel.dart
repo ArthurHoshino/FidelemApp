@@ -135,6 +135,7 @@ class RegistroViewModel extends ChangeNotifier {
         }
       }
     } catch (e) {
+      print('\x1B[1;31m [REGISTRO] Erro: $e \x1B[0m');
       // errorMessage = "Erro de conexão: $e";
       errorMessage = "Erro de conexão: Verifique as informações!";
 
