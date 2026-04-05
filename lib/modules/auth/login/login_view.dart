@@ -49,7 +49,7 @@ class _LoginViewState extends State<LoginView> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      FIDInputBox(text: "Usuário",
+                      FIDInputBox(text: "E-mail",
                           preset: FIDInputBox.medium,
                           controller: viewModel.usuarioController),
                       FIDInputBox(text: "Senha",

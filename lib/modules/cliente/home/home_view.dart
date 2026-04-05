@@ -1,3 +1,4 @@
+import 'package:fidelem_app/core/data/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_header.dart';
 import 'package:fidelem_app/modules/cliente/home/componentes/home_ultimos_grid.dart';
@@ -12,7 +13,7 @@ class HomeClienteView extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> bannersData = HomeClienteTestData.banners;
     final List<Map<String, dynamic>> buscadosData = HomeClienteTestData.ultimosBuscados;
-    final List<Map<String, dynamic>> promocoesData = HomeClienteTestData.promocoes;
+    final List<ProdutoModel> promocoesData = HomeClienteTestData.promocoes;
 
     return Scaffold(
       body: SafeArea(
