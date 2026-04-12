@@ -77,7 +77,7 @@ class LoginViewModel extends ChangeNotifier {
     }
 
     try {
-      final loginData = LoginModel(usuario: usuarioController.text, senha: senhaController.text, empresa: empresaIdSelecionada.toString());
+      final loginData = LoginModel(usuario: usuarioController.text.trim(), senha: senhaController.text.trim(), empresa: empresaIdSelecionada.toString());
 
       final response = await WebClient.getData(WebClient.cdSenha, queryParameters: {
         'CDSEEMAIL': loginData.usuario,
@@ -92,6 +92,9 @@ class LoginViewModel extends ChangeNotifier {
           print("Login realizado com sucesso!");
           MyApp.dadosUsuario = dados[0];
           MyApp.empresaId = loginData.empresa;
+
+          final cargo = dados[0]['CDCARNOME'];
+          MyApp.isCliente = cargo.toString().toUpperCase() == 'CLIENTE';
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Login realizado com sucesso!'),

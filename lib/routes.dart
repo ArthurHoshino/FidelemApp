@@ -11,6 +11,10 @@ import 'package:fidelem_app/modules/cliente/loja_pontos/loja_pontos_view.dart';
 import 'package:fidelem_app/base_view.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fidelem_app/modules/mercado/inventario/add_edit_view.dart';
+import 'package:fidelem_app/modules/mercado/funcionarios/funcionarios_view.dart';
+import 'package:fidelem_app/modules/mercado/funcionarios/funcionarios_add_view.dart';
+import 'package:fidelem_app/modules/mercado/cargos/cargos_view.dart';
+import 'package:fidelem_app/modules/mercado/cargos/cargos_add_view.dart';
 
 class Routes {
   // Rotas de fluxo geral
@@ -35,6 +39,10 @@ class Routes {
   static const String adicionarProdutoPage = '/inventario/add-produto';
   static const String editarProdutoPage = '/inventario/edit-produto';
   static const String adicionarProdutoScanPage = '/inventario/add-scan';
+  static const String funcionariosPage = '/funcionarios';
+  static const String addFuncionarioPage = '/funcionarios/add';
+  static const String cargosPage = '/cargos';
+  static const String addCargoPage = '/cargos/add';
 
   static Map<String, WidgetBuilder> get rotas {
     return {
@@ -56,6 +64,10 @@ class Routes {
       adicionarProdutoPage: (context) => const AddEditView(isEditing: false),
       editarProdutoPage: (context) => const AddEditView(isEditing: true),
       homeMercadoPage: (context) => const HomeMercadoView(),
+      funcionariosPage: (context) => const FuncionariosView(),
+      addFuncionarioPage: (context) => const FuncionariosAddView(),
+      cargosPage: (context) => const CargosView(),
+      addCargoPage: (context) => const CargosAddView(),
     };
   }
 }
