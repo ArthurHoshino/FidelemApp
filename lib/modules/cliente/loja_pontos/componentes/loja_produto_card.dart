@@ -77,7 +77,13 @@ class LojaProdutoCard extends StatelessWidget {
                         textAlign: TextAlign.left,
                         fontSize: 0.015,
                       ),
-                      const Text(" | ", style: TextStyle(color: Cor.cinzaClaro)),
+                      Container(
+                        width: 1.5,
+                        height: double.infinity,
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        color: Cor.cinzaClaro,
+                        
+                      ),
                       FIDText(
                         baseText: "${produto.pontos}pts",
                         preset: FIDText.medium,
