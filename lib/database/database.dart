@@ -461,6 +461,11 @@ class LCCARRINHODAO extends DatabaseAccessor<AppDatabase> with _$LCCARRINHODAOMi
   Future<void> limparCarrinhoDoUsuario(int usuarioId) {
     return (delete(lccarrinho)..where((t) => t.lcCarUsuarioId.equals(usuarioId))).go();
   }
+
+  /// Remove todos os itens do carrinho (app cliente atual = um usuário de teste).
+  Future<void> limparTodoCarrinho() async {
+    await delete(lccarrinho).go();
+  }
 }
 
 late AppDatabase appDatabase;

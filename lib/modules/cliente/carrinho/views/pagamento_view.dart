@@ -96,7 +96,9 @@ class PagamentoView extends StatelessWidget {
                   FIDButton(
                     text: "Confirmar Pagamento",
                     preset: FIDButton.medium,
-                    onPressed: () {onPressed!(5);},
+                    onPressed: () {
+                      onPressed!(5);
+                    },
                     padding: const {"bottom": 0.01},
                   ),
                 ],
