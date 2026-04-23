@@ -31,6 +31,7 @@ class _LojaPontosViewState extends State<LojaPontosView> {
           builder: (context, child) {
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.only(bottom: 24),
               child: Column(
                 children: [
 
