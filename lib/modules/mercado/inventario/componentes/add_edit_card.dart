@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
 import 'package:fidelem_app/core/widgets/fid_input_box.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
+import 'package:flutter/services.dart';
 
 class AddEditCard extends StatelessWidget {
   final String label;
   final String hint;
   final TextEditingController controller;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
 
   const AddEditCard({
     super.key, 
     required this.label, 
     required this.hint, 
-    required this.controller
+    required this.controller,
+    this.keyboardType,
+    this.inputFormatters,
   });
 
   @override
@@ -32,6 +37,8 @@ class AddEditCard extends StatelessWidget {
           text: hint,
           padding: const {"bottom": 0.03},
           preset: FIDInputBox.medium,
+          keyboardType: keyboardType,
+          inputFormatters: inputFormatters,
         ),
       ],
     );

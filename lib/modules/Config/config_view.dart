@@ -91,6 +91,14 @@ class _SettingsViewState extends State<SettingsView> {
                 },
               ),
               const Divider(),
+              ListTile(
+                leading: const Icon(Icons.account_balance_wallet, color: Cor.preto),
+                title: const Text("Gerenciar Categorias"),
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.categoriasPage);
+                },
+              ),
+              const Divider(),
             ],
 
             // Botão Redefinir Senha
