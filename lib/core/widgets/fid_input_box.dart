@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:fidelem_app/core/tema/tema.dart';
 
 class FIDInputBox extends StatelessWidget {
 
@@ -6,8 +7,8 @@ class FIDInputBox extends StatelessWidget {
   static double defaultWidth = 0.01;
   static double defaultHeight = 0.01;
   static double defaultBorderRadius = 20.0;
-  static Color defaultBorderColor = Color.fromARGB(255, 175, 175, 175);
-  static Color defaultTextColor = Color.fromARGB(255, 175, 175, 175);
+  static Color defaultBorderColor = Cor.cinzaClaro;
+  static Color defaultTextColor = Cor.cinzaClaro;
   static Map<String, double> defaultPadding = {
     "top": 0.05,
     "bottom": 0.05,
@@ -20,8 +21,8 @@ class FIDInputBox extends StatelessWidget {
     "width": 0.7, 
     "height": 0.05,
     "borderRadius": 10.0,
-    "borderColor": Color.fromARGB(255, 175, 175, 175),
-    "textColor": Color.fromARGB(255, 175, 175, 175),
+    "borderColor": Cor.cinzaClaro,
+    "textColor": Cor.cinzaClaro,
     "padding": {
       "top": 0.00,
       "bottom": 0.02,
@@ -37,6 +38,8 @@ class FIDInputBox extends StatelessWidget {
   final Color borderColor;
   final Color textColor;
   final Map<String, double> padding;
+  final TextEditingController? controller;
+  final bool obscureText;
 
  FIDInputBox({
   super.key,
@@ -48,6 +51,8 @@ class FIDInputBox extends StatelessWidget {
   Color? textColor,
   Map<String, double>? padding,
   Map<String, dynamic>? preset,
+  this.controller,
+  this.obscureText = false,
 }) : text = text ?? (preset?["text"] as String? ?? defaultText),
       width = width ?? (preset?["width"] as double? ?? defaultWidth),
       height = height ?? (preset?["height"] as double? ?? defaultHeight),
@@ -74,13 +79,20 @@ class FIDInputBox extends StatelessWidget {
         width: finalWidth,
         height: finalHeight,
         child: TextFormField(
+          controller: controller,
+          obscureText: obscureText,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: borderColor),
               borderRadius: BorderRadius.circular(borderRadius),
             ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: borderColor, width: 2),
+              borderRadius: BorderRadius.circular(borderRadius),
+            ),
             labelText: text,
             labelStyle: TextStyle(color: textColor),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
           ),
         )
       )

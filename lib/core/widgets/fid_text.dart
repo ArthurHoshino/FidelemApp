@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter/gestures.dart';
+import 'package:fidelem_app/core/tema/tema.dart';
 
 class FIDText extends StatelessWidget {
 
@@ -7,7 +8,7 @@ class FIDText extends StatelessWidget {
   static String defaultLinkText = "";
   static double defaultFontSize = 0.05;
   static FontWeight defaultFontWeight = FontWeight.normal;
-  static Color defaultColor = Color.fromARGB(255, 255, 0, 0);
+  static Color defaultColor = Cor.vermelho;
   static Map<String, double> defaultPadding = {
     "top": 0.05,
     "bottom": 0.05,
@@ -16,6 +17,7 @@ class FIDText extends StatelessWidget {
   };
   static String defaultRoute = "";
   static bool defaultLinkFirst = false;
+  static TextAlign defaultTextAlign = TextAlign.center;
 
   static Map<String, dynamic> large = {
     "baseText": "",
@@ -31,6 +33,7 @@ class FIDText extends StatelessWidget {
     },
     "route": "",
     "linkFirst": false,
+    "textAlign": TextAlign.center
   };
 
   static Map<String, dynamic> medium = {
@@ -47,6 +50,7 @@ class FIDText extends StatelessWidget {
     },
     "route": "",
     "linkFirst": false,
+    "textAlign": TextAlign.center
   };
 
   static Map<String, dynamic> small = {
@@ -63,6 +67,7 @@ class FIDText extends StatelessWidget {
     },
     "route": "",
     "linkFirst": false,
+    "textAlign": TextAlign.center
   };
 
   static Map<String, dynamic> link = {
@@ -79,6 +84,7 @@ class FIDText extends StatelessWidget {
     },
     "route": "",
     "linkFirst": false,
+    "textAlign": TextAlign.center
   };
 
   final String baseText;
@@ -89,6 +95,7 @@ class FIDText extends StatelessWidget {
   final Map<String, double> padding;
   final String route;
   final bool linkFirst;
+  final TextAlign textAlign;
 
   FIDText({
     super.key,
@@ -100,7 +107,8 @@ class FIDText extends StatelessWidget {
     Map<String, double>? padding,
     String? route,
     bool? linkFirst,
-    Map<String, dynamic>? preset,
+    Map<String, dynamic>? preset, 
+    TextAlign? textAlign,
   }) : baseText = baseText ?? (preset?["baseText"] as String? ?? defaultBaseText),
         linkText = linkText ?? (preset?["linkText"] as String? ?? defaultLinkText),
         fontSize = fontSize ?? (preset?["fontSize"] as double? ?? defaultFontSize),
@@ -108,7 +116,8 @@ class FIDText extends StatelessWidget {
         color = color ?? (preset?["color"] as Color? ?? defaultColor),
         padding = padding ?? (preset?["padding"] as Map<String, double>? ?? defaultPadding),
         route = route ?? (preset?["route"] as String ? ?? defaultRoute),
-        linkFirst = linkFirst ?? (preset?["linkFirst"] as bool? ?? defaultLinkFirst);
+        linkFirst = linkFirst ?? (preset?["linkFirst"] as bool? ?? defaultLinkFirst),
+        textAlign = textAlign ?? (preset?["textAlign"] as TextAlign? ?? defaultTextAlign);
 
  @override
   Widget build(BuildContext context) {

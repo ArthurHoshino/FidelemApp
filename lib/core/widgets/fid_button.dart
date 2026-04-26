@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fidelem_app/core/tema/tema.dart';
 
 class FIDButton extends StatelessWidget {
 
@@ -7,14 +8,31 @@ class FIDButton extends StatelessWidget {
   static double defaultWidth = 0.01;
   static double defaultHeight = 0.01;
   static double defaultBorderRadius = 20.0;
-  static Color defaultBorderColor = Color.fromARGB(255, 255, 0, 0);
-  static Color defaultBGColor = Color.fromARGB(255, 255, 0, 0);
-  static Color defaultTextColor = Color.fromARGB(255, 255, 0, 0);
+  static Color defaultBorderColor = Cor.vermelho;
+  static Color defaultBGColor = Cor.vermelho;
+  static Color defaultTextColor = Cor.vermelho;
   static Map<String, double> defaultPadding = {
     "top": 0.05,
     "bottom": 0.05,
     "right": 0.05,
     "left": 0.05,
+  };
+
+  static Map<String, dynamic> big = {
+    "onPressed": null,
+    "text": "",
+    "width": 0.9,
+    "height": 0.07,
+    "borderRadius": 10.0,
+    "borderColor": Cor.azul,
+    "BGColor": Cor.azul,
+    "textColor": Cor.branco,
+    "padding": {
+      "top": 0.00,
+      "bottom": 0.05,
+      "right": 0.00,
+      "left": 0.00,
+    },
   };
 
   static Map<String, dynamic> medium = {
@@ -23,9 +41,9 @@ class FIDButton extends StatelessWidget {
     "width": 0.6,
     "height": 0.05,
     "borderRadius": 10.0,
-    "borderColor": Color.fromARGB(255, 37, 106, 255),
-    "BGColor": Color.fromARGB(255, 37, 106, 255),
-    "textColor": Color.fromARGB(255, 255, 255, 255),
+    "borderColor": Cor.azul,
+    "BGColor": Cor.azul,
+    "textColor": Cor.branco,
     "padding": {
       "top": 0.00,
       "bottom": 0.05,

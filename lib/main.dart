@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:fidelem_app/database/database.dart';
 import 'package:fidelem_app/routes.dart';
-import 'package:fidelem_app/modules/login/login_view.dart';
-import 'package:fidelem_app/modules/registro/registro_view.dart';
-import 'package:fidelem_app/modules/config/config_view.dart';
+import 'package:fidelem_app/core/tema/tema.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  appDatabase = AppDatabase();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  static Map<String, dynamic>? dadosUsuario;
+  static String? empresaId;
+  static bool isCliente = false;
   const MyApp({super.key});
 
   @override
@@ -17,14 +21,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Fidelem App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 37, 150, 190)),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Cor.azul,
+        ),
       ),
-      initialRoute: Routes.registroPage,
-      routes: {
-        Routes.registroPage: (context) => const RegistroView(),
-        Routes.loginPage: (context) => const LoginView(),
-        Routes.configPage: (context) => const ConfigView()
-      }
+      initialRoute: Routes.loginPage,
+      routes: Routes.rotas,
     );
   }
 }
