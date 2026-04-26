@@ -80,7 +80,7 @@ class FIDSelectBox extends StatelessWidget {
           valueListenable: controller ?? ValueNotifier(null),
           builder: (context, currentValue, child) {
             return DropdownButtonFormField<String>(
-              value: currentValue,
+              initialValue: currentValue,
 
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
@@ -106,7 +106,7 @@ class FIDSelectBox extends StatelessWidget {
                 // 1. Atualiza o controller
                 controller?.value = newValue;
                 // 2. Chama o callback externo se existir
-                if (onChanged != null) onChanged!(newValue);
+                onChanged(newValue);
               },
             );
           }

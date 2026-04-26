@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/routes.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
+import 'package:fidelem_app/main.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
@@ -57,18 +58,38 @@ class _SettingsViewState extends State<SettingsView> {
             const SizedBox(height: 16),
 
             // Nome do usuário
-            const Text(
-              "João Silva",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              MyApp.dadosUsuario?['CDSENOME'] ?? "Nome Usuário",
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
 
             // Nome do mercado
-            const Text(
-              "Mercado Exemplo",
-              style: TextStyle(fontSize: 16, color: Cor.preto),
+            Text(
+              MyApp.dadosUsuario?['CDEMPNOME'] ?? "Mercado",
+              style: const TextStyle(fontSize: 16, color: Cor.preto),
             ),
 
             const SizedBox(height: 32),
+
+            // Opção Gerenciar Funcionários e Gerenciar Cargos (Apenas para funcionários do mercado)
+            if (MyApp.isCliente == false || (MyApp.dadosUsuario != null && MyApp.dadosUsuario!['CDCARNOME'] != 'CLIENTE')) ...[
+              ListTile(
+                leading: const Icon(Icons.group, color: Cor.preto),
+                title: const Text("Gerenciar Funcionários"),
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.funcionariosPage);
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.badge, color: Cor.preto),
+                title: const Text("Gerenciar Cargos"),
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.cargosPage);
+                },
+              ),
+              const Divider(),
+            ],
 
             // Botão Redefinir Senha
             ListTile(
@@ -89,7 +110,11 @@ class _SettingsViewState extends State<SettingsView> {
                 style: TextStyle(color: Cor.vermelho),
               ),
               onTap: () {
-                Navigator.pushNamed(context, Routes.registroPage);
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.loginPage,
+                  (route) => false,
+                );
               },
             ),
           ],

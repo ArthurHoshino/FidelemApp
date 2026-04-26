@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_bottom_nav.dart';
 import 'package:fidelem_app/database/database.dart';
 import 'package:fidelem_app/routes.dart';
+import 'package:fidelem_app/main.dart';
 
 class NavConfig {
   final List<String> routes;
@@ -54,13 +55,10 @@ class _BaseViewState extends State<BaseView> {
   void initState() {
     super.initState();
     
-    // M = mercado else cliente
-    final usuario = 'Ma';
-
-    if (usuario == 'M') {
-      currentConfig = NavConfig.mercado;
-    } else {
+    if (MyApp.isCliente) {
       currentConfig = NavConfig.cliente;
+    } else {
+      currentConfig = NavConfig.mercado;
     }
   }
 

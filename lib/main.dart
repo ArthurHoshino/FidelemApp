@@ -12,6 +12,7 @@ void main() {
 class MyApp extends StatelessWidget {
   static Map<String, dynamic>? dadosUsuario;
   static String? empresaId;
+  static bool isCliente = false;
   const MyApp({super.key});
 
   @override
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
           seedColor: Cor.azul,
         ),
       ),
-      initialRoute: Routes.basePage,
+      initialRoute: Routes.loginPage,
       routes: Routes.rotas,
     );
   }
