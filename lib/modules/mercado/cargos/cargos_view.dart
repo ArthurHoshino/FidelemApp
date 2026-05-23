@@ -73,7 +73,7 @@ class _CargosContent extends StatelessWidget {
                             child: Icon(Icons.badge, color: Cor.branco),
                           ),
                           title: Text(
-                            cargo['CDCARNOME'] ?? 'Sem Nome',
+                            cargo.descricao,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           trailing: Row(
@@ -99,7 +99,7 @@ class _CargosContent extends StatelessWidget {
                                     context: context,
                                     builder: (ctx) => AlertDialog(
                                       title: const Text("Excluir Cargo"),
-                                      content: Text("Tem certeza que deseja excluir o cargo '${cargo['CDCARNOME']}'?"),
+                                      content: Text("Tem certeza que deseja excluir o cargo '${cargo.descricao}'?"),
                                       actions: [
                                         TextButton(
                                           onPressed: () => Navigator.pop(ctx, false),
@@ -114,8 +114,7 @@ class _CargosContent extends StatelessWidget {
                                   );
                                   
                                   if (confirmar == true && context.mounted) {
-                                    final idParam = cargo['CDCARID'];
-                                    final sucesso = await context.read<CargosViewModel>().deletarCargo(context, idParam);
+                                    final sucesso = await context.read<CargosViewModel>().deletarCargo(context, cargo.id);
                                     if (sucesso && context.mounted) {
                                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Excluído com sucesso!"), backgroundColor: Colors.green));
                                     }

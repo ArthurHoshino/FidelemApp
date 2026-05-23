@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/services/web_client.dart';
 import 'package:fidelem_app/core/widgets/fid_select_controller.dart';
 import 'package:fidelem_app/main.dart';
+import 'package:fidelem_app/core/data/models/cargo_entity.dart';
+import 'package:fidelem_app/core/data/models/usuario_entity.dart';
 import 'dart:convert';
 
 class FuncionariosAddViewModel extends ChangeNotifier {
@@ -13,21 +15,21 @@ class FuncionariosAddViewModel extends ChangeNotifier {
   final FIDSelectController cargoController = FIDSelectController();
 
   List<String> cargosNomes = [];
-  final Map<String, dynamic> _cargosMap = {};
+  final Map<String, CargoEntity> _cargosMap = {};
 
   bool isLoadingCargos = false;
   bool isSaving = false;
   String? errorMessage;
 
-  final Map<String, dynamic>? funcionarioEditado;
+  final UsuarioEntity? funcionarioEditado;
 
   FuncionariosAddViewModel({this.funcionarioEditado}) {
     // Se for edição, preencher os campos iniciais
     if (funcionarioEditado != null) {
-      nomeController.text = funcionarioEditado!['CDSENOME'] ?? '';
-      emailController.text = funcionarioEditado!['CDSEEMAIL'] ?? '';
-      cpfCnpjController.text = funcionarioEditado!['CDSECPFCNPJ'] ?? '';
-      telefoneController.text = funcionarioEditado!['CDSETELEFONE'] ?? '';
+      nomeController.text = funcionarioEditado!.descricao;
+      emailController.text = funcionarioEditado!.email;
+      cpfCnpjController.text = funcionarioEditado!.cpfcnpj;
+      telefoneController.text = funcionarioEditado!.telefone ?? '';
       // A senha normalmente não vem da listagem para edição por segurança
     }
     carregarCargos();
@@ -58,15 +60,15 @@ class FuncionariosAddViewModel extends ChangeNotifier {
 
         for (var c in todosCargos) {
           if (c['CDCARNOME'] != 'CLIENTE') {
-            final nomeCargo = c['CDCARNOME'].toString();
-            cargosNomes.add(nomeCargo);
-            _cargosMap[nomeCargo] = c;
+            final cargo = CargoEntity.fromMap(c);
+            cargosNomes.add(cargo.descricao);
+            _cargosMap[cargo.descricao] = cargo;
           }
         }
 
         // Se estiver editando, setar o cargo selecionado baseado no nome que veio
         if (funcionarioEditado != null) {
-          final cargoAtual = funcionarioEditado!['CDCARNOME'];
+          final cargoAtual = funcionarioEditado!.nomeCargo;
           if (cargosNomes.contains(cargoAtual)) {
             cargoController.text = cargoAtual;
           }
@@ -111,14 +113,14 @@ class FuncionariosAddViewModel extends ChangeNotifier {
         'cdsecpfcnpj': cpfCnpjController.text.trim().isNotEmpty ? cpfCnpjController.text.trim() : null,
         'cdseemail': emailController.text.trim(),
         'cdsetelefone': telefoneController.text.trim().isNotEmpty ? telefoneController.text.trim() : null,
-        'cdsecargoid': cargoSelecionado['CDCARID'],
+        'cdsecargoid': cargoSelecionado.id,
         'empresa': empresaId,
       };
 
       var response = null;
 
       if (isEdit) {
-        data['cdseid'] = funcionarioEditado!['CDSEID'];
+        data['cdseid'] = funcionarioEditado!.id;
         response = await WebClient.sendData(
           endpoint: WebClient.cdSenha,
           method: HttpMethod.put,

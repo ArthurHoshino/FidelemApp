@@ -3,6 +3,7 @@ import 'package:fidelem_app/core/tema/tema.dart';
 import 'package:fidelem_app/core/widgets/fid_button.dart';
 import 'package:fidelem_app/core/widgets/fid_input_box.dart';
 import 'package:fidelem_app/modules/mercado/cargos/cargos_add_viewmodel.dart';
+import 'package:fidelem_app/core/data/models/cargo_entity.dart';
 import 'package:provider/provider.dart';
 
 class CargosAddView extends StatelessWidget {
@@ -10,7 +11,7 @@ class CargosAddView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final args = ModalRoute.of(context)?.settings.arguments as CargoEntity?;
 
     return ChangeNotifierProvider(
       create: (_) => CargosAddViewModel(cargoEditado: args),
