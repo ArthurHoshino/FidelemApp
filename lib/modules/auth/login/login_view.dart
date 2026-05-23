@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:fidelem_app/core/widgets/fid_line.dart';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
@@ -27,24 +28,55 @@ class _LoginViewState extends State<LoginView> {
     super.dispose();
   }
 
+  // Exibe um diálogo de confirmação para sair do aplicativo
+  Future<bool> _confirmarSaida() async {
+    final resultado = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Sair do aplicativo'),
+        content: const Text('Deseja realmente sair do aplicativo?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Não'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Sim'),
+          ),
+        ],
+      ),
+    );
+    return resultado ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     // O ListenableBuilder escuta as mudanças no viewModel (notifyListeners)
     return ListenableBuilder(
       listenable: viewModel,
       builder: (context, child) {
-        return Scaffold(
-          body: FidLogo(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  FIDText(baseText: "Seja bem-vindo(a)",
-                      preset: FIDText.large,
-                      textAlign: TextAlign.center),
-                  FIDText(baseText: "Entre com seu usuário e sua senha",
-                      padding: {"bottom": 0.03},
-                      preset: FIDText.medium,
-                      textAlign: TextAlign.center),
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) async {
+            if (didPop) return;
+            final sair = await _confirmarSaida();
+            if (sair) {
+              exit(0);
+            }
+          },
+          child: Scaffold(
+            body: FidLogo(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    FIDText(baseText: "Seja bem-vindo(a)",
+                        preset: FIDText.large,
+                        textAlign: TextAlign.center),
+                    FIDText(baseText: "Entre com seu usuário e sua senha",
+                        padding: {"bottom": 0.03},
+                        preset: FIDText.medium,
+                        textAlign: TextAlign.center),
 
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -73,16 +105,17 @@ class _LoginViewState extends State<LoginView> {
                     ],
                   ),
 
-                  FIDButton(text: "Login", preset: FIDButton.medium, onPressed: () => {
-                    viewModel.login(context)
-                  },),
-                  FIDLine(preset: FIDLine.small),
-                  FIDText(baseText: "Não tem uma conta? ",
-                      linkText: "Registre-se",
-                      route: Routes.registroPage,
-                      preset: FIDText.link,
-                      textAlign: TextAlign.center),
-                ],
+                    FIDButton(text: "Login", preset: FIDButton.medium, onPressed: () => {
+                      viewModel.login(context)
+                    },),
+                    FIDLine(preset: FIDLine.small),
+                    FIDText(baseText: "Não tem uma conta? ",
+                        linkText: "Registre-se",
+                        route: Routes.registroPage,
+                        preset: FIDText.link,
+                        textAlign: TextAlign.center),
+                  ],
+                ),
               ),
             ),
           ),

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:fidelem_app/modules/mercado/home/home_view.dart';
 import 'package:fidelem_app/modules/cliente/carrinho/views/carrinho_view.dart';
 import 'package:fidelem_app/modules/cliente/carrinho/views/pagamento_view.dart';
@@ -74,16 +75,45 @@ class _BaseViewState extends State<BaseView> {
     });
   }
 
+  // Exibe um diálogo de confirmação para sair do aplicativo
+  Future<bool> _confirmarSaida() async {
+    final resultado = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Sair do aplicativo'),
+        content: const Text('Deseja realmente sair do aplicativo?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Não'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Sim'),
+          ),
+        ],
+      ),
+    );
+    return resultado ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: currentIndex == 0,
-      onPopInvokedWithResult: (didPop, result) {
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
 
-        setState(() {
-          currentIndex = 0;
-        });
+        if (currentIndex != 0) {
+          setState(() {
+            currentIndex = 0;
+          });
+        } else {
+          final sair = await _confirmarSaida();
+          if (sair) {
+            exit(0);
+          }
+        }
       },
       child: Scaffold(
         body: IndexedStack(

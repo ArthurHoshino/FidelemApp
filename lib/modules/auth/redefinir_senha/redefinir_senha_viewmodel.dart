@@ -90,7 +90,7 @@ class RedefinirSenhaViewmodel extends ChangeNotifier {
         return;
       }
 
-      final redefinirData = RedefinirSenhaModel(email: emailController.text, senhaAntiga: senhaAntigaController.text, senhaNova: senhaNovaController.text, senhaNovaConfirma: senhaNovaConfirmaController.text, empresa: empresaIdSelecionada.toString());
+      final redefinirData = RedefinirSenhaModel(email: emailController.text.trim(), senhaAntiga: senhaAntigaController.text.trim(), senhaNova: senhaNovaController.text.trim(), senhaNovaConfirma: senhaNovaConfirmaController.text.trim(), empresa: empresaIdSelecionada.toString());
       
       final response = await WebClient.getData(WebClient.cdSenha, queryParameters: {
         'CDSEEMAIL': redefinirData.email,
