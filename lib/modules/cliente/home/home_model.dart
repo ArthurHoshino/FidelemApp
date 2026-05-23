@@ -4,22 +4,26 @@ class HomeModel {
   final List<Map<String, dynamic>> banners;
   final List<Map<String, dynamic>> ultimosBuscados;
   final List<ProdutoModel> promocoes;
+  final Map<int, int> quantidadesCarrinho;
 
   HomeModel({
     this.banners = HomeClienteTestData.banners,
     this.ultimosBuscados = HomeClienteTestData.ultimosBuscados,
     this.promocoes = const [],
+    this.quantidadesCarrinho = const {},
   });
 
   HomeModel copyWith({
     List<Map<String, dynamic>>? banners,
     List<Map<String, dynamic>>? ultimosBuscados,
     List<ProdutoModel>? promocoes,
+    Map<int, int>? quantidadesCarrinho,
   }) {
     return HomeModel(
       banners: banners ?? this.banners,
       ultimosBuscados: ultimosBuscados ?? this.ultimosBuscados,
       promocoes: promocoes ?? this.promocoes,
+      quantidadesCarrinho: quantidadesCarrinho ?? this.quantidadesCarrinho,
     );
   }
 }

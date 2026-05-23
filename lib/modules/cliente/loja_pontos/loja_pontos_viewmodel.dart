@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:drift/drift.dart' as drift;
-import 'package:fidelem_app/database/database.dart';
 import 'package:fidelem_app/core/data/teste/cliente_loja_test_data.dart';
+import 'package:fidelem_app/modules/cliente/carrinho/repositories/carrinho_repository.dart';
 import 'package:fidelem_app/modules/cliente/loja_pontos/loja_pontos_model.dart';
 
 class LojaPontosViewModel extends ChangeNotifier {
-  final AppDatabase db = appDatabase;
-  final int userId = 1;
+  final CarrinhoRepository _carrinhoRepository = CarrinhoRepository();
 
   List<LojaPontosModel> products = [];
   String selectedSort = 'Mais Vendidos';
@@ -16,17 +14,11 @@ class LojaPontosViewModel extends ChangeNotifier {
   }
 
   void init() {
-    db.carrinhoDao.watchCarrinhoSimplesDoUsuario(userId).listen((itensNoCarrinho) {
+    _carrinhoRepository.watchItensDoUsuario().listen((itensNoCarrinho) {
       products = ClienteLojaTestData.produtos.map((dados) {
         final id = int.tryParse(dados['id'].toString()) ?? 0;
-        
-        LCCARRINHOData? itemNoCarrinho; 
-        for (var c in itensNoCarrinho) {
-          if (c.lcCarProdutoId == id) {
-            itemNoCarrinho = c;
-            break;
-          }
-        }
+        final quantidade =
+            _carrinhoRepository.quantidadeParaProduto(itensNoCarrinho, id);
 
         return LojaPontosModel(
           id: dados['id'].toString(),
@@ -34,7 +26,7 @@ class LojaPontosViewModel extends ChangeNotifier {
           preco: (dados['preco'] as num).toDouble(),
           pontos: dados['pontos'],
           imagem: dados['imagem'],
-          quantidadeNoCarrinho: itemNoCarrinho?.lcCarQuantidade ?? 0,
+          quantidadeNoCarrinho: quantidade,
         );
       }).toList();
 
@@ -44,26 +36,7 @@ class LojaPontosViewModel extends ChangeNotifier {
 
   Future<void> updateCart(String productId, int change) async {
     final id = int.tryParse(productId) ?? -1;
-    
-    final registro = await db.carrinhoDao.getItemByProdutoEUsuario(id, userId);
-
-    if (registro != null) {
-      int novaQtd = registro.lcCarQuantidade + change;
-      
-      if (novaQtd < 1) {
-        await db.carrinhoDao.deleteItem(registro.toCompanion(true));
-      } else {
-        await db.carrinhoDao.updateItem(
-          registro.toCompanion(true).copyWith(lcCarQuantidade: drift.Value(novaQtd))
-        );
-      }
-    } else if (change == 1) {
-      await db.carrinhoDao.insertItem(LCCARRINHOCompanion(
-        lcCarProdutoId: drift.Value(id),
-        lcCarUsuarioId: drift.Value(userId),
-        lcCarQuantidade: const drift.Value(1),
-      ));
-    }
+    await _carrinhoRepository.atualizarQuantidade(id, change);
   }
 
   void setSort(String val) {

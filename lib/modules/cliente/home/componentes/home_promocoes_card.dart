@@ -6,13 +6,17 @@ class HomePromocoesCard extends StatelessWidget {
   final double fullPrice;
   final double promoPrice;
   final String? imagePath;
+  final int quantidadeNoCarrinho;
+  final VoidCallback onAdicionarAoCarrinho;
 
   const HomePromocoesCard({
     super.key,
     required this.title,
     required this.fullPrice,
     required this.promoPrice,
+    required this.onAdicionarAoCarrinho,
     this.imagePath,
+    this.quantidadeNoCarrinho = 0,
   });
 
   @override
@@ -40,12 +44,13 @@ class HomePromocoesCard extends StatelessWidget {
               padding: const EdgeInsets.all(12.0),
               child: Center(
                 child: imagePath == null
-                ? const Icon(Icons.image_not_supported)
-                : Image.asset(
-                  imagePath!,
-                  fit: BoxFit.contain,
-                  errorBuilder: (c, e, s) => const Icon(Icons.image, size: 40, color: Cor.cinzaClaro),
-                ),
+                    ? const Icon(Icons.image_not_supported)
+                    : Image.asset(
+                        imagePath!,
+                        fit: BoxFit.contain,
+                        errorBuilder: (c, e, s) =>
+                            const Icon(Icons.image, size: 40, color: Cor.cinzaClaro),
+                      ),
               ),
             ),
           ),
@@ -86,21 +91,37 @@ class HomePromocoesCard extends StatelessWidget {
                           Text(
                             'R\$ ${fullPrice.toStringAsFixed(2)}',
                             style: TextStyle(
-                              fontSize: promoPrice > 0 ? screenHeight * 0.014 : screenHeight * 0.018,
-                              fontWeight: promoPrice > 0 ? FontWeight.normal : FontWeight.bold,
+                              fontSize: promoPrice > 0
+                                  ? screenHeight * 0.014
+                                  : screenHeight * 0.018,
+                              fontWeight:
+                                  promoPrice > 0 ? FontWeight.normal : FontWeight.bold,
                               color: promoPrice > 0 ? Cor.cinzaClaro : Cor.preto,
-                              decoration: promoPrice > 0 ? TextDecoration.lineThrough : null,
+                              decoration:
+                                  promoPrice > 0 ? TextDecoration.lineThrough : null,
                             ),
                           ),
                         ],
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: const BoxDecoration(
-                          color: Cor.azulClaro1,
-                          shape: BoxShape.circle,
+                      Material(
+                        color: Cor.azulClaro1,
+                        shape: const CircleBorder(),
+                        child: InkWell(
+                          customBorder: const CircleBorder(),
+                          onTap: onAdicionarAoCarrinho,
+                          child: Padding(
+                            padding: const EdgeInsets.all(6),
+                            child: quantidadeNoCarrinho > 0
+                                ? Text(
+                                    '$quantidadeNoCarrinho',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Cor.azul,
+                                    ),
+                                  )
+                                : const Icon(Icons.add, size: 20, color: Cor.azul),
+                          ),
                         ),
-                        child: const Icon(Icons.add, size: 20, color: Cor.azul),
                       ),
                     ],
                   ),

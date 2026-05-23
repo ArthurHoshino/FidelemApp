@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:fidelem_app/core/data/teste/database_seed.dart';
 import 'package:fidelem_app/database/database.dart';
 import 'package:fidelem_app/routes.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   appDatabase = AppDatabase();
+  await DatabaseSeed.executarSeNecessario(appDatabase);
   runApp(const MyApp());
 }
 
