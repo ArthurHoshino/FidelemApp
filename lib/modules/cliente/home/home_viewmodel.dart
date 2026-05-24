@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:fidelem_app/core/services/web_client.dart';
 import 'package:fidelem_app/main.dart';
 import 'package:fidelem_app/core/data/teste/cliente_home_test_data.dart';
-import 'package:fidelem_app/core/data/models/models.dart';
+import 'package:fidelem_app/core/data/models/entity.dart';
+import 'package:fidelem_app/core/data/models/entidade_modelo.dart';
 import 'package:flutter/material.dart';
 
 part 'home_model.dart';
@@ -20,21 +21,18 @@ class HomeViewmodel extends ChangeNotifier {
   Future<void> carregarDadosPromocoes() async {
     try {
       final response = await WebClient.getData(WebClient.cdProduto, queryParameters: {
-        'cdprodempresaid': MyApp.empresaId ?? 1, // TODO: tirar o safe call para entregar. Colocado apenas para testes
+        'cdprodempresaid': MyApp.empresaId,
       });
 
       final promocoesData = jsonDecode(response.body);
       if (response.statusCode == 200 && promocoesData.isNotEmpty) {
-        List<ProdutoModel> listaPromocoes = [];
+        List<ProdutoEntity> listaPromocoes = [];
         for (Map<String, dynamic> item in promocoesData) {
-          final produto = ProdutoModel.fromMap(item);
-          if (produto != null && produto.precoDesconto != null) {
-            listaPromocoes.add(ProdutoModel.fromMap(item)!);
-          }
+          listaPromocoes.add(ProdutoEntity.fromMap(item));
         }
 
         _model = _model.copyWith(
-          promocoes: listaPromocoes,
+          promocoes: Updater(listaPromocoes),
         );
       }
     } on Exception catch (e) {

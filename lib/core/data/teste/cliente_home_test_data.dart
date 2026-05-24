@@ -1,4 +1,4 @@
-import 'package:fidelem_app/core/data/models/models.dart';
+import 'package:fidelem_app/core/data/models/entity.dart';
 
 class HomeClienteTestData {
   static const String testImage = "lib/core/assets/teste/mrpotato.png";
@@ -32,8 +32,8 @@ class HomeClienteTestData {
     },
   ];
 
-  static final List<ProdutoModel> promocoes = [
-    ProdutoModel(
+  static final List<ProdutoEntity> promocoes = [
+    ProdutoEntity(
         id: 1,
         nome: 'Batata Frita',
         descricao: 'Feito com batata de verdade',
@@ -43,7 +43,7 @@ class HomeClienteTestData {
         precoDesconto: 30,
         imagem: testImage,
     ),
-    ProdutoModel(
+    ProdutoEntity(
         id: 2,
         nome: 'Hambúrguer',
         descricao: 'Hambúrguer de carne bovina',
@@ -53,7 +53,7 @@ class HomeClienteTestData {
         precoDesconto: 1999.99,
         imagem: testImage,
     ),
-    ProdutoModel(
+    ProdutoEntity(
         id: 3,
         nome: 'Refrigerante',
         descricao: 'Refrigerante de cola',
@@ -63,7 +63,7 @@ class HomeClienteTestData {
         precoDesconto: 14.99,
         imagem: testImage,
     ),
-    ProdutoModel(
+    ProdutoEntity(
         id: 4,
         nome: 'Combo batata',
         descricao: 'Combo com batatas fritas e refrigerante',

@@ -3,7 +3,7 @@ part of 'home_viewmodel.dart';
 class HomeModel {
   final List<Map<String, dynamic>> banners;
   final List<Map<String, dynamic>> ultimosBuscados;
-  final List<ProdutoModel> promocoes;
+  final List<ProdutoEntity> promocoes;
 
   HomeModel({
     this.banners = HomeClienteTestData.banners,
@@ -12,14 +12,14 @@ class HomeModel {
   });
 
   HomeModel copyWith({
-    List<Map<String, dynamic>>? banners,
-    List<Map<String, dynamic>>? ultimosBuscados,
-    List<ProdutoModel>? promocoes,
+    Updater<List<Map<String, dynamic>>>? banners,
+    Updater<List<Map<String, dynamic>>>? ultimosBuscados,
+    Updater<List<ProdutoEntity>>? promocoes,
   }) {
     return HomeModel(
-      banners: banners ?? this.banners,
-      ultimosBuscados: ultimosBuscados ?? this.ultimosBuscados,
-      promocoes: promocoes ?? this.promocoes,
+      banners: banners != null ? banners.value! : this.banners,
+      ultimosBuscados: ultimosBuscados != null ? ultimosBuscados.value! : this.ultimosBuscados,
+      promocoes: promocoes != null ? promocoes.value! : this.promocoes,
     );
   }
 }

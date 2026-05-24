@@ -1,4 +1,4 @@
-import 'package:fidelem_app/core/data/models/models.dart';
+import 'package:fidelem_app/core/data/models/entity.dart';
 import 'package:fidelem_app/modules/cliente/home/home_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
@@ -6,7 +6,7 @@ import 'package:fidelem_app/core/tema/tema.dart';
 import 'package:fidelem_app/modules/cliente/home/componentes/home_promocoes_card.dart';
 
 class HomePromocoesGrid extends StatefulWidget {
-  final List<ProdutoModel> data;
+  final List<ProdutoEntity> data;
   const HomePromocoesGrid({super.key, required this.data});
 
   @override
