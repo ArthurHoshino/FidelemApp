@@ -9,7 +9,13 @@ enum CDProdutoEnum {
   qtdEstoque('CDPRODQTDESTOQUE'),
   empresaId('CDPRODEMPRESAID'),
   categoriaId('CDPRODCATEGORIAID'),
-  imagem('CDPRODIMGID');
+  imagem('CDPRODIMGID'),
+
+  // Campos da entidade
+  produtoEntityPrecoReal('precoReal'),
+  produtoEntityPrecoPonto('precoPronto'),
+  produtoEntityPrecoDesconto('precoDesconto'),
+  produtoEntityImagem('imagem');
 
   final String value;
   const CDProdutoEnum(this.value);

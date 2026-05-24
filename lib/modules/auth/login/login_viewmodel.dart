@@ -1,3 +1,4 @@
+import 'package:fidelem_app/core/data/models/usuario_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/services/web_client.dart';
 import 'package:fidelem_app/modules/auth/login/login_model.dart';
@@ -89,12 +90,10 @@ class LoginViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200 && dados.isNotEmpty) {
         if (context.mounted) {
-          print("Login realizado com sucesso!");
-          MyApp.dadosUsuario = dados[0];
+          MyApp.dadosUsuario = UsuarioEntity.fromMap(dados[0]);
           MyApp.empresaId = loginData.empresa;
 
-          final cargo = dados[0]['CDCARNOME'];
-          MyApp.isCliente = cargo.toString().toUpperCase() == 'CLIENTE';
+          MyApp.isCliente = MyApp.dadosUsuario!.isCliente;
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Login realizado com sucesso!'),

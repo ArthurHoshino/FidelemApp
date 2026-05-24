@@ -1,3 +1,5 @@
+import 'package:fidelem_app/core/data/enums/cdsenha_enum.dart';
+import 'package:fidelem_app/core/data/enums/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/routes.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
@@ -59,20 +61,20 @@ class _SettingsViewState extends State<SettingsView> {
 
             // Nome do usuário
             Text(
-              MyApp.dadosUsuario?['CDSENOME'] ?? "Nome Usuário",
+              MyApp.dadosUsuario?.getPropriedade(EnumGenerico.modelDescricao.descricao) ?? 'Usuário',
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
 
             // Nome do mercado
             Text(
-              MyApp.dadosUsuario?['CDEMPNOME'] ?? "Mercado",
+              MyApp.dadosUsuario?.getPropriedade(CDSenhaEnum.usuarioEntityEmpresa.value) ?? "Mercado",
               style: const TextStyle(fontSize: 16, color: Cor.preto),
             ),
 
             const SizedBox(height: 32),
 
             // Opção Gerenciar Funcionários e Gerenciar Cargos (Apenas para funcionários do mercado)
-            if (MyApp.isCliente == false || (MyApp.dadosUsuario != null && MyApp.dadosUsuario!['CDCARNOME'] != 'CLIENTE')) ...[
+            if (MyApp.isCliente == false || (MyApp.dadosUsuario != null && MyApp.dadosUsuario!.isCliente)) ...[
               ListTile(
                 leading: const Icon(Icons.group, color: Cor.preto),
                 title: const Text("Gerenciar Funcionários"),

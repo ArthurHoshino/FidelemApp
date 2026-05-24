@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-class ProdutoModel {
+class ProdutoEntity {
   final String nome;
   final String codigo;
   final String desc;
@@ -12,7 +12,7 @@ class ProdutoModel {
   final List<File> fotos;
 
 
-  ProdutoModel({
+  ProdutoEntity({
     required this.nome,
     required this.codigo,
     required this.desc,

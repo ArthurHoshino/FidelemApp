@@ -1,3 +1,4 @@
+import 'package:fidelem_app/core/data/models/usuario_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/database/database.dart';
 import 'package:fidelem_app/routes.dart';
@@ -10,7 +11,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  static Map<String, dynamic>? dadosUsuario;
+  static UsuarioEntity? dadosUsuario;
   static String? empresaId;
   static bool isCliente = false;
   const MyApp({super.key});
