@@ -4,6 +4,7 @@ import 'package:fidelem_app/core/services/web_client.dart';
 import 'package:fidelem_app/modules/auth/login/login_model.dart';
 import 'package:fidelem_app/routes.dart';
 import 'dart:convert';
+import 'package:crypto/crypto.dart'; 
 import 'package:fidelem_app/core/widgets/fid_select_controller.dart';
 import 'package:fidelem_app/main.dart';
 
@@ -54,10 +55,7 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   Future<void> login(BuildContext context) async {
-    isLoading = true;
-    errorMessage = null;
-    notifyListeners(); // Manda o evento de loading para a view
-
+    // 1. Validação para não enviar campos de texto vazios
     if (usuarioController.text.trim().isEmpty || senhaController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Preencha todas as informações!"), backgroundColor: Colors.red,),
@@ -77,16 +75,38 @@ class LoginViewModel extends ChangeNotifier {
       return;
     }
 
-    try {
-      final loginData = LoginModel(usuario: usuarioController.text.trim(), senha: senhaController.text.trim(), empresa: empresaIdSelecionada.toString());
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners(); 
 
+    try {
+      // 2. APLICAÇÃO DO HASH SHA-256 NA SENHA
+      final String senhaPlana = senhaController.text;
+      final bytesDaSenha = utf8.encode(senhaPlana); 
+      final String senhaComHash = sha256.convert(bytesDaSenha).toString(); 
+
+      // print('========================================================================');
+      // print('[TESTE] E-mail enviado: ${usuarioController.text.trim()}');
+      // print('[TESTE] Hash SHA-256 gerado: $senhaComHash');
+      // print('[TESTE] Empresa ID: $empresaIdSelecionada');
+      // print('========================================================================');
+
+      final loginData = LoginModel(
+        usuario: usuarioController.text.trim(), 
+        senha: senhaComHash, 
+        empresa: empresaIdSelecionada.toString()
+      );
+
+      // CORREÇÃO: Alterado os parâmetros de consulta para letras MINÚSCULAS 
+      // para bater exatamente com o que a sua API/Banco mapeiam (padrão do seu arquivo Registro)
       final response = await WebClient.getData(WebClient.cdSenha, queryParameters: {
-        'CDSEEMAIL': loginData.usuario,
-        'CDSESENHA': loginData.senha,
-        "empresa": loginData.empresa
+        'cdseemail': loginData.usuario,
+        'cdsesenha': loginData.senha,
+        'empresa': loginData.empresa
       });
 
-      final List<dynamic> dados = jsonDecode(response.body);
+      // Evita falha se a API retornar um corpo nulo ou string vazia
+      final List<dynamic> dados = response.body.isNotEmpty ? jsonDecode(response.body) : [];
 
       if (response.statusCode == 200 && dados.isNotEmpty) {
         if (context.mounted) {

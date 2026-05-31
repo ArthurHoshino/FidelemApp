@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/services/web_client.dart';
 import 'package:fidelem_app/routes.dart';
 import 'dart:convert';
+import 'package:crypto/crypto.dart'; 
 import 'package:fidelem_app/core/widgets/fid_select_controller.dart';
 
 class RegistroViewModel extends ChangeNotifier {
@@ -59,14 +60,18 @@ class RegistroViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
+      // Validação de campos vazios
       if (nomeController.text.trim().isEmpty || emailController.text.trim().isEmpty ||
           senhaController.text.trim().isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Preencha todas as informações!")),
         );
+        isLoading = false;
+        notifyListeners(); // <--- AJUSTE: Destrava o loading na tela
         return;
       }
 
+      
       final int? empresaIdSelecionada = _empresasMap[empresaController.text];
 
       if (empresaIdSelecionada == null) {
@@ -76,6 +81,8 @@ class RegistroViewModel extends ChangeNotifier {
             backgroundColor: Colors.red, // Cor de erro
           ),
         );
+        isLoading = false;
+        notifyListeners(); // <--- AJUSTE: Destrava o loading na tela
         return;
       }
 
@@ -87,17 +94,31 @@ class RegistroViewModel extends ChangeNotifier {
             backgroundColor: Colors.red,
           ),
         );
+        isLoading = false;
+        notifyListeners(); // <--- AJUSTE: Destrava o loading na tela
         return;
       }
 
-      final registroData = RegistroModel(nome: nomeController.text, email: emailController.text, senha: senhaController.text, senhaConfirma: senhaConfirmaController.text, empresa: empresaIdSelecionada.toString());
+      // Processamento seguro do Hash SHA-256 local
+      final bytesDaSenha = utf8.encode(senhaController.text);
+      final String senhaComHash = sha256.convert(bytesDaSenha).toString();
 
+      final registroData = RegistroModel(
+        nome: nomeController.text.trim(), 
+        email: emailController.text.trim(), 
+        senha: senhaComHash, 
+        senhaConfirma: senhaComHash, 
+        empresa: empresaIdSelecionada.toString()
+      );
+
+      // Busca o cargo passando o ID real recuperado dinamicamente
       final buscaCargo = await WebClient.getData(WebClient.cdCargo, queryParameters: {
         'CDCARNOME': 'CLIENTE',
         'cdcarempresaid' : registroData.empresa
       });
 
-      final idCargo = buscaCargo.body.isNotEmpty ? jsonDecode(buscaCargo.body)[0]['CDCARID'] : 1;
+      final List<dynamic> dadosCargo = buscaCargo.body.isNotEmpty ? jsonDecode(buscaCargo.body) : [];
+      final idCargo = dadosCargo.isNotEmpty ? dadosCargo[0]['CDCARID'] : 1;
 
       final response = await WebClient.sendData(endpoint: WebClient.cdSenha, method: HttpMethod.post, data: {
         'cdsenome': registroData.nome,

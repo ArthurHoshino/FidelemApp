@@ -524,7 +524,7 @@ class $CDSENHATable extends CDSENHA with TableInfo<$CDSENHATable, CDSENHAData> {
     false,
     additionalChecks: GeneratedColumn.checkTextLength(
       minTextLength: 1,
-      maxTextLength: 50,
+      maxTextLength: 255,
     ),
     type: DriftSqlType.string,
     requiredDuringInsert: true,
