@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
 import 'package:fidelem_app/core/widgets/fid_button.dart';
+import 'package:fidelem_app/core/widgets/fid_select_box.dart';
+import 'package:fidelem_app/modules/mercado/home/home_viewmodel.dart';
 
 class HomeHeader extends StatelessWidget {
-
+  final HomeMercadoViewModel viewModel;
+  final Function(String?) onCategoriaChanged;
   final VoidCallback onPressed;
-  const HomeHeader({super.key, required this.onPressed});
+  const HomeHeader({
+    super.key,
+    required this.onPressed,
+    required this.viewModel,
+    required this.onCategoriaChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +49,7 @@ class HomeHeader extends StatelessWidget {
 
         FIDText(
           baseText: "Produtos",
-          fontSize: 0.022,
+          fontSize: 0.042,
           fontWeight: FontWeight.bold,
           color: Cor.preto,
           textAlign: TextAlign.start,
@@ -53,53 +61,56 @@ class HomeHeader extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                decoration: BoxDecoration(
-                  color: Cor.branco,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Cor.cinzaClaro),
+
+              Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: FIDText(
+                  preset: FIDText.medium,
+                  baseText: "Filtrar Por:",
+                  fontWeight: FontWeight.w600,
+                  fontSize: .025,
+                  color: Cor.preto,
+                  padding: const {
+                    "top": 0,
+                    "bottom": 0,
+                    "left": 0,
+                    "right": 0,
+                  },
                 ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.filter_list, color: Cor.preto),
-                    const SizedBox(width: 8),
-                    const Text("Filtrar", style: TextStyle(color: Cor.preto)),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Cor.azul, 
-                        borderRadius: BorderRadius.circular(8)
-                      ),
-                      child: Text(
-                        "2",
-                        style: const TextStyle(
-                          color: Cor.branco, 
-                          fontSize: 12, 
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
+              ),
+              Expanded(
+                child: Container(
+                  height: 48,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    color: Cor.branco,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Color.fromARGB(1, 1, 0, 0),
                     ),
-                  ],
+                  ),
+                  child: Center(
+                    child: FIDSelectBox(
+                      padding: {"top": 0, "right": .1},
+                      items: viewModel.categorias,
+                      preset: FIDSelectBox.medium,
+                      controller: viewModel.categoriaController,
+                      onChanged: (categoria) {
+                        onCategoriaChanged(categoria);
+                      },
+                    ),
+                  ),
                 ),
               ),
 
-              FIDButton(
-                text: "Adicionar",
-                width: 0.3,
-                height: 0.05,
-                borderRadius: 10,
-                BGColor: Cor.azul,
-                borderColor: Cor.azul,
-                textColor: Cor.branco,
-                padding: const {"top": 0, "bottom": 0, "left": 0, "right": 0},
-                onPressed: () => onPressed(),
-              ),
+
+              const SizedBox(width: 12),
+
+
             ],
-          ),
+          )
         ),
       ],
     );

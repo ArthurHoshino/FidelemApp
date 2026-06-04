@@ -7,6 +7,7 @@ import 'package:fidelem_app/core/widgets/fid_bottom_nav.dart';
 import 'package:fidelem_app/database/database.dart';
 import 'package:fidelem_app/routes.dart';
 import 'package:fidelem_app/main.dart';
+import 'modules/mercado/inventario/add_edit_view.dart';
 
 class NavConfig {
   final List<String> routes;
@@ -19,10 +20,11 @@ class NavConfig {
     routes: [
       Routes.homeMercadoPage,
       Routes.adicionarProdutoPage,
-      Routes.editarProdutoPage,
+      Routes.dashboardPage,
+      // Routes.editarProdutoPage,
       Routes.configPage,
     ],
-    icons: [Icons.home, Icons.add_box, Icons.edit, Icons.settings],
+    icons: [Icons.home, Icons.add_box, Icons.auto_graph, Icons.settings],
   );
 
   // Configuração para Cliente
@@ -50,11 +52,12 @@ class _BaseViewState extends State<BaseView> {
   int currentIndex = 0;
   double valorTotalVenda = 0.0;
   late NavConfig currentConfig;
+  final GlobalKey<HomeMercadoViewState> homeKey = GlobalKey<HomeMercadoViewState>();
 
   @override
   void initState() {
     super.initState();
-    
+
     if (MyApp.isCliente) {
       currentConfig = NavConfig.cliente;
     } else {
@@ -69,7 +72,7 @@ class _BaseViewState extends State<BaseView> {
     setState(() {
       currentIndex = index;
       if (total != null) {
-        valorTotalVenda = total; 
+        valorTotalVenda = total;
       }
     });
   }
@@ -90,26 +93,40 @@ class _BaseViewState extends State<BaseView> {
           index: currentIndex,
           children: currentConfig.routes.map((routeName) {
             final builder = Routes.rotas[routeName];
-            if (routeName == Routes.homeMercadoPage) {
-              return HomeMercadoView(onPressed: onPageChange); 
-            }
             if (routeName == Routes.carrinhoPage) {
               return CarrinhoView(onPressed: onPageChange);
             }
             if (routeName == Routes.pagamentoPage) {
               return PagamentoView(
-                onPressed: onPageChange, 
-                total:valorTotalVenda,
-              ); 
+                onPressed: onPageChange,
+                total: valorTotalVenda,
+              );
             }
             if (routeName == Routes.pedidoSuccessoPage) {
-              return PedidoSucessoView(onPressed: onPageChange); 
+              return PedidoSucessoView(onPressed: onPageChange);
+            }
+            // HOME MERCADO COM KEY
+            if (routeName == Routes.homeMercadoPage) {
+              return HomeMercadoView(
+                key: homeKey,
+                onPressed: onPageChange,
+              );
+            }
+            // ADD EDIT INTERCEPTADO
+            if (routeName == Routes.adicionarProdutoPage) {
+              return AddEditView(
+                isEditing: false,
+                onChanged: () async {
+                  await homeKey.currentState?.recarregar();
+                },
+              );
             }
             if (builder != null) {
               return builder(context);
             }
+
             return Center(child: Text("Rota não encontrada: $routeName"));
-          }).toList()
+          }).toList(),
         ),
         bottomNavigationBar: SafeArea(
           child: FIDBottomNavBar(
@@ -118,7 +135,7 @@ class _BaseViewState extends State<BaseView> {
             icons: currentConfig.icons,
           ),
         ),
-      )
+      ),
     );
   }
 }

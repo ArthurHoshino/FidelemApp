@@ -52,6 +52,23 @@ class FIDButton extends StatelessWidget {
     },
   };
 
+  static Map<String, dynamic> card = {
+    "onPressed": null,
+    "text": "",
+    "width": 0.3,
+    "height": 0.035,
+    "borderRadius": 8.0,
+    "borderColor": Cor.azul,
+    "BGColor": Cor.azul,
+    "textColor": Cor.branco,
+    "padding": {
+      "top": 0.00,
+      "bottom": 0.05,
+      "right": 0.00,
+      "left": 0.00,
+    },
+  };
+
   final VoidCallback onPressed;
   final String text;
   final double width;

@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:flutter/services.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
 
 class FIDInputBox extends StatelessWidget {
@@ -9,6 +10,7 @@ class FIDInputBox extends StatelessWidget {
   static double defaultBorderRadius = 20.0;
   static Color defaultBorderColor = Cor.cinzaClaro;
   static Color defaultTextColor = Cor.cinzaClaro;
+
   static Map<String, double> defaultPadding = {
     "top": 0.05,
     "bottom": 0.05,
@@ -17,8 +19,8 @@ class FIDInputBox extends StatelessWidget {
   };
 
   static Map<String, dynamic> medium = {
-    "text": "", 
-    "width": 0.7, 
+    "text": "",
+    "width": 0.7,
     "height": 0.05,
     "borderRadius": 10.0,
     "borderColor": Cor.cinzaClaro,
@@ -41,25 +43,34 @@ class FIDInputBox extends StatelessWidget {
   final TextEditingController? controller;
   final bool obscureText;
 
- FIDInputBox({
-  super.key,
-  String? text,
-  double? width,
-  double? height,
-  double? borderRadius,
-  Color? borderColor,
-  Color? textColor,
-  Map<String, double>? padding,
-  Map<String, dynamic>? preset,
-  this.controller,
-  this.obscureText = false,
-}) : text = text ?? (preset?["text"] as String? ?? defaultText),
-      width = width ?? (preset?["width"] as double? ?? defaultWidth),
-      height = height ?? (preset?["height"] as double? ?? defaultHeight),
-      borderColor = borderColor ?? (preset?["borderColor"] as Color? ?? defaultBorderColor),
-      textColor = textColor ?? (preset?["textColor"] as Color? ?? defaultTextColor),
-      borderRadius = borderRadius ?? (preset?["borderRadius"] as double? ?? defaultBorderRadius),
-      padding = padding ?? (preset?["padding"] as Map<String, double>? ?? defaultPadding);
+  // NOVOS
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+
+  FIDInputBox({
+    super.key,
+    String? text,
+    double? width,
+    double? height,
+    double? borderRadius,
+    Color? borderColor,
+    Color? textColor,
+    Map<String, double>? padding,
+    Map<String, dynamic>? preset,
+    this.controller,
+    this.obscureText = false,
+
+    // NOVOS
+    this.keyboardType,
+    this.inputFormatters,
+
+  }) : text = text ?? (preset?["text"] as String? ?? defaultText),
+        width = width ?? (preset?["width"] as double? ?? defaultWidth),
+        height = height ?? (preset?["height"] as double? ?? defaultHeight),
+        borderColor = borderColor ?? (preset?["borderColor"] as Color? ?? defaultBorderColor),
+        textColor = textColor ?? (preset?["textColor"] as Color? ?? defaultTextColor),
+        borderRadius = borderRadius ?? (preset?["borderRadius"] as double? ?? defaultBorderRadius),
+        padding = padding ?? (preset?["padding"] as Map<String, double>? ?? defaultPadding);
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +79,12 @@ class FIDInputBox extends StatelessWidget {
     final double finalWidth = screenWidth * width;
     final double finalHeight = screenHeight * height;
     final EdgeInsets finalPadding = EdgeInsets.only(
-      top: (padding["top"] ?? 0.0) * screenHeight, 
-      bottom: (padding["bottom"] ?? 0.0) * screenHeight, 
-      right: (padding["right"] ?? 0.0) * screenWidth, 
-      left: (padding["left"] ?? 0.0) * screenWidth
+      top: (padding["top"] ?? 0.0) * screenHeight,
+      bottom: (padding["bottom"] ?? 0.0) * screenHeight,
+      right: (padding["right"] ?? 0.0) * screenWidth,
+      left: (padding["left"] ?? 0.0) * screenWidth,
     );
+
     return Padding(
       padding: finalPadding,
       child: SizedBox(
@@ -81,6 +93,10 @@ class FIDInputBox extends StatelessWidget {
         child: TextFormField(
           controller: controller,
           obscureText: obscureText,
+
+          keyboardType: keyboardType,
+          inputFormatters: inputFormatters,
+
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: borderColor),
@@ -92,10 +108,13 @@ class FIDInputBox extends StatelessWidget {
             ),
             labelText: text,
             labelStyle: TextStyle(color: textColor),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 0,
+            ),
           ),
-        )
-      )
+        ),
+      ),
     );
   }
 }

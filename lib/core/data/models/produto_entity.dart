@@ -1,5 +1,10 @@
 import 'package:fidelem_app/core/data/enums/enums.dart';
 import 'package:fidelem_app/core/data/models/entidade_modelo.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import '../../../main.dart';
+import '../../services/web_client.dart';
 
 class ProdutoEntity extends EntidadeModelo {
   final String nome;
@@ -8,6 +13,7 @@ class ProdutoEntity extends EntidadeModelo {
   final double? precoDesconto;
   final int qtdEstoque;
   final String? imagem;
+  final String? categoria;
 
   const ProdutoEntity({
     required super.id,
@@ -18,6 +24,7 @@ class ProdutoEntity extends EntidadeModelo {
     this.precoDesconto,
     required this.qtdEstoque,
     this.imagem,
+    this.categoria,
   });
 
   factory ProdutoEntity.fromMap(Map<String, dynamic> map) {
@@ -88,6 +95,39 @@ class ProdutoEntity extends EntidadeModelo {
       precoDesconto: precoDesconto != null ? precoDesconto.value : this.precoDesconto,
       qtdEstoque: qtdEstoque != null ? qtdEstoque.value! : this.qtdEstoque,
       imagem: imagem != null ? imagem.value : this.imagem,
+    );
+  }
+}
+
+Future<void> deleteProdutoById(BuildContext context, int prodId) async {
+  final response = await WebClient.sendData(
+    endpoint: WebClient.cdProduto,
+    method: HttpMethod.delete,
+    data: {
+      "empresa": MyApp.empresaId,
+      "cdprodid": prodId,
+    },
+  );
+
+  // print(response.body);
+
+  if (!context.mounted) return;
+
+  final messenger = ScaffoldMessenger.of(context);
+
+  if (response.statusCode < 300) {
+    messenger.showSnackBar(
+      const SnackBar(
+        content: Text("Produto deletado com sucesso!"),
+        backgroundColor: Colors.green,
+      ),
+    );
+  } else {
+    messenger.showSnackBar(
+      const SnackBar(
+        content: Text("Erro ao remover produto"),
+        backgroundColor: Colors.redAccent,
+      ),
     );
   }
 }

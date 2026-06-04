@@ -5,6 +5,7 @@ import 'package:fidelem_app/modules/auth/registro/registro_view.dart';
 import 'package:fidelem_app/modules/cliente/carrinho/views/carrinho_view.dart';
 import 'package:fidelem_app/modules/cliente/carrinho/views/pagamento_view.dart';
 import 'package:fidelem_app/modules/cliente/carrinho/views/pedido_sucesso_view.dart';
+import 'package:fidelem_app/modules/mercado/dashboard/dashboard_view.dart';
 import 'package:fidelem_app/modules/mercado/home/home_view.dart';
 import 'package:fidelem_app/modules/Config/config_view.dart';
 import 'package:fidelem_app/modules/cliente/loja_pontos/loja_pontos_view.dart';
@@ -15,6 +16,9 @@ import 'package:fidelem_app/modules/mercado/funcionarios/funcionarios_view.dart'
 import 'package:fidelem_app/modules/mercado/funcionarios/funcionarios_add_view.dart';
 import 'package:fidelem_app/modules/mercado/cargos/cargos_view.dart';
 import 'package:fidelem_app/modules/mercado/cargos/cargos_add_view.dart';
+import 'package:fidelem_app/modules/mercado/categorias/categorias_view.dart';
+import 'package:fidelem_app/modules/mercado/categorias/add_categorias_view.dart';
+import 'package:path/path.dart';
 
 class Routes {
   // Rotas de fluxo geral
@@ -43,6 +47,9 @@ class Routes {
   static const String addFuncionarioPage = '/funcionarios/add';
   static const String cargosPage = '/cargos';
   static const String addCargoPage = '/cargos/add';
+  static const String categoriasPage = '/categorias';
+  static const String addCategoriaPage = '/categorias/add-categoria';
+  static const String dashboardPage = '/dashboard';
 
   static Map<String, WidgetBuilder> get rotas {
     return {
@@ -62,12 +69,15 @@ class Routes {
 
       // Rotas do fluxo do Mercado
       adicionarProdutoPage: (context) => const AddEditView(isEditing: false),
-      editarProdutoPage: (context) => const AddEditView(isEditing: true),
+      editarProdutoPage: (context) => AddEditView(isEditing: true, produtoId: 1),
+      categoriasPage: (context) => const CategoriasView(),
+      addCategoriaPage: (context) => const AddCategoriasView(),
       homeMercadoPage: (context) => const HomeMercadoView(),
       funcionariosPage: (context) => const FuncionariosView(),
       addFuncionarioPage: (context) => const FuncionariosAddView(),
       cargosPage: (context) => const CargosView(),
       addCargoPage: (context) => const CargosAddView(),
+      dashboardPage: (context) => const DashboardView(),
     };
   }
 }

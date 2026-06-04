@@ -1,9 +1,19 @@
+import 'package:fidelem_app/core/data/enums/cdproduto_enum.dart';
+import 'package:fidelem_app/core/widgets/fid_button.dart';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
+import '../../../../core/data/models/produto_entity.dart';
+import '../../inventario/add_edit_view.dart';
 
 class HomeProdutoCard extends StatelessWidget {
   final Map<String, dynamic> item;
-  const HomeProdutoCard({super.key, required this.item});
+  final VoidCallback? onDelete;
+
+  const HomeProdutoCard({
+    super.key,
+    required this.item,
+    this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,29 +35,126 @@ class HomeProdutoCard extends StatelessWidget {
             ),
             child: const Icon(Icons.image, size: 32, color: Cor.azul),
           ),
+
           const SizedBox(height: 8),
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item["title"]!,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5),
+                  item[CDProdutoEnum.nome.value] ?? "-",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13.5,
+                  ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
+
                 const SizedBox(height: 4),
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: RichText(
-                    text: TextSpan(
-                      style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: Cor.preto),
-                      children: [
-                        TextSpan(text: "${item["price"]} | "),
-                        TextSpan(text: item["points"], style: const TextStyle(color: Cor.vermelho)),
-                      ],
+
+                RichText(
+                  text: TextSpan(
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                      color: Cor.preto,
                     ),
+                    children: [
+                      TextSpan(
+                        text: "${item[CDProdutoEnum.precoReal.value] ?? "-"} | ",
+                      ),
+                      TextSpan(
+                        text: ((item[CDProdutoEnum.precoPonto.value] ?? 0) == 0)
+                            ? "-"
+                            : item[CDProdutoEnum.precoPonto.value].toString(),
+                        style: const TextStyle(color: Cor.vermelho),
+                      ),
+                    ],
                   ),
+                ),
+
+                const SizedBox(height: 6),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: FIDButton(
+                        text: "Editar",
+                        preset: FIDButton.card,
+                        padding: const {"top": 0.00},
+                        onPressed: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => AddEditView(
+                                isEditing: true,
+                                produtoId: item[CDProdutoEnum.id.value],
+                              ),
+                            ),
+                          );
+
+                          if (result == true && onDelete != null) {
+                            onDelete!(); // recarrega a home
+                          }
+                        },
+                      ),
+                    ),
+
+                    const SizedBox(width: 6),
+
+                    Container(
+                      height: 34,
+                      width: 34,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text("Excluir produto"),
+                                content: const Text("Tem certeza que deseja excluir este produto?"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Cancelar"),
+                                  ),
+
+                                  TextButton(
+                                    onPressed: () async {
+
+                                      await deleteProdutoById(context, item[CDProdutoEnum.id.value]);
+                                      if (onDelete != null) {
+                                        onDelete!();
+                                      }
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      "Confirmar",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
