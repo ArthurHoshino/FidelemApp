@@ -3,6 +3,7 @@ import 'package:fidelem_app/core/widgets/fid_text.dart';
 import 'package:fidelem_app/core/widgets/fid_button.dart';
 import 'package:fidelem_app/modules/cliente/carrinho/componentes/pagamento_cupom_card.dart';
 import 'package:fidelem_app/modules/cliente/carrinho/componentes/pagamento_card.dart';
+import 'package:fidelem_app/core/services/cart_manager.dart';
 
 class PagamentoView extends StatelessWidget {
 
@@ -96,8 +97,22 @@ class PagamentoView extends StatelessWidget {
                   FIDButton(
                     text: "Confirmar Pagamento",
                     preset: FIDButton.medium,
-                    onPressed: () {
-                      onPressed!(5);
+                    onPressed: () async {
+                      final error = await CartManager.instance.finalizeCart();
+                      if (error != null) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(error),
+                              backgroundColor: Colors.redAccent,
+                            ),
+                          );
+                        }
+                      } else {
+                        if (context.mounted) {
+                          onPressed!(5);
+                        }
+                      }
                     },
                     padding: const {"bottom": 0.01},
                   ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
 import 'package:fidelem_app/modules/cliente/home/componentes/home_promocoes_card.dart';
+import 'package:fidelem_app/core/services/cart_manager.dart';
 
 class HomePromocoesGrid extends StatefulWidget {
   final List<ProdutoEntity> data;
@@ -25,7 +26,7 @@ class _HomePromocoesGridState extends State<HomePromocoesGrid> {
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: viewModel,
+      listenable: Listenable.merge([viewModel, CartManager.instance]),
       builder: (context, child) {
         final listaPromocoes = viewModel.model.promocoes;
         return Column(
@@ -60,11 +61,16 @@ class _HomePromocoesGridState extends State<HomePromocoesGrid> {
                 ),
                 itemBuilder: (context, index) {
                   final item = listaPromocoes[index];
+                  final qty = CartManager.instance.getProductQuantity(item.id);
                   return HomePromocoesCard(
                     title: item.nome,
                     fullPrice: item.precoReal.toDouble(),
                     promoPrice: item.precoDesconto!.toDouble(),
                     imagePath: item.imagem,
+                    quantidadeNoCarrinho: qty,
+                    onTapAdd: () async {
+                      await CartManager.instance.updateProductQuantity(item.id, 1);
+                    },
                   );
                 },
               ),

@@ -85,12 +85,12 @@ class LojaProdutoCard extends StatelessWidget {
                         
                       ),
                       FIDText(
-                        baseText: "${produto.pontos}pts",
+                        baseText: produto.pontos > 0 ? "${produto.pontos}pts" : "S/ pontos",
                         preset: FIDText.medium,
                         fontWeight: FontWeight.bold,
-                        color: Cor.vermelho, 
+                        color: produto.pontos > 0 ? Cor.vermelho : Cor.cinzaEscuro, 
                         textAlign: TextAlign.left,
-                        fontSize: 0.015,
+                        fontSize: produto.pontos > 0 ? 0.015 : 0.012,
                       ),
                     ],
                   ),

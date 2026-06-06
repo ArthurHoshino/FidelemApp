@@ -1,69 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:drift/drift.dart' as drift;
 import 'package:decimal/decimal.dart';
 import 'package:fidelem_app/database/database.dart';
-import 'package:fidelem_app/core/data/teste/cliente_loja_test_data.dart';
+import 'package:fidelem_app/core/services/cart_manager.dart';
 import '../models/carrinho_model.dart';
 
 class CarrinhoViewModel extends ChangeNotifier {
-  final AppDatabase db = appDatabase;
-  final int userId = 1;
-
+  final CartManager cartManager = CartManager.instance;
   List<CarrinhoModel> items = [];
 
   CarrinhoViewModel() {
     init();
   }
 
- void init() {
-  db.carrinhoDao.watchCarrinhoSimplesDoUsuario(userId).listen((itensNoBanco) {
-    List<CarrinhoModel> listaTemporaria = [];
-    final produtosDaLoja = ClienteLojaTestData.produtos;
-
-    for (var itemNoBanco in itensNoBanco) {
-      Map<String, dynamic>? dadosEncontrados;
-      
-      for (var produto in produtosDaLoja) {
-        if (produto['id'] == itemNoBanco.lcCarProdutoId) {
-          dadosEncontrados = produto;
-          break;
-        }
-      }
-
-      if (dadosEncontrados != null) {
-        final modeloParaExibir = CarrinhoModel(
-          carrinhoData: itemNoBanco,
-          nome: dadosEncontrados['nome'],
-          preco: (dadosEncontrados['preco'] as num).toDouble(),
-          imagem: dadosEncontrados['imagem'],
-        );
-
-        listaTemporaria.add(modeloParaExibir);
-      }
-    }
-    items = listaTemporaria;
-    notifyListeners();
-  });
-}
-
-  void adicionar(CarrinhoModel item) => _update(item, 1);
-  void remover(CarrinhoModel item) => _update(item, -1);
-  
-  void excluir(CarrinhoModel item) {
-    db.carrinhoDao.deleteItem(item.carrinhoData.toCompanion(true));
+  void init() {
+    cartManager.addListener(_onCartChanged);
+    cartManager.fetchCart();
+    _onCartChanged();
   }
 
-  void _update(CarrinhoModel item, int change) {
-    int novaQtd = item.carrinhoData.lcCarQuantidade + change;
-    if (novaQtd < 1) {
-      excluir(item);
-    } else {
-      db.carrinhoDao.updateItem(
-        item.carrinhoData.toCompanion(true).copyWith(
-          lcCarQuantidade: drift.Value(novaQtd),
-        ),
+  void _onCartChanged() {
+    items = cartManager.items.map((item) {
+      final lccarData = LCCARRINHOData(
+        lcCarId: item.id,
+        lcCarProdutoId: item.produtoId,
+        lcCarUsuarioId: cartManager.userId,
+        lcCarQuantidade: item.quantidade,
       );
-    }
+
+      final prod = item.produto;
+      return CarrinhoModel(
+        carrinhoData: lccarData,
+        nome: prod?.nome ?? 'Produto desconhecido',
+        preco: prod?.precoReal ?? 0.0,
+        imagem: prod?.imagem ?? '',
+      );
+    }).toList();
+
+    notifyListeners();
+  }
+
+  void adicionar(CarrinhoModel item) {
+    cartManager.updateProductQuantity(item.carrinhoData.lcCarProdutoId, 1);
+  }
+
+  void remover(CarrinhoModel item) {
+    cartManager.updateProductQuantity(item.carrinhoData.lcCarProdutoId, -1);
+  }
+  
+  void excluir(CarrinhoModel item) {
+    cartManager.updateProductQuantity(
+      item.carrinhoData.lcCarProdutoId,
+      -item.carrinhoData.lcCarQuantidade,
+    );
   }
 
   Decimal get total {
@@ -73,5 +61,11 @@ class CarrinhoViewModel extends ChangeNotifier {
       valorTotal += preco * Decimal.fromInt(item.carrinhoData.lcCarQuantidade);
     }
     return valorTotal;
+  }
+
+  @override
+  void dispose() {
+    cartManager.removeListener(_onCartChanged);
+    super.dispose();
   }
 }

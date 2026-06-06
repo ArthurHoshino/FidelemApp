@@ -28,7 +28,10 @@ class HomeViewmodel extends ChangeNotifier {
       if (response.statusCode == 200 && promocoesData.isNotEmpty) {
         List<ProdutoEntity> listaPromocoes = [];
         for (Map<String, dynamic> item in promocoesData) {
-          listaPromocoes.add(ProdutoEntity.fromMap(item));
+          final prod = ProdutoEntity.fromMap(item);
+          if (prod.precoDesconto != null) {
+            listaPromocoes.add(prod);
+          }
         }
 
         _model = _model.copyWith(

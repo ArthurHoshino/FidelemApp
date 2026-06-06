@@ -7,12 +7,17 @@ class HomePromocoesCard extends StatelessWidget {
   final double promoPrice;
   final String? imagePath;
 
+  final VoidCallback? onTapAdd;
+  final int quantidadeNoCarrinho;
+
   const HomePromocoesCard({
     super.key,
     required this.title,
     required this.fullPrice,
     required this.promoPrice,
     this.imagePath,
+    this.onTapAdd,
+    this.quantidadeNoCarrinho = 0,
   });
 
   @override
@@ -94,13 +99,32 @@ class HomePromocoesCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: const BoxDecoration(
-                          color: Cor.azulClaro1,
-                          shape: BoxShape.circle,
+                      InkWell(
+                        onTap: onTapAdd,
+                        borderRadius: BorderRadius.circular(100),
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: const BoxDecoration(
+                            color: Cor.azulClaro1,
+                            shape: BoxShape.circle,
+                          ),
+                          child: quantidadeNoCarrinho > 0
+                              ? SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: Center(
+                                    child: Text(
+                                      "$quantidadeNoCarrinho",
+                                      style: const TextStyle(
+                                        color: Cor.azul,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : const Icon(Icons.add, size: 20, color: Cor.azul),
                         ),
-                        child: const Icon(Icons.add, size: 20, color: Cor.azul),
                       ),
                     ],
                   ),
