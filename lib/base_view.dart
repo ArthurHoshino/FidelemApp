@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_bottom_nav.dart';
 import 'package:fidelem_app/routes.dart';
 import 'package:fidelem_app/main.dart';
+import 'package:fidelem_app/core/data/enums/privilegios_keys.dart';
 import 'modules/mercado/inventario/add_edit_view.dart';
 import 'package:fidelem_app/core/services/cart_manager.dart';
 
@@ -70,6 +71,21 @@ class _BaseViewState extends State<BaseView> {
     if (index == 2) {
       CartManager.instance.fetchCart();
     }
+    if (!MyApp.isCliente) {
+      if (index == 1 && !MyApp.privilegios.contains(PrivilegiosKeys.produtoAdicionar)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Acesso Negado: Privilégio de Adicionar Produtos necessário."), backgroundColor: Colors.red),
+        );
+        return;
+      }
+      if (index == 2 && !MyApp.privilegios.contains(PrivilegiosKeys.estatisticasVisualizar)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Acesso Negado: Privilégio de Visualizar Estatísticas necessário."), backgroundColor: Colors.red),
+        );
+        return;
+      }
+    }
+
     if (index == 5) {
       CartManager.instance.clearCart();
     }

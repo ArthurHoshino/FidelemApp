@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
 import '../../../../core/data/models/produto_entity.dart';
 import '../../inventario/add_edit_view.dart';
+import 'package:fidelem_app/main.dart';
+import 'package:fidelem_app/core/data/enums/privilegios_keys.dart';
 
 class HomeProdutoCard extends StatelessWidget {
   final Map<String, dynamic> item;
@@ -134,7 +136,15 @@ class HomeProdutoCard extends StatelessWidget {
                         text: "Editar",
                         preset: FIDButton.card,
                         padding: const {"top": 0.00},
+                        BGColor: (!MyApp.isCliente && !MyApp.privilegios.contains(PrivilegiosKeys.produtoEditar)) ? Cor.cinzaClaro : null,
+                        borderColor: (!MyApp.isCliente && !MyApp.privilegios.contains(PrivilegiosKeys.produtoEditar)) ? Cor.cinzaClaro : null,
                         onPressed: () async {
+                          if (!MyApp.isCliente && !MyApp.privilegios.contains(PrivilegiosKeys.produtoEditar)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Acesso Negado: Privilégio de Editar Produtos necessário."), backgroundColor: Colors.red),
+                            );
+                            return;
+                          }
                           final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -158,7 +168,7 @@ class HomeProdutoCard extends StatelessWidget {
                       height: 34,
                       width: 34,
                       decoration: BoxDecoration(
-                        color: Colors.red,
+                        color: (!MyApp.isCliente && !MyApp.privilegios.contains(PrivilegiosKeys.produtoExcluir)) ? Cor.cinzaClaro : Colors.red,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: IconButton(
@@ -169,6 +179,12 @@ class HomeProdutoCard extends StatelessWidget {
                           size: 20,
                         ),
                         onPressed: () {
+                          if (!MyApp.isCliente && !MyApp.privilegios.contains(PrivilegiosKeys.produtoExcluir)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Acesso Negado: Privilégio de Excluir Produtos necessário."), backgroundColor: Colors.red),
+                            );
+                            return;
+                          }
                           showDialog(
                             context: context,
                             builder: (context) {

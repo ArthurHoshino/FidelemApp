@@ -5,6 +5,7 @@ import 'package:fidelem_app/main.dart';
 import 'package:fidelem_app/core/data/models/cargo_entity.dart';
 import 'package:fidelem_app/core/data/models/usuario_entity.dart';
 import 'dart:convert';
+import 'package:crypto/crypto.dart';
 
 class FuncionariosAddViewModel extends ChangeNotifier {
   final TextEditingController nomeController = TextEditingController();
@@ -107,15 +108,25 @@ class FuncionariosAddViewModel extends ChangeNotifier {
     try {
       final empresaId = MyApp.empresaId;
 
-      final data = {
+      final senhaPura = senhaController.text.trim();
+      String? senhaFinal;
+      if (senhaPura.isNotEmpty) {
+        final bytesDaSenha = utf8.encode(senhaPura);
+        senhaFinal = sha256.convert(bytesDaSenha).toString();
+      }
+
+      final Map<String, dynamic> data = {
         'cdsenome': nomeController.text.trim(),
-        'cdsesenha': senhaController.text.trim(),
         'cdsecpfcnpj': cpfCnpjController.text.trim().isNotEmpty ? cpfCnpjController.text.trim() : null,
         'cdseemail': emailController.text.trim(),
         'cdsetelefone': telefoneController.text.trim().isNotEmpty ? telefoneController.text.trim() : null,
         'cdsecargoid': cargoSelecionado.id,
         'empresa': empresaId,
       };
+
+      if (senhaFinal != null) {
+        data['cdsesenha'] = senhaFinal;
+      }
 
       var response = null;
 
