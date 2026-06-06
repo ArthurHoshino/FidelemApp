@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/services/web_client.dart';
 import 'package:fidelem_app/main.dart';
+import 'package:fidelem_app/core/data/models/usuario_entity.dart';
 import 'dart:convert';
 
 class FuncionariosViewModel extends ChangeNotifier {
-  List<dynamic> funcionarios = [];
+  List<UsuarioEntity> funcionarios = [];
   bool isLoading = false;
   String? errorMessage;
 
@@ -32,7 +33,10 @@ class FuncionariosViewModel extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        funcionarios = jsonDecode(response.body);
+        final List<dynamic> dados = jsonDecode(response.body);
+        funcionarios = dados
+            .map((f) => UsuarioEntity.fromMap(f))
+            .toList();
       } else {
         errorMessage = "Erro ao carregar funcionários.";
       }
@@ -60,7 +64,7 @@ class FuncionariosViewModel extends ChangeNotifier {
 
       if (response.statusCode == 204) {
         // Remover a lista local ao invés de buscar tudo novamente (ou só recarregar)
-        funcionarios.removeWhere((f) => f['CDSEID'] == idFuncionario);
+        funcionarios.removeWhere((f) => f.id == idFuncionario);
         notifyListeners();
         return true;
       } else {

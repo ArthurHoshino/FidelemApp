@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/services/web_client.dart';
 import 'package:fidelem_app/main.dart';
+import 'package:fidelem_app/core/data/models/cargo_entity.dart';
 import 'dart:convert';
 
 class CargosViewModel extends ChangeNotifier {
-  List<dynamic> cargos = [];
+  List<CargoEntity> cargos = [];
   bool isLoading = false;
   String? errorMessage;
 
@@ -32,7 +33,10 @@ class CargosViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final List<dynamic> todosCargos = jsonDecode(response.body);
-        cargos = todosCargos.where((c) => c['CDCARNOME'] != 'CLIENTE').toList();
+        cargos = todosCargos
+            .where((c) => c['CDCARNOME'] != 'CLIENTE')
+            .map((c) => CargoEntity.fromMap(c))
+            .toList();
       } else {
         errorMessage = "Erro ao carregar cargos.";
       }
@@ -59,7 +63,7 @@ class CargosViewModel extends ChangeNotifier {
       );
 
       if (response.statusCode == 204) {
-        cargos.removeWhere((c) => c['CDCARID'] == idCargo);
+        cargos.removeWhere((c) => c.id == idCargo);
         notifyListeners();
         return true;
       } else {

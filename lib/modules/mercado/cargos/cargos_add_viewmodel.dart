@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/services/web_client.dart';
 import 'package:fidelem_app/main.dart';
+import 'package:fidelem_app/core/data/models/cargo_entity.dart';
 import 'dart:convert';
 
 class CargosAddViewModel extends ChangeNotifier {
@@ -9,11 +10,11 @@ class CargosAddViewModel extends ChangeNotifier {
   bool isSaving = false;
   String? errorMessage;
 
-  final Map<String, dynamic>? cargoEditado;
+  final CargoEntity? cargoEditado;
 
   CargosAddViewModel({this.cargoEditado}) {
     if (cargoEditado != null) {
-      nomeController.text = cargoEditado!['CDCARNOME'] ?? '';
+      nomeController.text = cargoEditado!.descricao;
     }
   }
 
@@ -42,7 +43,7 @@ class CargosAddViewModel extends ChangeNotifier {
       var response = null;
 
       if (isEdit) {
-        data['cdcarid'] = cargoEditado!['CDCARID'].toString();
+        data['cdcarid'] = cargoEditado!.id.toString();
         response = await WebClient.sendData(
           endpoint: WebClient.cdCargo,
           method: HttpMethod.put,

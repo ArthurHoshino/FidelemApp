@@ -75,11 +75,11 @@ class _FuncionariosContent extends StatelessWidget {
                             child: Icon(Icons.person, color: Cor.branco),
                           ),
                           title: Text(
-                            funcionario['CDSENOME'] ?? 'Sem Nome',
+                            funcionario.descricao,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(
-                            funcionario['CDCARNOME'] ?? 'Cargo Desconhecido',
+                            funcionario.nomeCargo,
                             style: const TextStyle(color: Cor.cinzaEscuro),
                           ),
                           trailing: Row(
@@ -106,7 +106,7 @@ class _FuncionariosContent extends StatelessWidget {
                                     context: context,
                                     builder: (ctx) => AlertDialog(
                                       title: const Text("Excluir Funcionário"),
-                                      content: Text("Tem certeza que deseja excluir o funcionário '${funcionario['CDSENOME']}'?"),
+                                      content: Text("Tem certeza que deseja excluir o funcionário '${funcionario.descricao}'?"),
                                       actions: [
                                         TextButton(
                                           onPressed: () => Navigator.pop(ctx, false),
@@ -121,8 +121,7 @@ class _FuncionariosContent extends StatelessWidget {
                                   );
                                   
                                   if (confirmar == true && context.mounted) {
-                                    final idParam = funcionario['CDSEID'];
-                                    final sucesso = await context.read<FuncionariosViewModel>().deletarFuncionario(context, idParam);
+                                    final sucesso = await context.read<FuncionariosViewModel>().deletarFuncionario(context, funcionario.id);
                                     if (sucesso && context.mounted) {
                                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Excluído com sucesso!"), backgroundColor: Colors.green));
                                     }

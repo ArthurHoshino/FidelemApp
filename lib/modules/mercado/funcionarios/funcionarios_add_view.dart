@@ -4,6 +4,7 @@ import 'package:fidelem_app/core/widgets/fid_button.dart';
 import 'package:fidelem_app/core/widgets/fid_input_box.dart';
 import 'package:fidelem_app/core/widgets/fid_select_box.dart';
 import 'package:fidelem_app/modules/mercado/funcionarios/funcionarios_add_viewmodel.dart';
+import 'package:fidelem_app/core/data/models/usuario_entity.dart';
 import 'package:provider/provider.dart';
 
 class FuncionariosAddView extends StatelessWidget {
@@ -11,7 +12,7 @@ class FuncionariosAddView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final args = ModalRoute.of(context)?.settings.arguments as UsuarioEntity?;
 
     return ChangeNotifierProvider(
       create: (_) => FuncionariosAddViewModel(funcionarioEditado: args),
