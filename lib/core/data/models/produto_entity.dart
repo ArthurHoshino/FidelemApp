@@ -1,6 +1,5 @@
 import 'package:fidelem_app/core/data/enums/enums.dart';
 import 'package:fidelem_app/core/data/models/entidade_modelo.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../main.dart';
@@ -28,13 +27,17 @@ class ProdutoEntity extends EntidadeModelo {
   });
 
   factory ProdutoEntity.fromMap(Map<String, dynamic> map) {
+    double? precoDesc = double.tryParse(map[CDProdutoEnum.precoDesconto.value]?.toString() ?? '');
+    if (precoDesc == 0.0) {
+      precoDesc = null;
+    }
     return ProdutoEntity(
       id: map[CDProdutoEnum.id.value]!.toInt(),
       nome: map[CDProdutoEnum.nome.value] as String,
       descricao: map[CDProdutoEnum.descricaoProduto.value] as String,
       precoReal: double.tryParse(map[CDProdutoEnum.precoReal.value]?.toString() ?? '') ?? 0,
       precoPonto: map[CDProdutoEnum.precoPonto.value] ?? 0,
-      precoDesconto: double.tryParse(map[CDProdutoEnum.precoDesconto.value]?.toString() ?? ''),
+      precoDesconto: precoDesc,
       qtdEstoque: map[CDProdutoEnum.qtdEstoque.value] ?? 0,
       imagem: map[CDProdutoEnum.imagem.value] as String?,
     );

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:drift/drift.dart' as drift;
-import 'package:fidelem_app/database/database.dart';
-import 'package:fidelem_app/core/data/teste/cliente_loja_test_data.dart';
+import 'package:fidelem_app/core/services/cart_manager.dart';
 import 'package:fidelem_app/modules/cliente/loja_pontos/loja_pontos_model.dart';
 
 class LojaPontosViewModel extends ChangeNotifier {
-  final AppDatabase db = appDatabase;
-  final int userId = 1;
+  final CartManager cartManager = CartManager.instance;
 
   List<LojaPontosModel> products = [];
   String selectedSort = 'Mais Vendidos';
@@ -16,54 +13,37 @@ class LojaPontosViewModel extends ChangeNotifier {
   }
 
   void init() {
-    db.carrinhoDao.watchCarrinhoSimplesDoUsuario(userId).listen((itensNoCarrinho) {
-      products = ClienteLojaTestData.produtos.map((dados) {
-        final id = int.tryParse(dados['id'].toString()) ?? 0;
-        
-        LCCARRINHOData? itemNoCarrinho; 
-        for (var c in itensNoCarrinho) {
-          if (c.lcCarProdutoId == id) {
-            itemNoCarrinho = c;
-            break;
-          }
-        }
+    cartManager.addListener(_onCartChanged);
+    cartManager.fetchCart();
+  }
 
-        return LojaPontosModel(
-          id: dados['id'].toString(),
-          nome: dados['nome'],
-          preco: (dados['preco'] as num).toDouble(),
-          pontos: dados['pontos'],
-          imagem: dados['imagem'],
-          quantidadeNoCarrinho: itemNoCarrinho?.lcCarQuantidade ?? 0,
-        );
-      }).toList();
+  void _onCartChanged() {
+    products = cartManager.allProducts.map((prod) {
+      final qty = cartManager.getProductQuantity(prod.id);
+      return LojaPontosModel(
+        id: prod.id.toString(),
+        nome: prod.nome,
+        preco: prod.precoReal,
+        pontos: prod.precoPonto,
+        imagem: prod.imagem ?? '',
+        quantidadeNoCarrinho: qty,
+      );
+    }).toList();
 
-      notifyListeners();
-    });
+    notifyListeners();
   }
 
   Future<void> updateCart(String productId, int change) async {
     final id = int.tryParse(productId) ?? -1;
-    
-    final registro = await db.carrinhoDao.getItemByProdutoEUsuario(id, userId);
-
-    if (registro != null) {
-      int novaQtd = registro.lcCarQuantidade + change;
-      
-      if (novaQtd < 1) {
-        await db.carrinhoDao.deleteItem(registro.toCompanion(true));
-      } else {
-        await db.carrinhoDao.updateItem(
-          registro.toCompanion(true).copyWith(lcCarQuantidade: drift.Value(novaQtd))
-        );
-      }
-    } else if (change == 1) {
-      await db.carrinhoDao.insertItem(LCCARRINHOCompanion(
-        lcCarProdutoId: drift.Value(id),
-        lcCarUsuarioId: drift.Value(userId),
-        lcCarQuantidade: const drift.Value(1),
-      ));
+    if (id != -1) {
+      await cartManager.updateProductQuantity(id, change);
     }
+  }
+
+  @override
+  void dispose() {
+    cartManager.removeListener(_onCartChanged);
+    super.dispose();
   }
 
   void setSort(String val) {

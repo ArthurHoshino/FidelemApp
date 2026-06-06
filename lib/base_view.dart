@@ -4,10 +4,10 @@ import 'package:fidelem_app/modules/cliente/carrinho/views/pagamento_view.dart';
 import 'package:fidelem_app/modules/cliente/carrinho/views/pedido_sucesso_view.dart';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_bottom_nav.dart';
-import 'package:fidelem_app/database/database.dart';
 import 'package:fidelem_app/routes.dart';
 import 'package:fidelem_app/main.dart';
 import 'modules/mercado/inventario/add_edit_view.dart';
+import 'package:fidelem_app/core/services/cart_manager.dart';
 
 class NavConfig {
   final List<String> routes;
@@ -66,8 +66,11 @@ class _BaseViewState extends State<BaseView> {
   }
 
   void onPageChange(int index, {double? total}) {
+    if (index == 2) {
+      CartManager.instance.fetchCart();
+    }
     if (index == 5) {
-      appDatabase.carrinhoDao.limparTodoCarrinho();
+      CartManager.instance.clearCart();
     }
     setState(() {
       currentIndex = index;
