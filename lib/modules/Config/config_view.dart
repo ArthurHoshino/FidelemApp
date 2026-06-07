@@ -116,30 +116,34 @@ class _SettingsViewState extends State<SettingsView> {
 
             // Opção Gerenciar Funcionários e Gerenciar Cargos (Apenas para funcionários do mercado)
             if (MyApp.isCliente == false) ...[
-              ListTile(
-                leading: const Icon(Icons.group, color: Cor.preto),
-                title: const Text("Gerenciar Funcionários"),
-                onTap: () {
-                  Navigator.pushNamed(context, Routes.funcionariosPage);
-                },
-              ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.badge, color: Cor.preto),
-                title: const Text("Gerenciar Cargos"),
-                onTap: () {
-                  Navigator.pushNamed(context, Routes.cargosPage);
-                },
-              ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.account_balance_wallet, color: Cor.preto),
-                title: const Text("Gerenciar Categorias"),
-                onTap: () {
-                  Navigator.pushNamed(context, Routes.categoriasPage);
-                },
-              ),
-              const Divider(),
+              if (MyApp.privilegios.contains(PrivilegiosKeys.funcionarioGerenciar)) ...[
+                ListTile(
+                  leading: const Icon(Icons.group, color: Cor.preto),
+                  title: const Text("Gerenciar Funcionários"),
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.funcionariosPage);
+                  },
+                ),
+                const Divider(),
+              ],
+              if (MyApp.privilegios.contains(PrivilegiosKeys.cargoGerenciar)) ...[
+                ListTile(
+                  leading: const Icon(Icons.badge, color: Cor.preto),
+                  title: const Text("Gerenciar Cargos"),
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.cargosPage);
+                  },
+                ),
+                const Divider(),
+                ListTile(
+                  leading: const Icon(Icons.account_balance_wallet, color: Cor.preto),
+                  title: const Text("Gerenciar Categorias"),
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.categoriasPage);
+                  },
+                ),
+                const Divider(),
+              ],
             ],
 
             // Botão Redefinir Senha

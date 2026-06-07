@@ -4,7 +4,7 @@ import 'package:fidelem_app/core/services/web_client.dart';
 import 'package:fidelem_app/modules/auth/login/login_model.dart';
 import 'package:fidelem_app/routes.dart';
 import 'dart:convert';
-import 'package:crypto/crypto.dart'; 
+import 'package:crypto/crypto.dart';
 import 'package:fidelem_app/core/widgets/fid_select_controller.dart';
 import 'package:fidelem_app/main.dart';
 
@@ -77,13 +77,13 @@ class LoginViewModel extends ChangeNotifier {
 
     isLoading = true;
     errorMessage = null;
-    notifyListeners(); 
+    notifyListeners();
 
     try {
       // 2. APLICAÇÃO DO HASH SHA-256 NA SENHA
       final String senhaPlana = senhaController.text;
-      final bytesDaSenha = utf8.encode(senhaPlana); 
-      final String senhaComHash = sha256.convert(bytesDaSenha).toString(); 
+      final bytesDaSenha = utf8.encode(senhaPlana);
+      final String senhaComHash = sha256.convert(bytesDaSenha).toString();
 
       // print('========================================================================');
       // print('[TESTE] E-mail enviado: ${usuarioController.text.trim()}');
@@ -92,12 +92,12 @@ class LoginViewModel extends ChangeNotifier {
       // print('========================================================================');
 
       final loginData = LoginModel(
-        usuario: usuarioController.text.trim(), 
-        senha: senhaComHash, 
+        usuario: usuarioController.text.trim(),
+        senha: senhaComHash,
         empresa: empresaIdSelecionada.toString()
       );
 
-      // CORREÇÃO: Alterado os parâmetros de consulta para letras MINÚSCULAS 
+      // CORREÇÃO: Alterado os parâmetros de consulta para letras MINÚSCULAS
       // para bater exatamente com o que a sua API/Banco mapeiam (padrão do seu arquivo Registro)
       final response = await WebClient.getData(WebClient.cdSenha, queryParameters: {
         'cdseemail': loginData.usuario,
@@ -114,6 +114,11 @@ class LoginViewModel extends ChangeNotifier {
           MyApp.empresaId = loginData.empresa;
 
           MyApp.isCliente = MyApp.dadosUsuario!.isCliente;
+
+          if (!MyApp.isCliente) {
+            await carregarPrivilegiosUsuario(MyApp.dadosUsuario!.idCargo);
+          }
+
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Login realizado com sucesso!'),
@@ -150,6 +155,34 @@ class LoginViewModel extends ChangeNotifier {
     } finally {
       isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> carregarPrivilegiosUsuario(int cargoId) async {
+    MyApp.privilegios.clear();
+    try {
+      final responseLink = await WebClient.getData(
+        WebClient.lcPrivilegio,
+        queryParameters: {'cdcarid': cargoId.toString()},
+      );
+      if (responseLink.statusCode == 200) {
+        final List<dynamic> linkDecoded = jsonDecode(responseLink.body);
+        final idsPrivilegios = linkDecoded.map((id) => id as int).toSet();
+
+        if (idsPrivilegios.isNotEmpty) {
+          final responseCat = await WebClient.getData(WebClient.cdPrivilegio);
+          if (responseCat.statusCode == 200) {
+            final List<dynamic> catDecoded = jsonDecode(responseCat.body);
+            for (var item in catDecoded) {
+              if (idsPrivilegios.contains(item['CDPRIVID'])) {
+                MyApp.privilegios.add(item['CDPRIVCHAVE']);
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      print("Erro ao carregar privilégios: $e");
     }
   }
 }

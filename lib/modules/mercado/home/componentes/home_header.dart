@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
 import 'package:fidelem_app/core/widgets/fid_button.dart';
+import 'package:fidelem_app/main.dart';
+import 'package:fidelem_app/core/data/enums/privilegios_keys.dart';
 import 'package:fidelem_app/core/widgets/fid_select_box.dart';
 import 'package:fidelem_app/modules/mercado/home/home_viewmodel.dart';
 
@@ -109,6 +111,25 @@ class HomeHeader extends StatelessWidget {
               const SizedBox(width: 12),
 
 
+              FIDButton(
+                text: "Adicionar",
+                width: 0.3,
+                height: 0.05,
+                borderRadius: 10,
+                BGColor: (MyApp.isCliente == false && !MyApp.privilegios.contains(PrivilegiosKeys.produtoAdicionar)) ? Cor.cinzaClaro : Cor.azul,
+                borderColor: (MyApp.isCliente == false && !MyApp.privilegios.contains(PrivilegiosKeys.produtoAdicionar)) ? Cor.cinzaClaro : Cor.azul,
+                textColor: Cor.branco,
+                padding: const {"top": 0, "bottom": 0, "left": 0, "right": 0},
+                onPressed: () {
+                  if (MyApp.isCliente == false && !MyApp.privilegios.contains(PrivilegiosKeys.produtoAdicionar)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Acesso Negado: Permissão de Adicionar Produtos necessária."), backgroundColor: Colors.red),
+                    );
+                  } else {
+                    onPressed();
+                  }
+                },
+              ),
             ],
           )
         ),

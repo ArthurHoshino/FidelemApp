@@ -1,7 +1,7 @@
 import 'package:fidelem_app/core/data/enums/enums.dart';
 import 'package:fidelem_app/core/data/models/entidade_modelo.dart';
 
-class CargoEntity extends EntidadeModelo {
+  class CargoEntity extends EntidadeModelo {
   final String empresaId;
 
   const CargoEntity({

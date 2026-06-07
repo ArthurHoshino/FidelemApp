@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
 
   static String? empresaId;
   static bool isCliente = false;
+  static Set<String> privilegios = {};
 
   static Future<void> refreshUsuario() async {
     if (dadosUsuario == null || empresaId == null) return;

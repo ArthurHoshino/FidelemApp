@@ -81,7 +81,7 @@ class FIDSelectBox extends StatelessWidget {
           builder: (context, currentValue, child) {
             return DropdownButtonFormField<String>(
               initialValue: currentValue,
-
+              isExpanded: true,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: borderColor),
@@ -99,7 +99,11 @@ class FIDSelectBox extends StatelessWidget {
               items: items.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value, style: const TextStyle(color: Color.fromRGBO(0, 0, 0, 1))),
+                  child: Text(
+                    value,
+                    style: const TextStyle(color: Color.fromRGBO(0, 0, 0, 1)),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 );
               }).toList(),
               onChanged: (newValue) {

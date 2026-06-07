@@ -12,6 +12,8 @@ class WebClient {
   // --- Endpoints (Tabelas) ---
   static const String cdEmpresa = 'cdempresa';
   static const String cdCargo = 'cdcargo';
+  static const String cdPrivilegio = 'cdprivilegio';
+  static const String lcPrivilegio = 'lcprivilegio';
   static const String cdSenha = 'cdsenha';
   static const String cdProduto = 'cdproduto';
   static const String cdCategoria = 'cdcategoria';
