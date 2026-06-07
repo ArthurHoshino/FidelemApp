@@ -10,12 +10,19 @@ import 'package:flutter/material.dart';
 part 'home_model.dart';
 
 class HomeViewmodel extends ChangeNotifier {
+  static final HomeViewmodel instance = HomeViewmodel._internal();
+
+  HomeViewmodel._internal();
+
+  factory HomeViewmodel() => instance;
+
   HomeModel _model = HomeModel();
 
   HomeModel get model => _model;
 
   void init() {
     carregarDadosPromocoes();
+    carregarDadosUltimosVisualizados();
   }
 
   Future<void> carregarDadosPromocoes() async {
@@ -36,6 +43,37 @@ class HomeViewmodel extends ChangeNotifier {
 
         _model = _model.copyWith(
           promocoes: Updater(listaPromocoes),
+        );
+      }
+    } on Exception catch (e) {
+      print('\x1B[1;31m Erro: ${e.toString()} \x1B[0m');
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> carregarDadosUltimosVisualizados() async {
+    try {
+      final response = await WebClient.getData('cdproduto/ultimos-visualizados', queryParameters: {
+        'cdprodempresaid': MyApp.empresaId,
+      });
+
+      final visualizadosData = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        List<Map<String, dynamic>> listaBuscados = [];
+        for (var item in visualizadosData) {
+          final prod = ProdutoEntity.fromMap(item);
+          listaBuscados.add({
+            "id": prod.id,
+            "titulo": prod.nome,
+            "subtitulo": prod.descricao,
+            "imagem": prod.imagem ?? '',
+            "produto": prod,
+          });
+        }
+
+        _model = _model.copyWith(
+          ultimosBuscados: Updater(listaBuscados),
         );
       }
     } on Exception catch (e) {

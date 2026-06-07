@@ -13,6 +13,7 @@ class ProdutoEntity extends EntidadeModelo {
   final int qtdEstoque;
   final String? imagem;
   final String? categoria;
+  final int? categoriaId;
 
   const ProdutoEntity({
     required super.id,
@@ -24,6 +25,7 @@ class ProdutoEntity extends EntidadeModelo {
     required this.qtdEstoque,
     this.imagem,
     this.categoria,
+    this.categoriaId,
   });
 
   factory ProdutoEntity.fromMap(Map<String, dynamic> map) {
@@ -40,6 +42,7 @@ class ProdutoEntity extends EntidadeModelo {
       precoDesconto: precoDesc,
       qtdEstoque: map[CDProdutoEnum.qtdEstoque.value] ?? 0,
       imagem: map['CDPRODIMGBLOB'] as String?,
+      categoriaId: map['CDPRODCATEGORIAID']?.toInt(),
     );
   }
 
@@ -55,6 +58,7 @@ class ProdutoEntity extends EntidadeModelo {
         MapEntry(CDProdutoEnum.precoDesconto.value, precoDesconto),
         MapEntry(CDProdutoEnum.qtdEstoque.value, qtdEstoque),
         MapEntry(CDProdutoEnum.imagem.value, imagem),
+        MapEntry('CDPRODCATEGORIAID', categoriaId),
       ]
     );
   }
@@ -88,6 +92,7 @@ class ProdutoEntity extends EntidadeModelo {
     Updater<double>? precoDesconto,
     Updater<int>? qtdEstoque,
     Updater<String>? imagem,
+    Updater<int>? categoriaId,
   }) {
     return ProdutoEntity(
       id: id != null ? id.value! : this.id,
@@ -98,6 +103,7 @@ class ProdutoEntity extends EntidadeModelo {
       precoDesconto: precoDesconto != null ? precoDesconto.value : this.precoDesconto,
       qtdEstoque: qtdEstoque != null ? qtdEstoque.value! : this.qtdEstoque,
       imagem: imagem != null ? imagem.value : this.imagem,
+      categoriaId: categoriaId != null ? categoriaId.value : this.categoriaId,
     );
   }
 }

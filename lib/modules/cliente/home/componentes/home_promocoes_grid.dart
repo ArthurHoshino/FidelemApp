@@ -1,27 +1,14 @@
-import 'package:fidelem_app/core/data/models/entity.dart';
 import 'package:fidelem_app/modules/cliente/home/home_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
 import 'package:fidelem_app/modules/cliente/home/componentes/home_promocoes_card.dart';
 import 'package:fidelem_app/core/services/cart_manager.dart';
+import 'package:fidelem_app/routes.dart';
 
-class HomePromocoesGrid extends StatefulWidget {
-  final List<ProdutoEntity> data;
-  const HomePromocoesGrid({super.key, required this.data});
-
-  @override
-  State<HomePromocoesGrid> createState() => _HomePromocoesGridState();
-}
-
-class _HomePromocoesGridState extends State<HomePromocoesGrid> {
-  final viewModel = HomeViewmodel();
-
-  @override
-  void initState() {
-    super.initState();
-    viewModel.init();
-  }
+class HomePromocoesGrid extends StatelessWidget {
+  final HomeViewmodel viewModel;
+  const HomePromocoesGrid({super.key, required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +57,14 @@ class _HomePromocoesGridState extends State<HomePromocoesGrid> {
                     quantidadeNoCarrinho: qty,
                     onTapAdd: () async {
                       await CartManager.instance.updateProductQuantity(item.id, 1);
+                    },
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        Routes.produtoDetalhePage,
+                        arguments: item,
+                      ).then((_) {
+                        viewModel.carregarDadosUltimosVisualizados();
+                      });
                     },
                   );
                 },
