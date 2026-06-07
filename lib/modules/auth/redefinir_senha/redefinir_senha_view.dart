@@ -67,7 +67,7 @@ class _RedefinirSenhaViewState extends State<RedefinirSenhaView> {
                 },),
                 FIDButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, Routes.loginPage);
+                      Navigator.pop(context);
                     },
                     text: "Cancelar",
                     borderColor: Cor.cinzaClaro,
