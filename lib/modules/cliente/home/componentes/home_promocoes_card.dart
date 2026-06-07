@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
 
@@ -44,13 +45,7 @@ class HomePromocoesCard extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Center(
-                child: imagePath == null
-                ? const Icon(Icons.image_not_supported)
-                : Image.asset(
-                  imagePath!,
-                  fit: BoxFit.contain,
-                  errorBuilder: (c, e, s) => const Icon(Icons.image, size: 40, color: Cor.cinzaClaro),
-                ),
+                child: _buildImage(imagePath),
               ),
             ),
           ),
@@ -135,5 +130,25 @@ class HomePromocoesCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildImage(String? path) {
+    if (path == null || path.isEmpty) {
+      return const Icon(Icons.image, size: 40, color: Cor.cinzaClaro);
+    }
+    if (path.startsWith('assets/')) {
+      return Image.asset(
+        path,
+        fit: BoxFit.contain,
+      );
+    }
+    try {
+      return Image.memory(
+        base64Decode(path),
+        fit: BoxFit.contain,
+      );
+    } catch (_) {
+      return const Icon(Icons.image_not_supported, size: 40, color: Cor.cinzaClaro);
+    }
   }
 }

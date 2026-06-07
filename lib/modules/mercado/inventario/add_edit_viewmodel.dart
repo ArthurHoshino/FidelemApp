@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:fidelem_app/core/data/models/entity.dart';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/services/web_client.dart';
@@ -5,8 +6,24 @@ import 'dart:convert';
 import 'package:fidelem_app/core/widgets/fid_select_controller.dart';
 import 'package:fidelem_app/main.dart';
 // import 'package:fidelem_app/modules/mercado/inventario/produto_model.dart';
-import 'package:http/http.dart' as http;
 
+
+class ProdutoImagemItem {
+  int? id;
+  final String? base64Content;
+  final File? localFile;
+  int order;
+
+  ProdutoImagemItem({
+    this.id,
+    this.base64Content,
+    this.localFile,
+    required this.order,
+  });
+
+  bool get isLocal => localFile != null;
+  bool get isRemote => id != null;
+}
 
 class AddEditViewmodel extends ChangeNotifier {
   // Controladores para pegarem o texto da view
@@ -25,6 +42,9 @@ class AddEditViewmodel extends ChangeNotifier {
   List<String> categorias = [];
   final Map<String, int> _categoriasMap = {};
 
+  List<ProdutoImagemItem> produtoImagens = [];
+  List<int> imagensParaDeletar = [];
+
   AddEditViewmodel() {
     carregarCategorias();
   }
@@ -39,6 +59,9 @@ class AddEditViewmodel extends ChangeNotifier {
     pontoController.text = "";
     descontoController.text = "";
     categoriaController.value = null;
+    produtoImagens.clear();
+    imagensParaDeletar.clear();
+    notifyListeners();
   }
 
 
@@ -77,6 +100,144 @@ class AddEditViewmodel extends ChangeNotifier {
     }
   }
 
+  Future<void> carregarImagensProduto(int prodId) async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      final response = await WebClient.getData(
+        WebClient.cdProdutoImagem,
+        queryParameters: {'cdprodimgprodutoid': prodId},
+      );
+      if (response.statusCode == 200) {
+        final List<dynamic> dados = jsonDecode(response.body);
+        produtoImagens.clear();
+        imagensParaDeletar.clear();
+        for (var i = 0; i < dados.length; i++) {
+          final item = dados[i];
+          produtoImagens.add(
+            ProdutoImagemItem(
+              id: item['CDPRODIMGID'],
+              base64Content: item['CDPRODIMGBLOB'],
+              order: item['CDPRODIMGORDEM'] ?? (i + 1),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      errorMessage = "Erro ao carregar imagens do produto: $e";
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void adicionarImagemLocal(File file) {
+    final maxOrder = produtoImagens.isEmpty
+        ? 0
+        : produtoImagens.map((e) => e.order).reduce((a, b) => a > b ? a : b);
+    produtoImagens.add(
+      ProdutoImagemItem(
+        localFile: file,
+        order: maxOrder + 1,
+      ),
+    );
+    notifyListeners();
+  }
+
+  void removerImagem(int index) {
+    final item = produtoImagens[index];
+    if (item.isRemote && item.id != null) {
+      imagensParaDeletar.add(item.id!);
+    }
+    produtoImagens.removeAt(index);
+    for (var i = 0; i < produtoImagens.length; i++) {
+      produtoImagens[i].order = i + 1;
+    }
+    notifyListeners();
+  }
+
+  void reordenarImagens(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    final item = produtoImagens.removeAt(oldIndex);
+    produtoImagens.insert(newIndex, item);
+    for (var i = 0; i < produtoImagens.length; i++) {
+      produtoImagens[i].order = i + 1;
+    }
+    notifyListeners();
+  }
+
+  Future<void> salvarImagens(int prodId) async {
+    // 1. Deletar imagens removidas
+    for (final id in imagensParaDeletar) {
+      try {
+        await WebClient.sendData(
+          endpoint: WebClient.cdProdutoImagem,
+          method: HttpMethod.delete,
+          data: {
+            'empresa': MyApp.empresaId,
+            'cdprodimgid': id,
+            'cdprodimgprodutoid': prodId,
+          },
+        );
+      } catch (e) {
+        print("Erro ao deletar imagem $id: $e");
+      }
+    }
+    imagensParaDeletar.clear();
+
+    // 2. Upload de novas imagens locais
+    for (var i = 0; i < produtoImagens.length; i++) {
+      final img = produtoImagens[i];
+      if (img.isLocal && img.localFile != null) {
+        try {
+          final bytes = await img.localFile!.readAsBytes();
+          final response = await WebClient.sendMultipartData(
+            endpoint: WebClient.cdProdutoImagem,
+            method: HttpMethod.post,
+            fields: {
+              'cdprodimgprodutoid': prodId.toString(),
+              'cdprodimgordem': img.order.toString(),
+              'empresa': MyApp.empresaId.toString(),
+            },
+            fileKey: 'prodimagem',
+            fileBytes: bytes,
+            fileName: 'imagem_${img.order}.jpg',
+          );
+          if (response.statusCode == 200) {
+            final Map<String, dynamic> responseData = jsonDecode(response.body);
+            img.id = responseData['id'];
+          }
+        } catch (e) {
+          print("Erro ao enviar imagem local: $e");
+        }
+      }
+    }
+
+    // 3. Reordenar todas as imagens no servidor
+    final List<int> imageIds = produtoImagens
+        .where((img) => img.id != null)
+        .map((img) => img.id!)
+        .toList();
+
+    if (imageIds.isNotEmpty) {
+      try {
+        await WebClient.sendData(
+          endpoint: '${WebClient.cdProdutoImagem}/reorder',
+          method: HttpMethod.put,
+          data: {
+            'cdprodimgprodutoid': prodId,
+            'imageIds': imageIds,
+            'empresa': MyApp.empresaId,
+          },
+        );
+      } catch (e) {
+        print("Erro ao reordenar imagens: $e");
+      }
+    }
+  }
+
   Future<void> inserirProduto(BuildContext context) async {
     final response = await WebClient.sendData(
       endpoint: WebClient.cdProduto,
@@ -97,6 +258,10 @@ class AddEditViewmodel extends ChangeNotifier {
     );
 
     if (response.statusCode < 300) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      final int novoProdId = responseData['id'];
+      await salvarImagens(novoProdId);
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Produto Inserido com sucesso!"),
@@ -135,6 +300,9 @@ class AddEditViewmodel extends ChangeNotifier {
     );
 
     if (response.statusCode < 300) {
+      final int prodId = int.parse(eanController.text);
+      await salvarImagens(prodId);
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Produto atualizado com sucesso!"),
@@ -161,7 +329,6 @@ class AddEditViewmodel extends ChangeNotifier {
       final response = await WebClient.getData(WebClient.cdProduto, queryParameters: {"cdprodid": produtoId, "cdprodempresaid": MyApp.empresaId});
       if (response.statusCode == 200) {
         final List<dynamic> dados = jsonDecode(response.body);
-        // print(dados[0]);
         return dados[0];
       }
     }catch (e) {
@@ -198,6 +365,9 @@ class AddEditViewmodel extends ChangeNotifier {
 
     categoriaController.value = await getCategoriaNome(dados["CDPRODCATEGORIAID"]);
 
+    if (prodId != null) {
+      await carregarImagensProduto(prodId);
+    }
   }
 
   Future<String> getCategoriaNome(int? catId) async {

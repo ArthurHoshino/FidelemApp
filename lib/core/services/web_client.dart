@@ -5,7 +5,7 @@ enum HttpMethod { post, put, delete }
 
 class WebClient {
   // URL base quando App Flutter rodando em um Emulador Android.
-  static const String baseUrl = 'http://10.254.204.22:3000'; // TODO MELHORAR ESSA CONFIGURAÇÃO
+  static const String baseUrl = 'http://192.168.15.159:3000'; // TODO MELHORAR ESSA CONFIGURAÇÃO
   // URL base quando Servidor Web/Dart rodando diretamente no PC.
   // static const String baseUrl = 'http://127.0.0.1:3000';
 
@@ -15,6 +15,7 @@ class WebClient {
   static const String cdSenha = 'cdsenha';
   static const String cdProduto = 'cdproduto';
   static const String cdCategoria = 'cdcategoria';
+  static const String cdProdutoImagem = 'cdprodutoimagem';
   static const String iaService = 'ia-service';
 
   // Requisições sem body (GET)
@@ -63,6 +64,37 @@ class WebClient {
         }
 
       return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Requisições Multipart para upload de imagens
+  static Future<http.Response> sendMultipartData({
+    required String endpoint,
+    required HttpMethod method,
+    required Map<String, String> fields,
+    required String fileKey,
+    required List<int> fileBytes,
+    required String fileName,
+  }) async {
+    final uri = Uri.parse('$baseUrl/$endpoint');
+    final request = http.MultipartRequest(
+      method == HttpMethod.put ? 'PUT' : 'POST',
+      uri,
+    );
+    request.fields.addAll(fields);
+    request.files.add(
+      http.MultipartFile.fromBytes(
+        fileKey,
+        fileBytes,
+        filename: fileName,
+      ),
+    );
+
+    try {
+      final streamedResponse = await request.send();
+      return await http.Response.fromStream(streamedResponse);
     } catch (e) {
       rethrow;
     }

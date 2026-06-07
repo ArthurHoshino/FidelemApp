@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:fidelem_app/core/data/enums/cdproduto_enum.dart';
 import 'package:fidelem_app/core/widgets/fid_button.dart';
 import 'package:flutter/material.dart';
@@ -26,14 +27,27 @@ class HomeProdutoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              color: Cor.branco,
-              borderRadius: BorderRadius.circular(12),
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: Cor.branco,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: item['CDPRODIMGBLOB'] != null && item['CDPRODIMGBLOB'].toString().isNotEmpty
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.memory(
+                        base64Decode(item['CDPRODIMGBLOB']),
+                        fit: BoxFit.cover,
+                        width: 64,
+                        height: 64,
+                      ),
+                    )
+                  : const Icon(Icons.image, size: 32, color: Cor.azul),
             ),
-            child: const Icon(Icons.image, size: 32, color: Cor.azul),
           ),
 
           const SizedBox(height: 8),
@@ -63,12 +77,12 @@ class HomeProdutoCard extends StatelessWidget {
                     ),
                     children: [
                       TextSpan(
-                        text: "${item[CDProdutoEnum.precoReal.value] ?? "-"} | ",
+                        text: "R\$ ${item[CDProdutoEnum.precoReal.value] ?? "-"} | ",
                       ),
                       TextSpan(
                         text: ((item[CDProdutoEnum.precoPonto.value] ?? 0) == 0)
                             ? "-"
-                            : item[CDProdutoEnum.precoPonto.value].toString(),
+                            : '${item[CDProdutoEnum.precoPonto.value].toString()} pts',
                         style: const TextStyle(color: Cor.vermelho),
                       ),
                     ],

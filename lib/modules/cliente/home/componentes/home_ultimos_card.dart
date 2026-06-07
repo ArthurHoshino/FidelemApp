@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
 
@@ -43,10 +44,8 @@ class HomeUltimosCard extends StatelessWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    imagePath,
-                    fit: BoxFit.cover,
-                    errorBuilder: (c, e, s) => const Icon(Icons.image, color: Cor.branco),
+                  child: Center(
+                    child: _buildImage(imagePath),
                   ),
                 ),
               ),
@@ -69,5 +68,29 @@ class HomeUltimosCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildImage(String path) {
+    if (path.isEmpty) {
+      return const Icon(Icons.image, color: Cor.branco);
+    }
+    if (path.startsWith('assets/')) {
+      return Image.asset(
+        path,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+      );
+    }
+    try {
+      return Image.memory(
+        base64Decode(path),
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+      );
+    } catch (_) {
+      return const Icon(Icons.image, color: Cor.branco);
+    }
   }
 }
