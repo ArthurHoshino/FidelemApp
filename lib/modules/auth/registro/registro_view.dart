@@ -1,5 +1,6 @@
 import 'package:fidelem_app/core/widgets/fid_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
 import 'package:fidelem_app/core/widgets/fid_logo.dart';
 import 'package:fidelem_app/core/widgets/fid_input_box.dart';
@@ -23,7 +24,9 @@ class _RegistroViewState extends State<RegistroView> {
   void dispose() {
     viewModel.nomeController.dispose();
     viewModel.emailController.dispose();
+    viewModel.cpfController.dispose();
     viewModel.senhaController.dispose();
+    viewModel.senhaConfirmaController.dispose();
     viewModel.empresaController.dispose();
     super.dispose();
   }
@@ -51,6 +54,15 @@ class _RegistroViewState extends State<RegistroView> {
                         textAlign: TextAlign.center,),
                       FIDInputBox(text: "Nome", preset: FIDInputBox.medium, controller: viewModel.nomeController,),
                       FIDInputBox(text: "Email", preset: FIDInputBox.medium, controller: viewModel.emailController,),
+                      FIDInputBox(
+                        text: "CPF",
+                        preset: FIDInputBox.medium,
+                        controller: viewModel.cpfController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          CpfInputFormatter(),
+                        ],
+                      ),
                       FIDInputBox(text: "Senha", preset: FIDInputBox.medium, controller: viewModel.senhaController, obscureText: true,),
 
                       FIDInputBox(text: "Confirme sua senha",
@@ -84,6 +96,39 @@ class _RegistroViewState extends State<RegistroView> {
           ),
         );
       },
+    );
+  }
+}
+
+class CpfInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final text = newValue.text;
+
+    if (newValue.selection.baseOffset == 0) {
+      return newValue;
+    }
+
+    final cleanText = text.replaceAll(RegExp(r'\D'), '');
+    final digits = cleanText.substring(0, cleanText.length > 11 ? 11 : cleanText.length);
+
+    final buffer = StringBuffer();
+    for (int i = 0; i < digits.length; i++) {
+      if (i == 3 || i == 6) {
+        buffer.write('.');
+      } else if (i == 9) {
+        buffer.write('-');
+      }
+      buffer.write(digits[i]);
+    }
+
+    final formatted = buffer.toString();
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
     );
   }
 }

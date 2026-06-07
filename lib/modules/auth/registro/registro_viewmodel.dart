@@ -12,6 +12,7 @@ class RegistroViewModel extends ChangeNotifier {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController senhaController = TextEditingController();
   final TextEditingController senhaConfirmaController = TextEditingController();
+  final TextEditingController cpfController = TextEditingController();
   final FIDSelectController empresaController = FIDSelectController();
 
   // Estado da tela
@@ -62,7 +63,7 @@ class RegistroViewModel extends ChangeNotifier {
     try {
       // Validação de campos vazios
       if (nomeController.text.trim().isEmpty || emailController.text.trim().isEmpty ||
-          senhaController.text.trim().isEmpty) {
+          senhaController.text.trim().isEmpty || cpfController.text.trim().isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Preencha todas as informações!")),
         );
@@ -123,7 +124,7 @@ class RegistroViewModel extends ChangeNotifier {
       final response = await WebClient.sendData(endpoint: WebClient.cdSenha, method: HttpMethod.post, data: {
         'cdsenome': registroData.nome,
         'cdsesenha': registroData.senha,
-        'cdsecpfcnpj': null,
+        'cdsecpfcnpj': cpfController.text.trim(),
         'cdseemail': registroData.email,
         'cdsetelefone': null,
         'cdsecargoid': idCargo,
