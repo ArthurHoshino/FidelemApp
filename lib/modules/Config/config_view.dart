@@ -115,7 +115,7 @@ class _SettingsViewState extends State<SettingsView> {
             const SizedBox(height: 24),
 
             // Opção Gerenciar Funcionários e Gerenciar Cargos (Apenas para funcionários do mercado)
-            if (MyApp.isCliente == false || (MyApp.dadosUsuario != null && MyApp.dadosUsuario!.isCliente)) ...[
+            if (MyApp.isCliente == false) ...[
               ListTile(
                 leading: const Icon(Icons.group, color: Cor.preto),
                 title: const Text("Gerenciar Funcionários"),

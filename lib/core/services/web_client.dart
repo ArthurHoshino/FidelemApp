@@ -17,6 +17,7 @@ class WebClient {
   static const String cdCategoria = 'cdcategoria';
   static const String cdProdutoImagem = 'cdprodutoimagem';
   static const String iaService = 'ia-service';
+  static const String estatisticas = 'estatisticas';
 
   // Requisições sem body (GET)
   static Future<http.Response> getData(

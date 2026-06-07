@@ -89,6 +89,42 @@ class HomeProdutoCard extends StatelessWidget {
                   ),
                 ),
 
+                const SizedBox(height: 4),
+
+                Builder(
+                  builder: (context) {
+                    final int estoque = int.tryParse(item[CDProdutoEnum.qtdEstoque.value]?.toString() ?? '0') ?? 0;
+                    final double preco = double.tryParse(item[CDProdutoEnum.precoReal.value]?.toString() ?? '0') ?? 0;
+                    final double totalBruto = estoque * preco;
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Qtd. Estoque: $estoque un.',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: Color(0xFF546E7A),
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          'Vlr. Bruto Total: R\$ ${totalBruto.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: Color(0xFF546E7A),
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    );
+                  }
+                ),
+
                 const SizedBox(height: 6),
 
                 Row(

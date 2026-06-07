@@ -49,7 +49,7 @@ class HomeProdutoGrid extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
-          childAspectRatio: 0.95,
+          childAspectRatio: 0.85,
         ),
         itemBuilder: (context, index) => HomeProdutoCard(
           item: promotions[index],
