@@ -39,7 +39,7 @@ class ProdutoEntity extends EntidadeModelo {
       precoPonto: map[CDProdutoEnum.precoPonto.value] ?? 0,
       precoDesconto: precoDesc,
       qtdEstoque: map[CDProdutoEnum.qtdEstoque.value] ?? 0,
-      imagem: map[CDProdutoEnum.imagem.value] as String?,
+      imagem: map['CDPRODIMGBLOB'] as String?,
     );
   }
 

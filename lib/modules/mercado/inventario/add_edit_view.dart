@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:fidelem_app/base_view.dart';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
@@ -36,9 +35,6 @@ class AddEditView extends StatefulWidget {
 class _AddEditViewState extends State<AddEditView> {
   final AddEditViewmodel viewModel = AddEditViewmodel();
 
-  List<File> listaImagens = [];
-  int nImagem = 0;
-
   @override
   void initState() {
     super.initState();
@@ -47,12 +43,6 @@ class _AddEditViewState extends State<AddEditView> {
         viewModel.setProdutoById(widget.produtoId);
       }
       setState(() {});
-    });
-  }
-
-  void atualizaImagem() {
-    setState(() {
-      nImagem = listaImagens.length;
     });
   }
 
@@ -213,9 +203,7 @@ class _AddEditViewState extends State<AddEditView> {
               ),
 
               AddEditImagens(
-                nImagem: nImagem,
-                listaImagens: listaImagens,
-                onUpdate: atualizaImagem,
+                viewModel: viewModel,
               ),
 
               SizedBox(height: 5),

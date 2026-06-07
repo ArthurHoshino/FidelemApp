@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
@@ -36,19 +37,16 @@ class LojaProdutoCard extends StatelessWidget {
         children: [
           Expanded(
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Cor.azulClaro1, 
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                image: produto.imagem.isNotEmpty
-                    ? DecorationImage(
-                        image: AssetImage(produto.imagem),
-                        fit: BoxFit.cover,
-                      )
-                    : null,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
               ),
-              child: produto.imagem.isEmpty
-                  ? const Icon(Icons.image_not_supported, color: Cor.azul, size: 60)
-                  : null,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                child: Center(
+                  child: _buildImage(produto.imagem),
+                ),
+              ),
             ),
           ),
 
@@ -181,5 +179,33 @@ class LojaProdutoCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildImage(String imagem) {
+    if (imagem.isEmpty) {
+      return const Center(
+        child: Icon(Icons.image, color: Cor.azul, size: 60),
+      );
+    }
+    if (imagem.startsWith('assets/')) {
+      return Image.asset(
+        imagem,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+      );
+    }
+    try {
+      return Image.memory(
+        base64Decode(imagem),
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+      );
+    } catch (_) {
+      return const Center(
+        child: Icon(Icons.image_not_supported, color: Cor.azul, size: 60),
+      );
+    }
   }
 }
