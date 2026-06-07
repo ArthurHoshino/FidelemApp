@@ -115,7 +115,7 @@ class CDCARGO extends Table {
 class CDSENHA extends Table {
   IntColumn get cdSeId => integer().named('CDSEID').autoIncrement()();
   TextColumn get cdSeNome => text().named('CDSENOME').withLength(min: 1, max: 255)();
-  TextColumn get cdSeSenha => text().named('CDSESENHA').withLength(min: 1, max: 50)();
+  TextColumn get cdSeSenha => text().named('CDSESENHA').withLength(min: 1, max: 255)();
   TextColumn get cdSeCpfCnpj => text().named('CDSECPFCNPJ').nullable().withLength(min: 1, max: 14)();
   TextColumn get cdSeEmail => text().named('CDSEEMAIL').withLength(min: 1, max: 255)();
   TextColumn get cdSeTelefone => text().named('CDSETELEFONE').nullable().withLength(min: 1, max: 45)();
