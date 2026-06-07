@@ -9,6 +9,7 @@ class UsuarioEntity extends EntidadeModelo {
   final String? telefone;
   final String cpfcnpj;
   final String empresa;
+  final int pontos;
 
   const UsuarioEntity({
     required super.id,
@@ -20,6 +21,7 @@ class UsuarioEntity extends EntidadeModelo {
     this.telefone,
     required this.cpfcnpj,
     required this.empresa,
+    required this.pontos,
   });
 
   factory UsuarioEntity.fromMap(Map<String, dynamic> map) {
@@ -33,6 +35,7 @@ class UsuarioEntity extends EntidadeModelo {
       telefone: map[CDSenhaEnum.telefone.value],
       cpfcnpj: map[CDSenhaEnum.cpfcnpj.value],
       empresa: map[CDSenhaEnum.empresa.value],
+      pontos: map[CDSenhaEnum.pontos.value]?.toInt() ?? 0,
     );
   }
 
@@ -48,6 +51,7 @@ class UsuarioEntity extends EntidadeModelo {
       CDSenhaEnum.telefone.value: telefone,
       CDSenhaEnum.cpfcnpj.value: cpfcnpj,
       CDSenhaEnum.empresa.value: empresa,
+      CDSenhaEnum.pontos.value: pontos,
     };
   }
 
@@ -69,6 +73,8 @@ class UsuarioEntity extends EntidadeModelo {
       return cpfcnpj;
     } else if (prop == CDSenhaEnum.usuarioEntityEmpresa.value) {
       return empresa;
+    } else if (prop == CDSenhaEnum.usuarioEntityPontos.value) {
+      return pontos;
     } else {
       return super.getPropriedade(prop);
     }
@@ -89,6 +95,7 @@ class UsuarioEntity extends EntidadeModelo {
     Updater<String>? telefone,
     Updater<String>? cpfcnpj,
     Updater<String>? empresa,
+    Updater<int>? pontos,
   }) {
     return UsuarioEntity(
       id: id != null ? id.value! : this.id,
@@ -100,6 +107,7 @@ class UsuarioEntity extends EntidadeModelo {
       telefone: telefone != null ? telefone.value : this.telefone,
       cpfcnpj: cpfcnpj != null ? cpfcnpj.value! : this.cpfcnpj,
       empresa: empresa != null ? empresa.value! : this.empresa,
+      pontos: pontos != null ? pontos.value! : this.pontos,
     );
   }
 }

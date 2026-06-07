@@ -171,6 +171,7 @@ class CartManager extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         _items.clear();
+        await MyApp.refreshUsuario();
         notifyListeners();
         return null; // Sucesso
       } else {

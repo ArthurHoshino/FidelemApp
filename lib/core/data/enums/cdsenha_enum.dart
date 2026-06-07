@@ -8,6 +8,7 @@ enum CDSenhaEnum {
   telefone('CDSETELEFONE'),
   cargo('CDSECARGOID'),
   empresa('CDEMPNOME'),
+  pontos('CDSEPONTOS'),
   
   // Enums para as propriedades da model
   usuarioEntityEmail('email'),
@@ -16,7 +17,8 @@ enum CDSenhaEnum {
   usuarioEntityNomeCargo('nomeCargo'),
   usuarioEntityTelefone('telefone'),
   usuarioEntityCpfCnpj('cpfcnpj'),
-  usuarioEntityEmpresa('empresa');
+  usuarioEntityEmpresa('empresa'),
+  usuarioEntityPontos('pontos');
 
   final String value;
   const CDSenhaEnum(this.value);

@@ -588,6 +588,18 @@ class $CDSENHATable extends CDSENHA with TableInfo<$CDSENHATable, CDSENHAData> {
       'REFERENCES cdcargo (CDCARID)',
     ),
   );
+  static const VerificationMeta _cdSePontosMeta = const VerificationMeta(
+    'cdSePontos',
+  );
+  @override
+  late final GeneratedColumn<int> cdSePontos = GeneratedColumn<int>(
+    'CDSEPONTOS',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     cdSeId,
@@ -597,6 +609,7 @@ class $CDSENHATable extends CDSENHA with TableInfo<$CDSENHATable, CDSENHAData> {
     cdSeEmail,
     cdSeTelefone,
     cdSeCargoId,
+    cdSePontos,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -669,6 +682,12 @@ class $CDSENHATable extends CDSENHA with TableInfo<$CDSENHATable, CDSENHAData> {
     } else if (isInserting) {
       context.missing(_cdSeCargoIdMeta);
     }
+    if (data.containsKey('CDSEPONTOS')) {
+      context.handle(
+        _cdSePontosMeta,
+        cdSePontos.isAcceptableOrUnknown(data['CDSEPONTOS']!, _cdSePontosMeta),
+      );
+    }
     return context;
   }
 
@@ -706,6 +725,10 @@ class $CDSENHATable extends CDSENHA with TableInfo<$CDSENHATable, CDSENHAData> {
         DriftSqlType.int,
         data['${effectivePrefix}CDSECARGOID'],
       )!,
+      cdSePontos: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}CDSEPONTOS'],
+      )!,
     );
   }
 
@@ -723,6 +746,7 @@ class CDSENHAData extends DataClass implements Insertable<CDSENHAData> {
   final String cdSeEmail;
   final String? cdSeTelefone;
   final int cdSeCargoId;
+  final int cdSePontos;
   const CDSENHAData({
     required this.cdSeId,
     required this.cdSeNome,
@@ -731,6 +755,7 @@ class CDSENHAData extends DataClass implements Insertable<CDSENHAData> {
     required this.cdSeEmail,
     this.cdSeTelefone,
     required this.cdSeCargoId,
+    required this.cdSePontos,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -746,6 +771,7 @@ class CDSENHAData extends DataClass implements Insertable<CDSENHAData> {
       map['CDSETELEFONE'] = Variable<String>(cdSeTelefone);
     }
     map['CDSECARGOID'] = Variable<int>(cdSeCargoId);
+    map['CDSEPONTOS'] = Variable<int>(cdSePontos);
     return map;
   }
 
@@ -762,6 +788,7 @@ class CDSENHAData extends DataClass implements Insertable<CDSENHAData> {
           ? const Value.absent()
           : Value(cdSeTelefone),
       cdSeCargoId: Value(cdSeCargoId),
+      cdSePontos: Value(cdSePontos),
     );
   }
 
@@ -778,6 +805,7 @@ class CDSENHAData extends DataClass implements Insertable<CDSENHAData> {
       cdSeEmail: serializer.fromJson<String>(json['cdSeEmail']),
       cdSeTelefone: serializer.fromJson<String?>(json['cdSeTelefone']),
       cdSeCargoId: serializer.fromJson<int>(json['cdSeCargoId']),
+      cdSePontos: serializer.fromJson<int>(json['cdSePontos']),
     );
   }
   @override
@@ -791,6 +819,7 @@ class CDSENHAData extends DataClass implements Insertable<CDSENHAData> {
       'cdSeEmail': serializer.toJson<String>(cdSeEmail),
       'cdSeTelefone': serializer.toJson<String?>(cdSeTelefone),
       'cdSeCargoId': serializer.toJson<int>(cdSeCargoId),
+      'cdSePontos': serializer.toJson<int>(cdSePontos),
     };
   }
 
@@ -802,6 +831,7 @@ class CDSENHAData extends DataClass implements Insertable<CDSENHAData> {
     String? cdSeEmail,
     Value<String?> cdSeTelefone = const Value.absent(),
     int? cdSeCargoId,
+    int? cdSePontos,
   }) => CDSENHAData(
     cdSeId: cdSeId ?? this.cdSeId,
     cdSeNome: cdSeNome ?? this.cdSeNome,
@@ -810,6 +840,7 @@ class CDSENHAData extends DataClass implements Insertable<CDSENHAData> {
     cdSeEmail: cdSeEmail ?? this.cdSeEmail,
     cdSeTelefone: cdSeTelefone.present ? cdSeTelefone.value : this.cdSeTelefone,
     cdSeCargoId: cdSeCargoId ?? this.cdSeCargoId,
+    cdSePontos: cdSePontos ?? this.cdSePontos,
   );
   CDSENHAData copyWithCompanion(CDSENHACompanion data) {
     return CDSENHAData(
@@ -826,6 +857,9 @@ class CDSENHAData extends DataClass implements Insertable<CDSENHAData> {
       cdSeCargoId: data.cdSeCargoId.present
           ? data.cdSeCargoId.value
           : this.cdSeCargoId,
+      cdSePontos: data.cdSePontos.present
+          ? data.cdSePontos.value
+          : this.cdSePontos,
     );
   }
 
@@ -838,7 +872,8 @@ class CDSENHAData extends DataClass implements Insertable<CDSENHAData> {
           ..write('cdSeCpfCnpj: $cdSeCpfCnpj, ')
           ..write('cdSeEmail: $cdSeEmail, ')
           ..write('cdSeTelefone: $cdSeTelefone, ')
-          ..write('cdSeCargoId: $cdSeCargoId')
+          ..write('cdSeCargoId: $cdSeCargoId, ')
+          ..write('cdSePontos: $cdSePontos')
           ..write(')'))
         .toString();
   }
@@ -852,6 +887,7 @@ class CDSENHAData extends DataClass implements Insertable<CDSENHAData> {
     cdSeEmail,
     cdSeTelefone,
     cdSeCargoId,
+    cdSePontos,
   );
   @override
   bool operator ==(Object other) =>
@@ -863,7 +899,8 @@ class CDSENHAData extends DataClass implements Insertable<CDSENHAData> {
           other.cdSeCpfCnpj == this.cdSeCpfCnpj &&
           other.cdSeEmail == this.cdSeEmail &&
           other.cdSeTelefone == this.cdSeTelefone &&
-          other.cdSeCargoId == this.cdSeCargoId);
+          other.cdSeCargoId == this.cdSeCargoId &&
+          other.cdSePontos == this.cdSePontos);
 }
 
 class CDSENHACompanion extends UpdateCompanion<CDSENHAData> {
@@ -874,6 +911,7 @@ class CDSENHACompanion extends UpdateCompanion<CDSENHAData> {
   final Value<String> cdSeEmail;
   final Value<String?> cdSeTelefone;
   final Value<int> cdSeCargoId;
+  final Value<int> cdSePontos;
   const CDSENHACompanion({
     this.cdSeId = const Value.absent(),
     this.cdSeNome = const Value.absent(),
@@ -882,6 +920,7 @@ class CDSENHACompanion extends UpdateCompanion<CDSENHAData> {
     this.cdSeEmail = const Value.absent(),
     this.cdSeTelefone = const Value.absent(),
     this.cdSeCargoId = const Value.absent(),
+    this.cdSePontos = const Value.absent(),
   });
   CDSENHACompanion.insert({
     this.cdSeId = const Value.absent(),
@@ -891,6 +930,7 @@ class CDSENHACompanion extends UpdateCompanion<CDSENHAData> {
     required String cdSeEmail,
     this.cdSeTelefone = const Value.absent(),
     required int cdSeCargoId,
+    this.cdSePontos = const Value.absent(),
   }) : cdSeNome = Value(cdSeNome),
        cdSeSenha = Value(cdSeSenha),
        cdSeEmail = Value(cdSeEmail),
@@ -903,6 +943,7 @@ class CDSENHACompanion extends UpdateCompanion<CDSENHAData> {
     Expression<String>? cdSeEmail,
     Expression<String>? cdSeTelefone,
     Expression<int>? cdSeCargoId,
+    Expression<int>? cdSePontos,
   }) {
     return RawValuesInsertable({
       if (cdSeId != null) 'CDSEID': cdSeId,
@@ -912,6 +953,7 @@ class CDSENHACompanion extends UpdateCompanion<CDSENHAData> {
       if (cdSeEmail != null) 'CDSEEMAIL': cdSeEmail,
       if (cdSeTelefone != null) 'CDSETELEFONE': cdSeTelefone,
       if (cdSeCargoId != null) 'CDSECARGOID': cdSeCargoId,
+      if (cdSePontos != null) 'CDSEPONTOS': cdSePontos,
     });
   }
 
@@ -923,6 +965,7 @@ class CDSENHACompanion extends UpdateCompanion<CDSENHAData> {
     Value<String>? cdSeEmail,
     Value<String?>? cdSeTelefone,
     Value<int>? cdSeCargoId,
+    Value<int>? cdSePontos,
   }) {
     return CDSENHACompanion(
       cdSeId: cdSeId ?? this.cdSeId,
@@ -932,6 +975,7 @@ class CDSENHACompanion extends UpdateCompanion<CDSENHAData> {
       cdSeEmail: cdSeEmail ?? this.cdSeEmail,
       cdSeTelefone: cdSeTelefone ?? this.cdSeTelefone,
       cdSeCargoId: cdSeCargoId ?? this.cdSeCargoId,
+      cdSePontos: cdSePontos ?? this.cdSePontos,
     );
   }
 
@@ -959,6 +1003,9 @@ class CDSENHACompanion extends UpdateCompanion<CDSENHAData> {
     if (cdSeCargoId.present) {
       map['CDSECARGOID'] = Variable<int>(cdSeCargoId.value);
     }
+    if (cdSePontos.present) {
+      map['CDSEPONTOS'] = Variable<int>(cdSePontos.value);
+    }
     return map;
   }
 
@@ -971,7 +1018,8 @@ class CDSENHACompanion extends UpdateCompanion<CDSENHAData> {
           ..write('cdSeCpfCnpj: $cdSeCpfCnpj, ')
           ..write('cdSeEmail: $cdSeEmail, ')
           ..write('cdSeTelefone: $cdSeTelefone, ')
-          ..write('cdSeCargoId: $cdSeCargoId')
+          ..write('cdSeCargoId: $cdSeCargoId, ')
+          ..write('cdSePontos: $cdSePontos')
           ..write(')'))
         .toString();
   }
@@ -4970,6 +5018,7 @@ typedef $$CDSENHATableCreateCompanionBuilder =
       required String cdSeEmail,
       Value<String?> cdSeTelefone,
       required int cdSeCargoId,
+      Value<int> cdSePontos,
     });
 typedef $$CDSENHATableUpdateCompanionBuilder =
     CDSENHACompanion Function({
@@ -4980,6 +5029,7 @@ typedef $$CDSENHATableUpdateCompanionBuilder =
       Value<String> cdSeEmail,
       Value<String?> cdSeTelefone,
       Value<int> cdSeCargoId,
+      Value<int> cdSePontos,
     });
 
 final class $$CDSENHATableReferences
@@ -5101,6 +5151,11 @@ class $$CDSENHATableFilterComposer
 
   ColumnFilters<String> get cdSeTelefone => $composableBuilder(
     column: $table.cdSeTelefone,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get cdSePontos => $composableBuilder(
+    column: $table.cdSePontos,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -5242,6 +5297,11 @@ class $$CDSENHATableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get cdSePontos => $composableBuilder(
+    column: $table.cdSePontos,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$CDCARGOTableOrderingComposer get cdSeCargoId {
     final $$CDCARGOTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -5294,6 +5354,11 @@ class $$CDSENHATableAnnotationComposer
 
   GeneratedColumn<String> get cdSeTelefone => $composableBuilder(
     column: $table.cdSeTelefone,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get cdSePontos => $composableBuilder(
+    column: $table.cdSePontos,
     builder: (column) => column,
   );
 
@@ -5436,6 +5501,7 @@ class $$CDSENHATableTableManager
                 Value<String> cdSeEmail = const Value.absent(),
                 Value<String?> cdSeTelefone = const Value.absent(),
                 Value<int> cdSeCargoId = const Value.absent(),
+                Value<int> cdSePontos = const Value.absent(),
               }) => CDSENHACompanion(
                 cdSeId: cdSeId,
                 cdSeNome: cdSeNome,
@@ -5444,6 +5510,7 @@ class $$CDSENHATableTableManager
                 cdSeEmail: cdSeEmail,
                 cdSeTelefone: cdSeTelefone,
                 cdSeCargoId: cdSeCargoId,
+                cdSePontos: cdSePontos,
               ),
           createCompanionCallback:
               ({
@@ -5454,6 +5521,7 @@ class $$CDSENHATableTableManager
                 required String cdSeEmail,
                 Value<String?> cdSeTelefone = const Value.absent(),
                 required int cdSeCargoId,
+                Value<int> cdSePontos = const Value.absent(),
               }) => CDSENHACompanion.insert(
                 cdSeId: cdSeId,
                 cdSeNome: cdSeNome,
@@ -5462,6 +5530,7 @@ class $$CDSENHATableTableManager
                 cdSeEmail: cdSeEmail,
                 cdSeTelefone: cdSeTelefone,
                 cdSeCargoId: cdSeCargoId,
+                cdSePontos: cdSePontos,
               ),
           withReferenceMapper: (p0) => p0
               .map(

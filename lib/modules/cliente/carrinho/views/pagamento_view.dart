@@ -5,6 +5,7 @@ import 'package:fidelem_app/modules/cliente/carrinho/componentes/pagamento_cupom
 import 'package:fidelem_app/modules/cliente/carrinho/componentes/pagamento_card.dart';
 import 'package:fidelem_app/core/services/cart_manager.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
+import 'package:fidelem_app/main.dart';
 
 class PagamentoView extends StatefulWidget {
   final Function(int, {double? total})? onPressed;
@@ -118,7 +119,7 @@ class _PagamentoViewState extends State<PagamentoView> {
                 icon: Icons.star_border,
                 isEnabled: true,
                 isSelected: selectedMetodo == 'pontos',
-                subtitle: "${CartManager.instance.totalPoints} pontos acumulados na compra",
+                subtitle: "${CartManager.instance.totalPoints} pts necessários (Saldo: ${MyApp.dadosUsuario?.pontos ?? 0} pts)",
                 onTap: () {
                   setState(() {
                     selectedMetodo = 'pontos';
@@ -134,6 +135,24 @@ class _PagamentoViewState extends State<PagamentoView> {
                     text: "Confirmar Pagamento",
                     preset: FIDButton.medium,
                     onPressed: () async {
+                      if (selectedMetodo == 'pontos') {
+                        final currentPoints = MyApp.dadosUsuario?.pontos ?? 0;
+                        final requiredPoints = CartManager.instance.totalPoints;
+                        if (currentPoints < requiredPoints) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  "Saldo de pontos insuficiente! Você tem $currentPoints pts, mas precisa de $requiredPoints pts.",
+                                ),
+                                backgroundColor: Colors.redAccent,
+                              ),
+                            );
+                          }
+                          return;
+                        }
+                      }
+
                       final error = await CartManager.instance.finalizeCart(selectedMetodo);
                       if (error != null) {
                         if (context.mounted) {

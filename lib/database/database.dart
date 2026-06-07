@@ -65,7 +65,7 @@ class AppDatabase extends _$AppDatabase {
   /**
    * Construtor para testes
    */
-  // AppDatabase.test(QueryExecutor e) : super(e);
+  AppDatabase.test(QueryExecutor e) : super(e);
 
   @override
   int get schemaVersion => 1;
@@ -120,6 +120,7 @@ class CDSENHA extends Table {
   TextColumn get cdSeEmail => text().named('CDSEEMAIL').withLength(min: 1, max: 255)();
   TextColumn get cdSeTelefone => text().named('CDSETELEFONE').nullable().withLength(min: 1, max: 45)();
   IntColumn get cdSeCargoId  => integer().named('CDSECARGOID').references(CDCARGO, #cdCarid)();
+  IntColumn get cdSePontos => integer().named('CDSEPONTOS').withDefault(const Constant(0))();
 }
 
 class FIDELSESSAO extends Table {
