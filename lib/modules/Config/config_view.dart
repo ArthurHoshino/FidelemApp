@@ -59,19 +59,60 @@ class _SettingsViewState extends State<SettingsView> {
 
             const SizedBox(height: 16),
 
-            // Nome do usuário
-            Text(
-              MyApp.dadosUsuario?.getPropriedade(EnumGenerico.modelDescricao.descricao) ?? 'Usuário',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ListenableBuilder(
+              listenable: MyApp.dadosUsuarioNotifier,
+              builder: (context, child) {
+                final user = MyApp.dadosUsuario;
+                return Column(
+                  children: [
+                    // Nome do usuário
+                    Text(
+                      user?.getPropriedade(EnumGenerico.modelDescricao.descricao) ?? 'Usuário',
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+
+                    // Nome do mercado
+                    Text(
+                      user?.getPropriedade(CDSenhaEnum.usuarioEntityEmpresa.value) ?? "Mercado",
+                      style: const TextStyle(fontSize: 16, color: Cor.preto),
+                    ),
+
+                    if (user != null && user.isCliente) ...[
+                      const SizedBox(height: 12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Cor.azul.withOpacity(0.08),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Cor.azul.withOpacity(0.2)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.stars_rounded,
+                              color: Colors.amber,
+                              size: 22,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              "${user.pontos} pontos acumulados",
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Cor.preto,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                );
+              },
             ),
 
-            // Nome do mercado
-            Text(
-              MyApp.dadosUsuario?.getPropriedade(CDSenhaEnum.usuarioEntityEmpresa.value) ?? "Mercado",
-              style: const TextStyle(fontSize: 16, color: Cor.preto),
-            ),
-
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
 
             // Opção Gerenciar Funcionários e Gerenciar Cargos (Apenas para funcionários do mercado)
             if (MyApp.isCliente == false || (MyApp.dadosUsuario != null && MyApp.dadosUsuario!.isCliente)) ...[
