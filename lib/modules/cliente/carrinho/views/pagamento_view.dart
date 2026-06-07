@@ -4,12 +4,19 @@ import 'package:fidelem_app/core/widgets/fid_button.dart';
 import 'package:fidelem_app/modules/cliente/carrinho/componentes/pagamento_cupom_card.dart';
 import 'package:fidelem_app/modules/cliente/carrinho/componentes/pagamento_card.dart';
 import 'package:fidelem_app/core/services/cart_manager.dart';
+import 'package:fidelem_app/core/tema/tema.dart';
 
-class PagamentoView extends StatelessWidget {
-
+class PagamentoView extends StatefulWidget {
   final Function(int, {double? total})? onPressed;
   final double total;
   const PagamentoView({super.key, this.onPressed, required this.total});
+
+  @override
+  State<PagamentoView> createState() => _PagamentoViewState();
+}
+
+class _PagamentoViewState extends State<PagamentoView> {
+  String selectedMetodo = 'dinheiro';
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +35,9 @@ class PagamentoView extends StatelessWidget {
                     offset: const Offset(0, -30),
                     child: IconButton(
                       icon: const Icon(Icons.arrow_back),
-                      onPressed: () {onPressed!(4);},
+                      onPressed: () {
+                        widget.onPressed!(4);
+                      },
                       padding: const EdgeInsets.all(8),
                       constraints: const BoxConstraints(),
                       iconSize: 30,
@@ -47,12 +56,19 @@ class PagamentoView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  FIDText(baseText: "Total a Pagar:", preset: FIDText.large, textAlign: TextAlign.start),
                   FIDText(
-                    baseText: "R\$ ${total.toStringAsFixed(2).replaceAll('.', ',')}",
+                    baseText: selectedMetodo == 'pontos' ? "Total a Pagar:" : "Total a Pagar:",
+                    preset: FIDText.large,
+                    textAlign: TextAlign.start,
+                  ),
+                  FIDText(
+                    baseText: selectedMetodo == 'pontos'
+                        ? "${CartManager.instance.totalPoints} pontos"
+                        : "R\$ ${widget.total.toStringAsFixed(2).replaceAll('.', ',')}",
                     preset: FIDText.large,
                     fontWeight: FontWeight.bold,
                     textAlign: TextAlign.end,
+                    color: selectedMetodo == 'pontos' ? Cor.vermelho : Cor.preto,
                   ),
                 ],
               ),
@@ -68,26 +84,46 @@ class PagamentoView extends StatelessWidget {
                 title: "Dinheiro",
                 icon: Icons.money,
                 isEnabled: true,
-                isSelected: true,
-                onTap: () {},
+                isSelected: selectedMetodo == 'dinheiro',
+                onTap: () {
+                  setState(() {
+                    selectedMetodo = 'dinheiro';
+                  });
+                },
               ),
               PagamentoCard(
                 title: "Cartão de Crédito",
                 icon: Icons.credit_card,
-                isEnabled: false,
-                subtitle: "Em desenvolvimento",
+                isEnabled: true,
+                isSelected: selectedMetodo == 'cartao',
+                onTap: () {
+                  setState(() {
+                    selectedMetodo = 'cartao';
+                  });
+                },
               ),
               PagamentoCard(
                 title: "PIX",
                 icon: Icons.qr_code,
-                isEnabled: false,
-                subtitle: "Em desenvolvimento",
+                isEnabled: true,
+                isSelected: selectedMetodo == 'pix',
+                onTap: () {
+                  setState(() {
+                    selectedMetodo = 'pix';
+                  });
+                },
               ),
               PagamentoCard(
-                title: "Boleto Bancário",
-                icon: Icons.receipt_long,
-                isEnabled: false,
-                subtitle: "Em desenvolvimento",
+                title: "Pontos de Fidelidade",
+                icon: Icons.star_border,
+                isEnabled: true,
+                isSelected: selectedMetodo == 'pontos',
+                subtitle: "${CartManager.instance.totalPoints} pontos acumulados na compra",
+                onTap: () {
+                  setState(() {
+                    selectedMetodo = 'pontos';
+                  });
+                },
               ),
 
               const Spacer(),
@@ -98,7 +134,7 @@ class PagamentoView extends StatelessWidget {
                     text: "Confirmar Pagamento",
                     preset: FIDButton.medium,
                     onPressed: () async {
-                      final error = await CartManager.instance.finalizeCart();
+                      final error = await CartManager.instance.finalizeCart(selectedMetodo);
                       if (error != null) {
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -110,7 +146,7 @@ class PagamentoView extends StatelessWidget {
                         }
                       } else {
                         if (context.mounted) {
-                          onPressed!(5);
+                          widget.onPressed!(5);
                         }
                       }
                     },

@@ -63,13 +63,13 @@ class PagamentoCard extends StatelessWidget {
                     textAlign: TextAlign.left,
                   ),
 
-                  if (!isEnabled && subtitle != null)
+                  if (subtitle != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 3),
                       child: FIDText(
                         baseText: subtitle!,
                         preset: FIDText.small,
-                        color: Cor.vermelho,
+                        color: isEnabled ? Cor.cinzaEscuro : Cor.vermelho,
                         textAlign: TextAlign.left,
                       ),
                     ),

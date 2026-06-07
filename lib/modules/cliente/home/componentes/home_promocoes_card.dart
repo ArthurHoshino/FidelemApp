@@ -10,6 +10,7 @@ class HomePromocoesCard extends StatelessWidget {
 
   final VoidCallback? onTapAdd;
   final int quantidadeNoCarrinho;
+  final VoidCallback? onTap;
 
   const HomePromocoesCard({
     super.key,
@@ -19,25 +20,29 @@ class HomePromocoesCard extends StatelessWidget {
     this.imagePath,
     this.onTapAdd,
     this.quantidadeNoCarrinho = 0,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Cor.branco,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Cor.preto.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Cor.branco,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Cor.preto.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
@@ -129,8 +134,9 @@ class HomePromocoesCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildImage(String? path) {
     if (path == null || path.isEmpty) {

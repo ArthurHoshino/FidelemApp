@@ -152,7 +152,7 @@ class CartManager extends ChangeNotifier {
   }
 
   // Finalizes checkout by posting to /lcvenda/finalizar
-  Future<String?> finalizeCart() async {
+  Future<String?> finalizeCart(String metodoPagamento) async {
     _isLoading = true;
     notifyListeners();
     try {
@@ -162,6 +162,7 @@ class CartManager extends ChangeNotifier {
         data: {
           'lcvensenhaid': userId,
           'lccarempresaid': empresaId,
+          'metodopagamento': metodoPagamento,
         },
       );
 
@@ -188,4 +189,14 @@ class CartManager extends ChangeNotifier {
   }
 
   List<ProdutoEntity> get allProducts => _allProducts;
+
+  int get totalPoints {
+    int total = 0;
+    for (var item in _items) {
+      if (item.produto != null) {
+        total += (item.produto!.precoPonto) * item.quantidade;
+      }
+    }
+    return total;
+  }
 }

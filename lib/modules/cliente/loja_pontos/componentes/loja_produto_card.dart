@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
 import 'package:fidelem_app/core/tema/tema.dart';
 import 'package:fidelem_app/modules/cliente/loja_pontos/loja_pontos_model.dart';
+import 'package:fidelem_app/core/services/cart_manager.dart';
+import 'package:fidelem_app/routes.dart';
+import 'package:fidelem_app/core/data/models/entity.dart';
 
 class LojaProdutoCard extends StatelessWidget {
   final LojaPontosModel produto;
@@ -36,15 +39,38 @@ class LojaProdutoCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Cor.azulClaro1, 
-                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-              ),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                child: Center(
-                  child: _buildImage(produto.imagem),
+            child: InkWell(
+              onTap: () {
+                final int? idInt = int.tryParse(produto.id);
+                if (idInt != null) {
+                  final prodEntity = CartManager.instance.allProducts.firstWhere(
+                    (p) => p.id == idInt,
+                    orElse: () => ProdutoEntity(
+                      id: idInt,
+                      nome: produto.nome,
+                      descricao: '',
+                      precoReal: produto.preco,
+                      precoPonto: produto.pontos,
+                      qtdEstoque: 0,
+                      imagem: produto.imagem,
+                    ),
+                  );
+                  Navigator.of(context).pushNamed(
+                    Routes.produtoDetalhePage,
+                    arguments: prodEntity,
+                  );
+                }
+              },
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Cor.azulClaro1, 
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                ),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                  child: Center(
+                    child: _buildImage(produto.imagem),
+                  ),
                 ),
               ),
             ),
@@ -55,40 +81,67 @@ class LojaProdutoCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                FIDText(
-                  baseText: produto.nome,
-                  preset: FIDText.medium,
-                  fontWeight: FontWeight.bold,
-                  textAlign: TextAlign.left,
-                ),
-                const SizedBox(height: 4),
-                
-                SizedBox(
-                  height: priceLineHeight,
-                  child: Row(
+                InkWell(
+                  onTap: () {
+                    final int? idInt = int.tryParse(produto.id);
+                    if (idInt != null) {
+                      final prodEntity = CartManager.instance.allProducts.firstWhere(
+                        (p) => p.id == idInt,
+                        orElse: () => ProdutoEntity(
+                          id: idInt,
+                          nome: produto.nome,
+                          descricao: '',
+                          precoReal: produto.preco,
+                          precoPonto: produto.pontos,
+                          qtdEstoque: 0,
+                          imagem: produto.imagem,
+                        ),
+                      );
+                      Navigator.of(context).pushNamed(
+                        Routes.produtoDetalhePage,
+                        arguments: prodEntity,
+                      );
+                    }
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       FIDText(
-                        baseText: "R\$ ${produto.preco.toStringAsFixed(2).replaceAll('.', ',')}",
+                        baseText: produto.nome,
                         preset: FIDText.medium,
                         fontWeight: FontWeight.bold,
-                        color: Cor.preto,
                         textAlign: TextAlign.left,
-                        fontSize: 0.015,
                       ),
-                      Container(
-                        width: 1.5,
-                        height: double.infinity,
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        color: Cor.cinzaClaro,
-                        
-                      ),
-                      FIDText(
-                        baseText: produto.pontos > 0 ? "${produto.pontos}pts" : "S/ pontos",
-                        preset: FIDText.medium,
-                        fontWeight: FontWeight.bold,
-                        color: produto.pontos > 0 ? Cor.vermelho : Cor.cinzaEscuro, 
-                        textAlign: TextAlign.left,
-                        fontSize: produto.pontos > 0 ? 0.015 : 0.012,
+                      const SizedBox(height: 4),
+                      
+                      SizedBox(
+                        height: priceLineHeight,
+                        child: Row(
+                          children: [
+                            FIDText(
+                              baseText: "R\$ ${produto.preco.toStringAsFixed(2).replaceAll('.', ',')}",
+                              preset: FIDText.medium,
+                              fontWeight: FontWeight.bold,
+                              color: Cor.preto,
+                              textAlign: TextAlign.left,
+                              fontSize: 0.015,
+                            ),
+                            Container(
+                              width: 1.5,
+                              height: double.infinity,
+                              margin: const EdgeInsets.symmetric(horizontal: 8),
+                              color: Cor.cinzaClaro,
+                            ),
+                            FIDText(
+                              baseText: produto.pontos > 0 ? "${produto.pontos}pts" : "S/ pontos",
+                              preset: FIDText.medium,
+                              fontWeight: FontWeight.bold,
+                              color: produto.pontos > 0 ? Cor.vermelho : Cor.cinzaEscuro, 
+                              textAlign: TextAlign.left,
+                              fontSize: produto.pontos > 0 ? 0.015 : 0.012,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

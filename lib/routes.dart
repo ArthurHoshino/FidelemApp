@@ -1,3 +1,5 @@
+import 'package:fidelem_app/core/data/models/entity.dart';
+import 'package:fidelem_app/modules/cliente/home/produto_detalhe_view.dart';
 import 'package:fidelem_app/modules/cliente/home/home_view.dart';
 import 'package:fidelem_app/modules/auth/login/login_view.dart';
 import 'package:fidelem_app/modules/auth/redefinir_senha/redefinir_senha_view.dart';
@@ -18,7 +20,6 @@ import 'package:fidelem_app/modules/mercado/cargos/cargos_view.dart';
 import 'package:fidelem_app/modules/mercado/cargos/cargos_add_view.dart';
 import 'package:fidelem_app/modules/mercado/categorias/categorias_view.dart';
 import 'package:fidelem_app/modules/mercado/categorias/add_categorias_view.dart';
-import 'package:path/path.dart';
 
 class Routes {
   // Rotas de fluxo geral
@@ -36,6 +37,7 @@ class Routes {
   static const String carrinhoPage = '/carrinho';
   static const String pagamentoPage = '/pagamento';
   static const String pedidoSuccessoPage = '/pedido-successo';
+  static const String produtoDetalhePage = '/produto-detalhe';
 
   // Rotas do fluxo do Mercado
   static const String homeMercadoPage = '/home-mercado';
@@ -66,6 +68,10 @@ class Routes {
       homeClientePage: (context) => const HomeClienteView(),
       lojaPontosPage: (context) => const LojaPontosView(),
       basePage: (context) => const BaseView(),
+      produtoDetalhePage: (context) {
+        final prod = ModalRoute.of(context)!.settings.arguments as ProdutoEntity;
+        return ProdutoDetalheView(produto: prod);
+      },
 
       // Rotas do fluxo do Mercado
       adicionarProdutoPage: (context) => const AddEditView(isEditing: false),
