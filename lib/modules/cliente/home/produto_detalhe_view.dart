@@ -80,7 +80,7 @@ class _ProdutoDetalheViewState extends State<ProdutoDetalheView> {
         endpoint: 'lcauditoria',
         method: HttpMethod.post,
         data: {
-          'lcauddescricao': 'Visualizou o produto: ${widget.produto.nome} (ID: ${widget.produto.id})',
+          'lcauddescricao': 'Visualizou o produto: ${widget.produto.nome} (ID: ${widget.produto.id}) (Usuario: ${MyApp.dadosUsuario?.id})',
           'lcaudacaoid': 7,
           'lcaudempresaid': MyApp.empresaId,
         },

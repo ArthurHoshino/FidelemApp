@@ -56,6 +56,7 @@ class HomeViewmodel extends ChangeNotifier {
     try {
       final response = await WebClient.getData('cdproduto/ultimos-visualizados', queryParameters: {
         'cdprodempresaid': MyApp.empresaId,
+        'usuarioId': MyApp.dadosUsuario?.id,
       });
 
       final visualizadosData = jsonDecode(response.body);
