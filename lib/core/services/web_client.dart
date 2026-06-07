@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../config/app_config.dart';
 
 enum HttpMethod { post, put, delete }
 
 class WebClient {
-  // URL base quando App Flutter rodando em um Emulador Android.
-  static const String baseUrl = 'http://192.168.15.159:3000'; // TODO MELHORAR ESSA CONFIGURAÇÃO
-  // URL base quando Servidor Web/Dart rodando diretamente no PC.
-  // static const String baseUrl = 'http://127.0.0.1:3000';
+  // URL base carregada dinamicamente a partir do ambiente de execução/compilação.
+  static String get baseUrl => AppConfig.apiBaseUrl;
 
   // --- Endpoints (Tabelas) ---
   static const String cdEmpresa = 'cdempresa';

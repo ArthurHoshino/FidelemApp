@@ -112,16 +112,6 @@ class _LojaPontosViewState extends State<LojaPontosView> {
                         ),
                       ),
                     ),
-                  
-                  LojaFiltros(
-                    currentSort: viewModel.selectedSort,
-                    onSortChanged: (val) => viewModel.setSort(val),
-                    onFilterPressed: () {
-                      // Reset filters
-                      viewModel.setSearchQuery('');
-                      viewModel.setSelectedCategory(null);
-                    },
-                  ),
 
                   if (viewModel.products.isEmpty)
                     const Padding(

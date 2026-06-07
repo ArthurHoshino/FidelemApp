@@ -10,31 +10,115 @@ Este projeto surgiu com o objetivo de auxiliar pequenas e médias empresas que t
 * Flutter
 
 ### ⚙️ Como executar
-Clone o repositório para a sua pasta desejada e acesse ela. Em seguida instale as depedências do projeto:
+
+#### 1. Instalar as dependências
+Clone o repositório para a sua pasta desejada, acesse-a e instale as dependências do projeto:
 ```shell
 flutter pub get
 ```
 
-Antes de rodar o projeto, caso utilize o seu dispositivo, primeiro verifique que ele foi reconhecido:
+#### 2. Configurar as variáveis de ambiente
+O projeto utiliza configuração baseada em ambientes por meio do recurso `--dart-define-from-file`.
+Na pasta `environments`, você encontrará modelos de arquivos para desenvolvimento e produção. Antes de rodar o projeto, você deve criar os arquivos `.json` correspondentes a partir dos templates `.example`:
+
+```shell
+cp environments/development.json.example environments/development.json
+cp environments/production.json.example environments/production.json
+```
+
+Se desejar, abra os novos arquivos `development.json` e `production.json` criados e ajuste o campo `API_BASE_URL` com as suas URLs correspondentes.
+
+#### 3. Verificar o dispositivo conectado
+Caso utilize o seu próprio dispositivo físico ou um emulador, verifique se ele foi reconhecido pelo Flutter:
 ```shell
 flutter devices
 ```
 
-O seu dispositvo deve aparecer na listagem, mais ou menos da seguinte maneira:
-```txt
-Found 4 connected devices:
-  SM A546E (mobile) • ID_CELULAR • android-arm64  • Android 16 (API 36)
-  Windows (desktop) • windows    • windows-x64    • Microsoft Windows [versÆo 10.0.26100.6725]
-  Chrome (web)      • chrome     • web-javascript • Google Chrome 142.0.7444.134
-  Edge (web)        • edge       • web-javascript • Microsoft Edge 142.0.3595.94
+Seu dispositivo deve constar na listagem de saída. Caso precise especificar o dispositivo durante a execução, utilize o identificador dele (por exemplo, `SM A546E` ou seu respectivo `ID_CELULAR`).
+
+#### 4. Executar o aplicativo
+
+Você pode executar o projeto em modo de desenvolvimento ou de produção:
+
+* **Modo de Desenvolvimento:**
+  Utiliza as configurações de `environments/development.json` (aponta para a API local por padrão):
+  ```shell
+  flutter run --dart-define-from-file=environments/development.json
+  ```
+  *(Se possuir mais de um dispositivo conectado, especifique usando o parâmetro `-d ID_CELULAR`)*
+
+* **Modo de Produção:**
+  Utiliza as configurações de `environments/production.json` (aponta para a API de produção por padrão):
+  ```shell
+  flutter run --dart-define-from-file=environments/production.json
+  ```
+
+---
+
+### 📦 Como compilar uma versão release
+
+Para gerar a build final de distribuição do aplicativo utilizando as configurações do ambiente de produção, use o comando correspondente à plataforma desejada:
+
+* **Android (APK):**
+  ```shell
+  flutter build apk --release --dart-define-from-file=environments/production.json
+  ```
+
+* **Android (App Bundle - recomendado para publicação na Google Play Store):**
+  ```shell
+  flutter build appbundle --release --dart-define-from-file=environments/production.json
+  ```
+
+* **iOS:**
+  ```shell
+  flutter build ipa --release --dart-define-from-file=environments/production.json
+  ```
+
+* **Web:**
+  ```shell
+  flutter build web --release --dart-define-from-file=environments/production.json
+  ```
+
+---
+
+### 🛠️ Configuração da IDE (Opcional)
+
+Para facilitar a execução direta pela sua IDE preferida sem precisar digitar os argumentos no terminal:
+
+#### VS Code
+Crie ou edite o arquivo `.vscode/launch.json` na raiz do projeto com a seguinte estrutura:
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "FidelemApp (Dev)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define-from-file=environments/development.json"
+      ]
+    },
+    {
+      "name": "FidelemApp (Prod)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define-from-file=environments/production.json"
+      ]
+    }
+  ]
+}
 ```
 
-Caso apareça somente um dispositvo (o seu celular conectado), basta rodar o comando `flutter run` que ele será selecionado automaticamente. Do contrário, será necessário especificar qual o dispositivo desejado:
-```shell
-flutter run -d ID_CELULAR
-``` 
-
-Se estiver utilizando o Android Studio ou o VSCode que reconheça o dispositivo, basta garantir que ele está selecionado e em seguida utilizar os próprios recursos da IDE para executar o projeto.
+#### Android Studio
+1. Acesse **Run** > **Edit Configurations...**
+2. Crie ou edite uma configuração de execução do Flutter.
+3. No campo **Additional run args**, insira:
+   `--dart-define-from-file=environments/development.json` (ou `production.json` para produção).
+4. Clique em **Apply** e execute diretamente pelos botões de Run/Debug da IDE.
 
 ### 🧑‍💻 Integrantes
 * [Arthur Osaka Hoshino](https://github.com/ArthurHoshino)
