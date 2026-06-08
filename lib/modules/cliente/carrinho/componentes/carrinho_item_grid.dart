@@ -31,6 +31,7 @@ class CarrinhoItemGrid extends StatelessWidget {
           name: item.nome,
           price: item.preco,
           quantity: item.carrinhoData.lcCarQuantidade,
+          imagem: item.imagem,
           onAdd: () => viewModel.adicionar(item),
           onRemove: () => viewModel.remover(item),
           onDelete: () => viewModel.excluir(item),

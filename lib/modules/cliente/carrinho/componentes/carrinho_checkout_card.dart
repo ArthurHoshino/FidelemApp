@@ -29,11 +29,16 @@ class CarrinhoCheckout extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              FIDText(baseText: "Total:", preset: FIDText.large),
+              FIDText(
+                baseText: "Total:",
+                preset: FIDText.large,
+                padding: const {"top": 0.0, "bottom": 0.0, "left": 0.0, "right": 0.0},
+              ),
               FIDText(
                 baseText: "R\$ ${total.toStringAsFixed(2).replaceAll('.', ',')}",
                 preset: FIDText.large,
                 fontWeight: FontWeight.bold,
+                padding: const {"top": 0.0, "bottom": 0.0, "left": 0.0, "right": 0.0},
               ),
             ],
           ),

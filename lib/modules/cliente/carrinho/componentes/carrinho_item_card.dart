@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fidelem_app/core/widgets/fid_text.dart';
 import 'package:fidelem_app/core/widgets/fid_line.dart';
@@ -7,6 +8,7 @@ class CarrinhoItemCard extends StatelessWidget {
   final String name;
   final double price;
   final int quantity;
+  final String imagem;
   final VoidCallback onAdd;
   final VoidCallback onRemove;
   final VoidCallback onDelete;
@@ -16,6 +18,7 @@ class CarrinhoItemCard extends StatelessWidget {
     required this.name,
     required this.price,
     required this.quantity,
+    required this.imagem,
     required this.onAdd,
     required this.onRemove,
     required this.onDelete,
@@ -39,7 +42,10 @@ class CarrinhoItemCard extends StatelessWidget {
                   color: Cor.azulClaro1,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.shopping_bag_outlined, color: Cor.azul),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: _buildImage(imagem),
+                ),
               ),
               
               const SizedBox(width: 12),
@@ -48,11 +54,12 @@ class CarrinhoItemCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     FIDText(
                       baseText: name,
                       preset: FIDText.medium,
                       fontWeight: FontWeight.bold,
+                      color: Cor.preto,
+                      padding: const {"top": 0.0, "bottom": 0.0, "left": 0.0, "right": 0.0},
                     ),
                     
                     const SizedBox(height: 8),
@@ -71,7 +78,12 @@ class CarrinhoItemCard extends StatelessWidget {
                               buildActionButton(Icons.remove, onRemove),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                                child: FIDText(baseText: quantity.toString(), preset: FIDText.medium),
+                                child: FIDText(
+                                  baseText: quantity.toString(),
+                                  preset: FIDText.medium,
+                                  color: Cor.preto,
+                                  padding: const {"top": 0.0, "bottom": 0.0, "left": 0.0, "right": 0.0},
+                                ),
                               ),
                               buildActionButton(Icons.add, onAdd),
                             ],
@@ -82,6 +94,8 @@ class CarrinhoItemCard extends StatelessWidget {
                           baseText: "R\$ ${totalItem.toStringAsFixed(2).replaceAll('.', ',')}",
                           preset: FIDText.medium,
                           fontWeight: FontWeight.bold,
+                          color: Cor.preto,
+                          padding: const {"top": 0.0, "bottom": 0.0, "left": 0.0, "right": 0.0},
                         ),
                       ],
                     ),
@@ -111,5 +125,33 @@ class CarrinhoItemCard extends StatelessWidget {
         child: Icon(icon, size: 18, color: Cor.azul),
       ),
     );
+  }
+
+  Widget _buildImage(String imagem) {
+    if (imagem.isEmpty) {
+      return const Center(
+        child: Icon(Icons.shopping_bag_outlined, color: Cor.azul, size: 30),
+      );
+    }
+    if (imagem.startsWith('assets/')) {
+      return Image.asset(
+        imagem,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+      );
+    }
+    try {
+      return Image.memory(
+        base64Decode(imagem),
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+      );
+    } catch (_) {
+      return const Center(
+        child: Icon(Icons.image_not_supported, color: Cor.azul, size: 30),
+      );
+    }
   }
 }

@@ -32,23 +32,21 @@ class _PagamentoViewState extends State<PagamentoView> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Transform.translate(
-                    offset: const Offset(0, -30),
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () {
-                        widget.onPressed!(4);
-                      },
-                      padding: const EdgeInsets.all(8),
-                      constraints: const BoxConstraints(),
-                      iconSize: 30,
-                    ),
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () {
+                      widget.onPressed!(2);
+                    },
+                    padding: const EdgeInsets.all(8),
+                    constraints: const BoxConstraints(),
+                    iconSize: 30,
                   ),
                   Expanded(
                     child: FIDText(
                       baseText: "Métodos de Pagamentos",
                       preset: FIDText.large,
                       textAlign: TextAlign.start,
+                      padding: const {"top": 0.0, "bottom": 0.0, "left": 0.0, "right": 0.0},
                     ),
                   ),
                 ],
@@ -61,6 +59,7 @@ class _PagamentoViewState extends State<PagamentoView> {
                     baseText: selectedMetodo == 'pontos' ? "Total a Pagar:" : "Total a Pagar:",
                     preset: FIDText.large,
                     textAlign: TextAlign.start,
+                    padding: const {"top": 0.0, "bottom": 0.0, "left": 0.0, "right": 0.0},
                   ),
                   FIDText(
                     baseText: selectedMetodo == 'pontos'
@@ -70,6 +69,7 @@ class _PagamentoViewState extends State<PagamentoView> {
                     fontWeight: FontWeight.bold,
                     textAlign: TextAlign.end,
                     color: selectedMetodo == 'pontos' ? Cor.vermelho : Cor.preto,
+                    padding: const {"top": 0.0, "bottom": 0.0, "left": 0.0, "right": 0.0},
                   ),
                 ],
               ),
